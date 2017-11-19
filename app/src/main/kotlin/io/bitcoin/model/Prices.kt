@@ -1,3 +1,3 @@
 package io.bitcoin.model
 
-data class Prices(val ask: Double?, val bid: Double?)
+data class Prices(@JvmField val ask: Double?, @JvmField val bid: Double?)

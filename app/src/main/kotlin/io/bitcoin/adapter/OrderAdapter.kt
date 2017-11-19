@@ -45,8 +45,8 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 	fun updatePrice(currencyPair: CurrencyPair, price: Double) {
 		this.lastPrices[currencyPair] = price
 
-		this.orders.forEachIndexed { index, (currencyPair1) ->
-			if (currencyPair1 == currencyPair) {
+		this.orders.forEachIndexed { index, order ->
+			if (order.currencyPair == currencyPair) {
 				this.notifyItemChanged(index)
 			}
 		}

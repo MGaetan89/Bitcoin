@@ -32,11 +32,7 @@ data class CurrencyPair(private val left: String, private val right: String) : P
 
 	fun reciprocal() = CurrencyPair(this.right, this.left)
 
-	fun toTag(): String {
-		val tag = "${this.left.toLowerCase()}${this.right.toLowerCase()}"
-
-		return if (tag == "btcusd") "" else tag
-	}
+	fun toTag() = "${this.left.toLowerCase()}${this.right.toLowerCase()}".takeUnless { it == "btcusd" }.orEmpty()
 
 	override fun toString() = "${this.left} / ${this.right}"
 }
