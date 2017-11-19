@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="?attr/listPreferredItemHeightSmall"
+	android:background="?attr/selectableItemBackground"
+	android:clickable="true"
+	android:focusable="true">
+
+	<android.support.constraint.Barrier
+		android:id="@+id/barrier_ask_bid"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="start"
+		app:constraint_referenced_ids="ask_label,bid_label" />
+
+	<android.support.constraint.Guideline
+		android:id="@+id/guideline_horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		app:layout_constraintGuide_percent="0.5" />
+
+	<android.support.constraint.Guideline
+		android:id="@+id/guideline_vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		app:layout_constraintGuide_end="115dp" />
+
+	<TextView
+		android:id="@+id/currency_pair"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:layout_marginStart="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/barrier_ask_bid"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="@sample/exchanges.json/exchanges/currency_pair" />
+
+	<TextView
+		android:id="@+id/bid_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/bid"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:textColor="@color/bid"
+		app:layout_constraintBaseline_toBaselineOf="@+id/bid_value"
+		app:layout_constraintEnd_toStartOf="@+id/guideline_vertical" />
+
+	<TextView
+		android:id="@+id/ask_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/ask"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:textColor="@color/ask"
+		app:layout_constraintBaseline_toBaselineOf="@+id/ask_value"
+		app:layout_constraintEnd_toStartOf="@+id/guideline_vertical" />
+
+	<io.bitcoin.view.AnimatedTextView
+		android:id="@+id/bid_value"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:layout_marginStart="@dimen/margin"
+		android:gravity="end"
+		android:text="@string/no_price"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="1"
+		app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
+		app:layout_constraintWidth_default="wrap"
+		tools:text="@sample/exchanges.json/exchanges/bid" />
+
+	<io.bitcoin.view.AnimatedTextView
+		android:id="@+id/ask_value"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:layout_marginStart="@dimen/margin"
+		android:gravity="end"
+		android:text="@string/no_price"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="1"
+		app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
+		app:layout_constraintTop_toBottomOf="@+id/guideline_horizontal"
+		app:layout_constraintWidth_default="wrap"
+		tools:text="@sample/exchanges.json/exchanges/ask" />
+</android.support.constraint.ConstraintLayout>

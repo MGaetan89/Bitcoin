@@ -1,0 +1,45 @@
+buildscript {
+	ext.androidGradlePlugin = '3.1.0-alpha04'
+	ext.assertJAndroidVersion = '1.1.1'
+	ext.buildToolsVersion = '27.0.1'
+	ext.compileSdkVersion = 27
+	ext.constraintLayoutVersion = '1.1.0-beta3'
+	ext.jsonVersion = '20170516'
+	ext.jUnitVersion = '4.12'
+	ext.kotlinVersion = '1.2.0-rc-39'
+	ext.minSdkVersion = 21
+	ext.pusherVersion = '1.6.0'
+	ext.supportLibraryVersion = '27.0.1'
+	ext.targetSdkVersion = 27
+	ext.versionCode = 1
+	ext.versionName = '1.0'
+
+	repositories {
+		google()
+		jcenter()
+
+		maven {
+			url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
+		}
+	}
+
+	dependencies {
+		classpath "com.android.tools.build:gradle:$androidGradlePlugin"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+	}
+}
+
+allprojects {
+	repositories {
+		google()
+		jcenter()
+
+		maven {
+			url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
+		}
+	}
+}
+
+task clean(type: Delete) {
+	delete rootProject.buildDir
+}

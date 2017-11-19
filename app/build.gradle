@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+def properties = new Properties()
+
+if (rootProject.file('local.properties').exists()) {
+	properties.load(rootProject.file('local.properties').newDataInputStream())
+}
+
+android {
+	compileSdkVersion rootProject.compileSdkVersion
+	buildToolsVersion rootProject.buildToolsVersion
+
+	defaultConfig {
+		applicationId 'io.bitcoin'
+		minSdkVersion rootProject.minSdkVersion
+		targetSdkVersion rootProject.targetSdkVersion
+		versionCode rootProject.versionCode
+		versionName rootProject.versionName
+		resConfigs 'en', 'fr'
+
+		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key")
+		buildConfigField "String[]", "CURRENCY_PAIRS", properties.getProperty("currency_pairs")
+	}
+
+	buildTypes {
+		debug {
+			postprocessing {
+				removeUnusedCode true
+				removeUnusedResources true
+				obfuscate true
+				optimizeCode true
+				proguardFiles 'proguard-rules.pro'
+			}
+		}
+
+		release {
+			postprocessing {
+				removeUnusedCode true
+				removeUnusedResources true
+				obfuscate true
+				optimizeCode true
+				proguardFiles 'proguard-rules.pro'
+			}
+		}
+	}
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_7
+		targetCompatibility JavaVersion.VERSION_1_7
+	}
+
+	sourceSets {
+		main.java.srcDirs = ['src/main/kotlin']
+		test.java.srcDirs = ['src/test/kotlin']
+	}
+}
+
+androidExtensions {
+	experimental = true
+}
+
+dependencies {
+	implementation "com.android.support:design:$supportLibraryVersion"
+	implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+	implementation "com.pusher:pusher-java-client:$pusherVersion"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+	testImplementation "com.squareup.assertj:assertj-android:$assertJAndroidVersion"
+	testImplementation "junit:junit:$jUnitVersion"
+	testImplementation "org.json:json:$jsonVersion"
+}

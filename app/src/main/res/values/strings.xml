@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="add">Add</string>
+	<string name="add_order">Add Order</string>
+	<string name="app_name">Bitcoin for Bitstamp</string>
+	<string name="ask">Ask</string>
+	<string name="bid">Bid</string>
+	<string name="configure">Configure</string>
+	<string name="exchange">Exchange</string>
+	<string name="fees">Fees</string>
+	<string name="no_price">-</string>
+	<string name="order_id">#%1$d</string>
+	<string name="order_id_label">Order Id</string>
+	<string name="orders">Orders</string>
+	<string name="quantity">Quantity</string>
+	<string name="unit_price">Unit Price</string>
+</resources>

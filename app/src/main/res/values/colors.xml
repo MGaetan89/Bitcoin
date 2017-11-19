@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="accent">#64AFFF</color>
+	<color name="ask">#FF2A68</color>
+	<color name="background">#202226</color>
+	<color name="bid">#8EC919</color>
+	<color name="text">#FFFFFF</color>
+</resources>

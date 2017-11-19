@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="fr">
+	<string name="add">Ajouter</string>
+	<string name="add_order">Ajouter un Ordre</string>
+	<string name="app_name">Bitcoin pour Bitstamp</string>
+	<string name="ask">Demande</string>
+	<string name="bid">Offre</string>
+	<string name="configure">Configurer</string>
+	<string name="exchange">Echange</string>
+	<string name="fees">Frais</string>
+	<string name="no_price">-</string>
+	<string name="order_id">#%1$d</string>
+	<string name="order_id_label">Numéro d\'ordre</string>
+	<string name="orders">Ordres</string>
+	<string name="quantity">Quantité</string>
+	<string name="unit_price">Prix Unitaire</string>
+</resources>

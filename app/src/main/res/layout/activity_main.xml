@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="io.bitcoin.MainActivity">
+
+	<android.support.constraint.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/exchange_title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/margin"
+			android:layout_marginStart="@dimen/margin"
+			android:layout_marginTop="@dimen/margin"
+			android:text="@string/exchange"
+			android:textAppearance="@style/TextAppearance.AppCompat.Title"
+			app:layout_constraintEnd_toStartOf="@+id/configure_exchange"
+			app:layout_constraintHorizontal_bias="0"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintWidth_default="wrap" />
+
+		<ImageButton
+			android:id="@+id/configure_exchange"
+			style="@style/Base.Widget.AppCompat.Button.Small"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/margin"
+			android:background="@android:color/transparent"
+			android:contentDescription="@string/configure"
+			android:src="@drawable/ic_settings"
+			android:tint="@color/accent"
+			app:layout_constraintBottom_toTopOf="@+id/fragment_exchange"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<fragment
+			android:id="@+id/fragment_exchange"
+			android:name="io.bitcoin.fragment.ExchangeFragment"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/margin"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/exchange_title"
+			tools:layout="@layout/fragment_exchange" />
+
+		<TextView
+			android:id="@+id/order_title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin"
+			android:layout_marginTop="@dimen/margin"
+			android:text="@string/orders"
+			android:textAppearance="@style/TextAppearance.AppCompat.Title"
+			app:layout_constraintEnd_toStartOf="@+id/add_order"
+			app:layout_constraintHorizontal_bias="0"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/fragment_exchange"
+			app:layout_constraintWidth_default="wrap" />
+
+		<ImageButton
+			android:id="@+id/add_order"
+			style="@style/Base.Widget.AppCompat.Button.Small"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/margin"
+			android:background="@android:color/transparent"
+			android:contentDescription="@string/add"
+			android:src="@drawable/ic_add"
+			android:tint="@color/accent"
+			app:layout_constraintBottom_toTopOf="@+id/fragment_order"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/fragment_exchange" />
+
+		<fragment
+			android:id="@+id/fragment_order"
+			android:name="io.bitcoin.fragment.OrderFragment"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/margin"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/order_title"
+			tools:layout="@layout/fragment_orders" />
+	</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>
