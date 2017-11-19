@@ -1,0 +1,18 @@
+language: android
+
+android:
+  components:
+    - android-27
+    - build-tools-27.0.1
+    - platform-tools
+    - tools
+
+script:
+  - ./gradlew clean :app:testDebug
+
+cache:
+  directories:
+    - $HOME/.android/build-cache/
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.m2/
