@@ -20,8 +20,8 @@ android {
 		versionName rootProject.versionName
 		resConfigs 'en', 'fr'
 
-		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key")
-		buildConfigField "String[]", "CURRENCY_PAIRS", properties.getProperty("currency_pairs")
+		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key", "\"\"")
+		buildConfigField "String[]", "CURRENCY_PAIRS", properties.getProperty("currency_pairs", "new String[0]")
 	}
 
 	buildTypes {
