@@ -6,6 +6,7 @@ import android.animation.TypeConverter
 import android.animation.TypeEvaluator
 import android.content.Context
 import android.support.annotation.ColorInt
+import android.support.annotation.Keep
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Property
@@ -16,35 +17,52 @@ import java.text.NumberFormat
 class AnimatedTextView @JvmOverloads constructor(
 		context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : TextView(context, attrs, defStyleAttr) {
-	private val animationDuration = this.resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+	private val animationDuration = this.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 	private val typeEvaluator = TypeEvaluator<Double> { fraction, startValue, endValue ->
 		startValue + (endValue - startValue) * fraction
 	}
+
+	private var defaultTextColor = ContextCompat.getColor(this.context, R.color.text)
 	private var value = 0.0
+
+	@Keep
+	override fun setTextColor(color: Int) {
+		super.setTextColor(color)
+
+		this.defaultTextColor = color
+	}
 
 	fun setValue(value: Double, formatter: NumberFormat) {
 		val textColor = when {
-			value < this.value -> R.color.ask
-			value > this.value -> R.color.bid
-			else -> R.color.text
-		}.let { ContextCompat.getColor(this.context, it) }
+			value < this.value -> ContextCompat.getColor(this.context, R.color.ask)
+			value > this.value -> ContextCompat.getColor(this.context, R.color.bid)
+			else -> this.defaultTextColor
+		}
 
 		this.animateChange(value, textColor, formatter)
 	}
 
 	private fun animateChange(value: Double, @ColorInt targetTextColor: Int, formatter: NumberFormat) {
-		val currentTextColor = this.currentTextColor.takeIf { it != targetTextColor } ?: return
+		this.clearAnimation()
 
-		val colorIn = ObjectAnimator.ofArgb(this, "textColor", currentTextColor, targetTextColor)
-				.setDuration(this.animationDuration)
-		val colorOut = ObjectAnimator.ofArgb(this, "textColor", targetTextColor, currentTextColor)
-				.setDuration(this.animationDuration)
+		val currentTextColor = this.currentTextColor
 		val textAnimator = ObjectAnimator.ofObject<AnimatedTextView, Double, CharSequence>(
 				this, TextViewTextProperty<AnimatedTextView>(), Converter(Double::class.java, formatter), this.typeEvaluator, this.value, value
 		).setDuration(this.animationDuration)
 
 		val animatorSet = AnimatorSet()
-		animatorSet.play(colorIn).with(textAnimator).before(colorOut)
+
+		if (currentTextColor == targetTextColor) {
+			animatorSet.play(textAnimator)
+		} else {
+			val colorIn = ObjectAnimator.ofArgb(this, "textColor", currentTextColor, targetTextColor)
+					.setDuration(this.animationDuration)
+			val colorOut = ObjectAnimator.ofArgb(this, "textColor", targetTextColor, currentTextColor)
+					.setDuration(this.animationDuration)
+
+			animatorSet.play(colorIn).with(textAnimator).before(colorOut)
+		}
+
 		animatorSet.start()
 
 		this.value = value

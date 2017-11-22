@@ -43,8 +43,8 @@ class ExchangeAdapter : RecyclerView.Adapter<ExchangeAdapter.ViewHolder>() {
 	}
 
 	class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-		private val ask = view.findViewById<AnimatedTextView>(R.id.ask_value)
-		private val bid = view.findViewById<AnimatedTextView>(R.id.bid_value)
+		private val ask = view.findViewById<AnimatedTextView>(R.id.ask)
+		private val bid = view.findViewById<AnimatedTextView>(R.id.bid)
 		private val currency = view.findViewById<TextView>(R.id.currency_pair)
 
 		fun bindTo(currencyPair: CurrencyPair, prices: Prices?) {

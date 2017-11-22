@@ -3,8 +3,6 @@
 	<string name="add">Add</string>
 	<string name="add_order">Add Order</string>
 	<string name="app_name">Bitcoin for Bitstamp</string>
-	<string name="ask">Ask</string>
-	<string name="bid">Bid</string>
 	<string name="configure">Configure</string>
 	<string name="exchange">Exchange</string>
 	<string name="fees">Fees</string>
