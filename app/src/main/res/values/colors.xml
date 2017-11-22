@@ -4,5 +4,7 @@
 	<color name="ask">#FF2A68</color>
 	<color name="background">#202226</color>
 	<color name="bid">#8EC919</color>
+	<color name="primary">#141414</color>
+	<color name="primary_dark">#000000</color>
 	<color name="text">#FFFFFF</color>
 </resources>

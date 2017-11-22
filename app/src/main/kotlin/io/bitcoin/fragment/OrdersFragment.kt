@@ -13,38 +13,55 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import io.bitcoin.Config
 import io.bitcoin.R
 import io.bitcoin.adapter.OrderAdapter
 import io.bitcoin.extension.getOrders
 import io.bitcoin.extension.removeOrder
-import io.bitcoin.model.CurrencyPair
 import kotlinx.android.synthetic.main.fragment_orders.list
 
-class OrderFragment : Fragment() {
+class OrdersFragment : Fragment() {
 	private val adapter by lazy { OrderAdapter() }
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			when (intent.action) {
-				Config.ACTION_ORDER_ADDED -> {
+				AddOrderFragment.ACTION_ORDER_ADDED -> {
 					val orders = PreferenceManager.getDefaultSharedPreferences(context).getOrders()
 
 					adapter.updateOrders(orders)
-				}
-				Config.ACTION_PRICE_UPDATE -> {
-					val currencyPair = intent.getParcelableExtra<CurrencyPair>(Config.EXTRA_CURRENCY_PAIR)
-					val price = intent.getDoubleExtra(Config.EXTRA_PRICE, 0.0)
-
-					adapter.updatePrice(currencyPair, price)
 				}
 			}
 		}
 	}
 
+	init {
+		this.setHasOptionsMenu(true)
+	}
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+
+		this.activity?.setTitle(R.string.orders)
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		inflater.inflate(R.menu.orders, menu)
+	}
+
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
 			= inflater.inflate(R.layout.fragment_orders, container, false)
+
+	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+		R.id.menu_add_order -> {
+			this.displayAddOrder()
+			true
+		}
+		else -> super.onOptionsItemSelected(item)
+	}
 
 	override fun onPause() {
 		this.context?.let {
@@ -57,12 +74,8 @@ class OrderFragment : Fragment() {
 	override fun onResume() {
 		super.onResume()
 
-		val filter = IntentFilter()
-		filter.addAction(Config.ACTION_ORDER_ADDED)
-		filter.addAction(Config.ACTION_PRICE_UPDATE)
-
 		this.context?.let {
-			LocalBroadcastManager.getInstance(it).registerReceiver(this.receiver, filter)
+			LocalBroadcastManager.getInstance(it).registerReceiver(this.receiver, IntentFilter(AddOrderFragment.ACTION_ORDER_ADDED))
 		}
 	}
 
@@ -79,6 +92,15 @@ class OrderFragment : Fragment() {
 		val orders = PreferenceManager.getDefaultSharedPreferences(this.context).getOrders()
 
 		this.adapter.updateOrders(orders)
+	}
+
+	private fun displayAddOrder() {
+		AddOrderFragment.newInstance()
+				.show(this.childFragmentManager, "add_order")
+	}
+
+	companion object {
+		fun newInstance() = OrdersFragment()
 	}
 
 	private inner class OrderDismissCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.END or ItemTouchHelper.START) {

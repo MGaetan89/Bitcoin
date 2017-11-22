@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.bitcoin.BuildConfig
-import io.bitcoin.Config
 import io.bitcoin.R
 import io.bitcoin.adapter.ConfigureExchangeAdapter
 import io.bitcoin.extension.getExchanges
@@ -46,7 +45,7 @@ class ConfigureExchangeFragment : BottomSheetDialogFragment(), View.OnClickListe
 	private fun notifyExchangesUpdated() {
 		this.context?.let {
 			LocalBroadcastManager.getInstance(it)
-					.sendBroadcast(Intent(Config.ACTION_EXCHANGES_UPDATED))
+					.sendBroadcast(Intent(ACTION_EXCHANGES_UPDATED))
 		}
 	}
 
@@ -56,6 +55,8 @@ class ConfigureExchangeFragment : BottomSheetDialogFragment(), View.OnClickListe
 	}
 
 	companion object {
+		const val ACTION_EXCHANGES_UPDATED = BuildConfig.APPLICATION_ID + ".action.exchanges_updated"
+
 		fun newInstance() = ConfigureExchangeFragment()
 	}
 }

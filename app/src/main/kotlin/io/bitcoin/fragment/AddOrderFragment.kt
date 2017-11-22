@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import io.bitcoin.BuildConfig
-import io.bitcoin.Config
 import io.bitcoin.R
 import io.bitcoin.extension.saveOrder
 import io.bitcoin.extension.toCurrencyPair
@@ -56,7 +55,7 @@ class AddOrderFragment : BottomSheetDialogFragment(), View.OnClickListener {
 	private fun notifyOrderAdded() {
 		this.context?.let {
 			LocalBroadcastManager.getInstance(it)
-					.sendBroadcast(Intent(Config.ACTION_ORDER_ADDED))
+					.sendBroadcast(Intent(ACTION_ORDER_ADDED))
 		}
 	}
 
@@ -65,6 +64,8 @@ class AddOrderFragment : BottomSheetDialogFragment(), View.OnClickListener {
 	}
 
 	companion object {
+		const val ACTION_ORDER_ADDED = BuildConfig.APPLICATION_ID + ".action.order_added"
+
 		fun newInstance() = AddOrderFragment()
 	}
 }

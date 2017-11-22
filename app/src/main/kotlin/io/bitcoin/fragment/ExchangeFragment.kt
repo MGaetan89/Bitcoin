@@ -11,12 +11,14 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.pusher.client.Pusher
 import com.pusher.client.channel.SubscriptionEventListener
 import io.bitcoin.BuildConfig
-import io.bitcoin.Config
 import io.bitcoin.R
 import io.bitcoin.adapter.ExchangeAdapter
 import io.bitcoin.extension.getExchanges
@@ -30,7 +32,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			when (intent.action) {
-				Config.ACTION_EXCHANGES_UPDATED -> {
+				ConfigureExchangeFragment.ACTION_EXCHANGES_UPDATED -> {
 					unsubscribeFromChannels(adapter.currencyPairs.map { it.toTag() })
 
 					val channels = PreferenceManager.getDefaultSharedPreferences(context).getExchanges()
@@ -43,6 +45,20 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 		}
 	}
 
+	init {
+		this.setHasOptionsMenu(true)
+	}
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+
+		this.activity?.setTitle(R.string.exchange)
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		inflater.inflate(R.menu.exchange, menu)
+	}
+
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
 			= inflater.inflate(R.layout.fragment_exchange, container, false)
 
@@ -53,16 +69,14 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 		this.activity?.runOnUiThread {
 			this.adapter.updatePrice(currencyPair, prices)
 		}
+	}
 
-		prices.bid?.let {
-			val intent = Intent(Config.ACTION_PRICE_UPDATE)
-			intent.putExtra(Config.EXTRA_CURRENCY_PAIR, currencyPair)
-			intent.putExtra(Config.EXTRA_PRICE, it)
-
-			this.context?.let {
-				LocalBroadcastManager.getInstance(it).sendBroadcast(intent)
-			}
+	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+		R.id.menu_configure_exchange -> {
+			this.displayConfigureExchange()
+			true
 		}
+		else -> super.onOptionsItemSelected(item)
 	}
 
 	override fun onPause() {
@@ -80,7 +94,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	override fun onResume() {
 		super.onResume()
 
-		val filter = IntentFilter(Config.ACTION_EXCHANGES_UPDATED)
+		val filter = IntentFilter(ConfigureExchangeFragment.ACTION_EXCHANGES_UPDATED)
 
 		this.context?.let {
 			LocalBroadcastManager.getInstance(it).registerReceiver(this.receiver, filter)
@@ -104,6 +118,11 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 		}
 	}
 
+	private fun displayConfigureExchange() {
+		ConfigureExchangeFragment.newInstance()
+				.show(this.childFragmentManager, "configure_exchange")
+	}
+
 	private fun subscribeToChannels(channels: List<String>) {
 		channels.forEach {
 			if (it.isEmpty()) {
@@ -124,8 +143,10 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 		}
 	}
 
-	private companion object {
+	companion object {
 		private const val CHANNEL = "order_book"
 		private const val EVENT = "data"
+
+		fun newInstance() = ExchangeFragment()
 	}
 }
