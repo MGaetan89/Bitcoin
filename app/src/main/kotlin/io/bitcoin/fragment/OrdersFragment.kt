@@ -18,21 +18,31 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.pusher.client.Pusher
+import com.pusher.client.channel.SubscriptionEventListener
+import io.bitcoin.BuildConfig
 import io.bitcoin.R
 import io.bitcoin.adapter.OrderAdapter
 import io.bitcoin.extension.getOrders
 import io.bitcoin.extension.removeOrder
+import io.bitcoin.extension.toCurrencyPair
+import io.bitcoin.extension.toPrices
 import kotlinx.android.synthetic.main.fragment_orders.list
 
-class OrdersFragment : Fragment() {
+class OrdersFragment : Fragment(), SubscriptionEventListener {
 	private val adapter by lazy { OrderAdapter() }
+	private val pusher by lazy { Pusher(BuildConfig.PUSHER_API_KEY) }
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			when (intent.action) {
 				AddOrderFragment.ACTION_ORDER_ADDED -> {
+					unsubscribeFromChannels(adapter.getCurrencyPairs())
+
 					val orders = PreferenceManager.getDefaultSharedPreferences(context).getOrders()
 
 					adapter.updateOrders(orders)
+
+					subscribeToChannels(orders.map { it.currencyPair.toTag() })
 				}
 			}
 		}
@@ -55,6 +65,16 @@ class OrdersFragment : Fragment() {
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
 			= inflater.inflate(R.layout.fragment_orders, container, false)
 
+	override fun onEvent(channelName: String, eventName: String, data: String) {
+		data.toPrices().bid?.let {
+			this.activity?.runOnUiThread {
+				val currencyPair = channelName.toCurrencyPair(ExchangeFragment.CHANNEL)
+
+				this.adapter.updatePrice(currencyPair, it)
+			}
+		}
+	}
+
 	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 		R.id.menu_add_order -> {
 			this.displayAddOrder()
@@ -68,6 +88,10 @@ class OrdersFragment : Fragment() {
 			LocalBroadcastManager.getInstance(it).unregisterReceiver(this.receiver)
 		}
 
+		this.unsubscribeFromChannels(this.adapter.getCurrencyPairs())
+
+		this.pusher.disconnect()
+
 		super.onPause()
 	}
 
@@ -77,6 +101,14 @@ class OrdersFragment : Fragment() {
 		this.context?.let {
 			LocalBroadcastManager.getInstance(it).registerReceiver(this.receiver, IntentFilter(AddOrderFragment.ACTION_ORDER_ADDED))
 		}
+
+		val orders = PreferenceManager.getDefaultSharedPreferences(this.context).getOrders()
+
+		this.adapter.updateOrders(orders)
+
+		this.subscribeToChannels(this.adapter.getCurrencyPairs())
+
+		this.pusher.connect()
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,15 +120,31 @@ class OrdersFragment : Fragment() {
 
 			ItemTouchHelper(OrderDismissCallback()).attachToRecyclerView(it)
 		}
-
-		val orders = PreferenceManager.getDefaultSharedPreferences(this.context).getOrders()
-
-		this.adapter.updateOrders(orders)
 	}
 
 	private fun displayAddOrder() {
 		AddOrderFragment.newInstance()
 				.show(this.childFragmentManager, "add_order")
+	}
+
+	private fun subscribeToChannels(channels: List<String>) {
+		channels.forEach {
+			if (it.isEmpty()) {
+				this.pusher.subscribe(ExchangeFragment.CHANNEL).bind(ExchangeFragment.EVENT, this)
+			} else {
+				this.pusher.subscribe("${ExchangeFragment.CHANNEL}_$it").bind(ExchangeFragment.EVENT, this)
+			}
+		}
+	}
+
+	private fun unsubscribeFromChannels(channels: List<String>) {
+		channels.forEach {
+			if (it.isEmpty()) {
+				this.pusher.unsubscribe(ExchangeFragment.CHANNEL)
+			} else {
+				this.pusher.unsubscribe("${ExchangeFragment.CHANNEL}_$it")
+			}
+		}
 	}
 
 	companion object {

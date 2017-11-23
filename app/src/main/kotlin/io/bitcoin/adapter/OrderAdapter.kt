@@ -15,6 +15,8 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 	private val lastPrices = mutableMapOf<CurrencyPair, Double>()
 	private val orders = mutableListOf<Order>()
 
+	fun getCurrencyPairs() = this.orders.map { it.currencyPair.toTag() }
+
 	override fun getItemCount() = this.orders.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {

@@ -144,8 +144,8 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	}
 
 	companion object {
-		private const val CHANNEL = "order_book"
-		private const val EVENT = "data"
+		const val CHANNEL = "order_book"
+		const val EVENT = "data"
 
 		fun newInstance() = ExchangeFragment()
 	}
