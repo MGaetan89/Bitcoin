@@ -16,30 +16,30 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.pusher.client.Pusher
 import com.pusher.client.channel.SubscriptionEventListener
-import io.bitcoin.BuildConfig
 import io.bitcoin.R
 import io.bitcoin.adapter.ExchangeAdapter
 import io.bitcoin.extension.getExchanges
 import io.bitcoin.extension.toCurrencyPair
 import io.bitcoin.extension.toPrices
+import io.bitcoin.network.BitstampApi
+import io.bitcoin.network.BitstampApi.Channel
+import io.bitcoin.network.BitstampApi.Event
 import kotlinx.android.synthetic.main.fragment_exchange.list
 
 class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	private val adapter by lazy { ExchangeAdapter() }
-	private val pusher by lazy { Pusher(BuildConfig.PUSHER_API_KEY) }
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			when (intent.action) {
 				ConfigureExchangeFragment.ACTION_EXCHANGES_UPDATED -> {
-					unsubscribeFromChannels(adapter.currencyPairs.map { it.toTag() })
+					BitstampApi.unSubscribeFrom(Channel.order_book, adapter.currencyPairs.map { it.toTag() })
 
 					val channels = PreferenceManager.getDefaultSharedPreferences(context).getExchanges()
 
-					adapter.updateCurrencyPairs(channels.map { it.toCurrencyPair(CHANNEL) })
+					adapter.updateCurrencyPairs(channels.map { it.toCurrencyPair(Channel.order_book.name) })
 
-					subscribeToChannels(channels)
+					BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this@ExchangeFragment)
 				}
 			}
 		}
@@ -63,7 +63,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 			= inflater.inflate(R.layout.fragment_exchange, container, false)
 
 	override fun onEvent(channelName: String, eventName: String, data: String) {
-		val currencyPair = channelName.toCurrencyPair(CHANNEL)
+		val currencyPair = channelName.toCurrencyPair(Channel.order_book.name)
 		val prices = data.toPrices()
 
 		this.activity?.runOnUiThread {
@@ -84,9 +84,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 			LocalBroadcastManager.getInstance(it).unregisterReceiver(this.receiver)
 		}
 
-		this.unsubscribeFromChannels(this.adapter.currencyPairs.map { it.toTag() })
-
-		this.pusher.disconnect()
+		BitstampApi.unSubscribeFrom(Channel.order_book, this.adapter.currencyPairs.map { it.toTag() })
 
 		super.onPause()
 	}
@@ -102,11 +100,9 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 
 		val channels = PreferenceManager.getDefaultSharedPreferences(this.context).getExchanges()
 
-		this.adapter.updateCurrencyPairs(channels.map { it.toCurrencyPair(CHANNEL) })
+		this.adapter.updateCurrencyPairs(channels.map { it.toCurrencyPair(Channel.order_book.name) })
 
-		this.subscribeToChannels(channels)
-
-		this.pusher.connect()
+		BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -123,30 +119,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 				.show(this.childFragmentManager, "configure_exchange")
 	}
 
-	private fun subscribeToChannels(channels: List<String>) {
-		channels.forEach {
-			if (it.isEmpty()) {
-				this.pusher.subscribe(CHANNEL).bind(EVENT, this)
-			} else {
-				this.pusher.subscribe("${CHANNEL}_$it").bind(EVENT, this)
-			}
-		}
-	}
-
-	private fun unsubscribeFromChannels(channels: List<String>) {
-		channels.forEach {
-			if (it.isEmpty()) {
-				this.pusher.unsubscribe(CHANNEL)
-			} else {
-				this.pusher.unsubscribe("${CHANNEL}_$it")
-			}
-		}
-	}
-
 	companion object {
-		const val CHANNEL = "order_book"
-		const val EVENT = "data"
-
 		fun newInstance() = ExchangeFragment()
 	}
 }
