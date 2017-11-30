@@ -18,7 +18,7 @@ object BitstampApi {
 	}
 
 	fun subscribeTo(channel: Channel, event: Event, currencyPairs: List<String>, listener: SubscriptionEventListener) {
-		currencyPairs.forEach {
+		currencyPairs.toSet().forEach {
 			this.pusher.subscribe(if (it.isEmpty()) channel.name else "${channel}_$it")
 					.bind(event.name, listener)
 		}
@@ -27,7 +27,7 @@ object BitstampApi {
 	}
 
 	fun unSubscribeFrom(channel: Channel, currencyPairs: List<String>) {
-		currencyPairs.forEach {
+		currencyPairs.toSet().forEach {
 			if (it.isEmpty()) {
 				this.pusher.unsubscribe(channel.name)
 			} else {
