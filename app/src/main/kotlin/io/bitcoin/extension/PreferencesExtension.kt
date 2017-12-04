@@ -26,7 +26,9 @@ fun SharedPreferences.removeOrder(order: Order) {
 }
 
 fun SharedPreferences.saveExchanges(exchanges: Set<String>) {
-	this.edit().putStringSet("exchanges", exchanges).apply()
+	val adjustedExchanges = exchanges.map { if (it == "btcusd") "" else it }.toSet()
+
+	this.edit().putStringSet("exchanges", adjustedExchanges).apply()
 }
 
 fun SharedPreferences.saveOrder(order: Order) {

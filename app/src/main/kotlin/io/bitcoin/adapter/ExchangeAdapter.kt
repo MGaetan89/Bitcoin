@@ -6,34 +6,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.bitcoin.R
-import io.bitcoin.model.CurrencyPair
 import io.bitcoin.model.Prices
+import io.bitcoin.model.TradingPair
 import io.bitcoin.view.AnimatedTextView
 import java.text.NumberFormat
 
 class ExchangeAdapter : RecyclerView.Adapter<ExchangeAdapter.ViewHolder>() {
-	val currencyPairs = mutableListOf<CurrencyPair>()
-	private var prices = arrayOfNulls<Prices>(this.currencyPairs.size)
+	val tradingPairs = mutableListOf<TradingPair>()
+	private var prices = arrayOfNulls<Prices>(this.tradingPairs.size)
 
 	override fun getItemCount() = this.prices.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bindTo(this.currencyPairs[position], this.prices[position])
+		holder.bindTo(this.tradingPairs[position], this.prices[position])
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder.of(parent)
 
-	fun updateCurrencyPairs(currencyPairs: List<CurrencyPair>) {
-		this.currencyPairs.clear()
-		this.currencyPairs.addAll(currencyPairs)
+	fun updateTradingPairs(tradingPairs: List<TradingPair>) {
+		this.tradingPairs.clear()
+		this.tradingPairs.addAll(tradingPairs)
 
-		this.prices = arrayOfNulls(this.currencyPairs.size)
+		this.prices = arrayOfNulls(this.tradingPairs.size)
 
 		this.notifyDataSetChanged()
 	}
 
-	fun updatePrice(currencyPair: CurrencyPair, prices: Prices) {
-		val index = this.currencyPairs.indexOf(currencyPair)
+	fun updatePrice(tradingPair: TradingPair, prices: Prices) {
+		val index = this.tradingPairs.indexOf(tradingPair)
 
 		if (index >= 0) {
 			this.prices[index] = prices
@@ -45,15 +45,15 @@ class ExchangeAdapter : RecyclerView.Adapter<ExchangeAdapter.ViewHolder>() {
 	class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		private val ask = view.findViewById<AnimatedTextView>(R.id.ask)
 		private val bid = view.findViewById<AnimatedTextView>(R.id.bid)
-		private val currency = view.findViewById<TextView>(R.id.currency_pair)
+		private val tradingPair = view.findViewById<TextView>(R.id.currency_pair)
 
-		fun bindTo(currencyPair: CurrencyPair, prices: Prices?) {
-			val numberFormat = currencyPair.getNumberFormat()
+		fun bindTo(tradingPair: TradingPair, prices: Prices?) {
+			val numberFormat = tradingPair.getCounterNumberFormat()
 
 			this.setPrice(this.ask, prices?.ask, numberFormat)
 			this.setPrice(this.bid, prices?.bid, numberFormat)
 
-			this.currency.text = currencyPair.toString()
+			this.tradingPair.text = tradingPair.toString()
 		}
 
 		private fun setPrice(textView: AnimatedTextView, price: Double?, numberFormat: NumberFormat) {

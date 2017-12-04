@@ -3,7 +3,7 @@ package io.bitcoin.model
 import com.squareup.moshi.Json
 import java.text.NumberFormat
 
-class TradingPair(
+data class TradingPair(
 		@Json(name = "base_decimals") val baseDecimals: Int,
 		@Json(name = "counter_decimals") val counterDecimals: Int,
 		val description: String,
@@ -27,4 +27,6 @@ class TradingPair(
 	}
 
 	override fun toString() = this.description
+
+	fun toUrlSymbol() = this.urlSymbol.takeIf { it != "btcusd" }.orEmpty()
 }

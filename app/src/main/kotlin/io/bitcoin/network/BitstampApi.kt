@@ -39,21 +39,24 @@ object BitstampApi {
 				?.body()
 	}
 
-	fun subscribeTo(channel: Channel, event: Event, currencyPairs: List<String>, listener: SubscriptionEventListener) {
-		currencyPairs.toSet().forEach {
-			this.pusher.subscribe(if (it.isEmpty()) channel.name else "${channel}_$it")
-					.bind(event.name, listener)
-		}
-
+	fun subscribeTo(channel: Channel, event: Event, urlSymbols: Iterable<String>, listener: SubscriptionEventListener) {
 		this.pusher.connect()
+
+		urlSymbols.toSet().forEach {
+			val channelName = if (it.isEmpty()) channel.name else "${channel}_$it"
+
+			if (this.pusher.getChannel(channelName)?.isSubscribed != true) {
+				this.pusher.subscribe(channelName).bind(event.name, listener)
+			}
+		}
 	}
 
-	fun unSubscribeFrom(channel: Channel, currencyPairs: List<String>) {
-		currencyPairs.toSet().forEach {
-			if (it.isEmpty()) {
-				this.pusher.unsubscribe(channel.name)
-			} else {
-				this.pusher.unsubscribe("${channel}_$it")
+	fun unSubscribeFrom(channel: Channel, urlSymbols: Iterable<String>) {
+		urlSymbols.toSet().forEach {
+			val channelName = if (it.isEmpty()) channel.name else "${channel}_$it"
+
+			if (this.pusher.getChannel(channelName)?.isSubscribed == true) {
+				this.pusher.unsubscribe(channelName)
 			}
 		}
 

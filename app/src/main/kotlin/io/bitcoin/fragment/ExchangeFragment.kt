@@ -20,12 +20,15 @@ import com.pusher.client.channel.SubscriptionEventListener
 import io.bitcoin.R
 import io.bitcoin.adapter.ExchangeAdapter
 import io.bitcoin.extension.getExchanges
-import io.bitcoin.extension.toCurrencyPair
 import io.bitcoin.extension.toPrices
+import io.bitcoin.extension.toTradingPair
+import io.bitcoin.model.TradingPair
 import io.bitcoin.network.BitstampApi
 import io.bitcoin.network.BitstampApi.Channel
 import io.bitcoin.network.BitstampApi.Event
 import kotlinx.android.synthetic.main.fragment_exchange.list
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	private val adapter by lazy { ExchangeAdapter() }
@@ -33,17 +36,18 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 		override fun onReceive(context: Context, intent: Intent) {
 			when (intent.action) {
 				ConfigureExchangeFragment.ACTION_EXCHANGES_UPDATED -> {
-					BitstampApi.unSubscribeFrom(Channel.order_book, adapter.currencyPairs.map { it.toTag() })
+					BitstampApi.unSubscribeFrom(Channel.order_book, adapter.tradingPairs.map { it.toUrlSymbol() })
 
 					val channels = PreferenceManager.getDefaultSharedPreferences(context).getExchanges()
 
-					adapter.updateCurrencyPairs(channels.map { it.toCurrencyPair(Channel.order_book.name) })
+					adapter.updateTradingPairs(channels.mapNotNull { it.toTradingPair(Channel.order_book.name, tradingPairs) })
 
 					BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this@ExchangeFragment)
 				}
 			}
 		}
 	}
+	private val tradingPairs = mutableListOf<TradingPair>()
 
 	init {
 		this.setHasOptionsMenu(true)
@@ -63,11 +67,13 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 			= inflater.inflate(R.layout.fragment_exchange, container, false)
 
 	override fun onEvent(channelName: String, eventName: String, data: String) {
-		val currencyPair = channelName.toCurrencyPair(Channel.order_book.name)
+		val tradingPair = channelName.toTradingPair(Channel.order_book.name, this.tradingPairs)
 		val prices = data.toPrices()
 
-		this.activity?.runOnUiThread {
-			this.adapter.updatePrice(currencyPair, prices)
+		tradingPair?.let {
+			launch(UI) {
+				this@ExchangeFragment.adapter.updatePrice(it, prices)
+			}
 		}
 	}
 
@@ -84,7 +90,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 			LocalBroadcastManager.getInstance(it).unregisterReceiver(this.receiver)
 		}
 
-		BitstampApi.unSubscribeFrom(Channel.order_book, this.adapter.currencyPairs.map { it.toTag() })
+		BitstampApi.unSubscribeFrom(Channel.order_book, this.adapter.tradingPairs.map { it.toUrlSymbol() })
 
 		super.onPause()
 	}
@@ -92,17 +98,26 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	override fun onResume() {
 		super.onResume()
 
+		launch {
+			BitstampApi.getTradingPairs()?.let {
+				this@ExchangeFragment.tradingPairs.clear()
+				this@ExchangeFragment.tradingPairs.addAll(it.sortedBy { it.description })
+
+				val channels = PreferenceManager.getDefaultSharedPreferences(this@ExchangeFragment.context).getExchanges()
+
+				launch(UI) {
+					this@ExchangeFragment.adapter.updateTradingPairs(channels.mapNotNull { it.toTradingPair(Channel.order_book.name, this@ExchangeFragment.tradingPairs) })
+				}
+
+				BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this@ExchangeFragment)
+			}
+		}
+
 		val filter = IntentFilter(ConfigureExchangeFragment.ACTION_EXCHANGES_UPDATED)
 
 		this.context?.let {
 			LocalBroadcastManager.getInstance(it).registerReceiver(this.receiver, filter)
 		}
-
-		val channels = PreferenceManager.getDefaultSharedPreferences(this.context).getExchanges()
-
-		this.adapter.updateCurrencyPairs(channels.map { it.toCurrencyPair(Channel.order_book.name) })
-
-		BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

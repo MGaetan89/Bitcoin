@@ -15,9 +15,9 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 	private val lastPrices = mutableMapOf<TradingPair, Double>()
 	private val orders = mutableListOf<Order>()
 
-	fun getCurrencyPairs() = this.orders.map { it.tradingPair.urlSymbol }
-
 	override fun getItemCount() = this.orders.size
+
+	fun getUrlSymbols() = this.orders.map { it.tradingPair.toUrlSymbol() }
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val order = this.orders[position]
@@ -56,11 +56,11 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 
 	class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		private val color: View = view.findViewById(R.id.color)
-		private val currencyPair: TextView = view.findViewById(R.id.currency_pair)
 		private val gain: TextView = view.findViewById(R.id.gain)
 		private val gainPercent: TextView = view.findViewById(R.id.gain_percent)
 		private val id: TextView = view.findViewById(R.id.id)
 		private val quantity: TextView = view.findViewById(R.id.quantity)
+		private val tradingPair: TextView = view.findViewById(R.id.trading_pair)
 		private val unitPrice: TextView = view.findViewById(R.id.unit_price)
 
 		fun bindTo(order: Order, lastPrice: Double?) {
@@ -88,9 +88,9 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 				this.gainPercent.setTextColor(color)
 			}
 
-			this.currencyPair.text = order.tradingPair.toString()
 			this.id.text = this.id.resources.getString(R.string.order_id, order.id)
 			this.quantity.text = quantityNumberFormat.format(order.quantity)
+			this.tradingPair.text = order.tradingPair.toString()
 			this.unitPrice.text = priceNumberFormat.format(order.unitPrice)
 		}
 
