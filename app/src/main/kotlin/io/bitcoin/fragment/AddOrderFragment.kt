@@ -12,15 +12,17 @@ import android.widget.ArrayAdapter
 import io.bitcoin.BuildConfig
 import io.bitcoin.R
 import io.bitcoin.extension.saveOrder
-import io.bitcoin.extension.toCurrencyPair
-import io.bitcoin.model.CurrencyPair
 import io.bitcoin.model.Order
+import io.bitcoin.model.TradingPair
+import io.bitcoin.network.BitstampApi
 import kotlinx.android.synthetic.main.fragment_add_order.add
 import kotlinx.android.synthetic.main.fragment_add_order.currency_pair
 import kotlinx.android.synthetic.main.fragment_add_order.fees
 import kotlinx.android.synthetic.main.fragment_add_order.order_id
 import kotlinx.android.synthetic.main.fragment_add_order.quantity
 import kotlinx.android.synthetic.main.fragment_add_order.unit_price
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 class AddOrderFragment : BottomSheetDialogFragment(), View.OnClickListener {
 	override fun onClick(view: View) {
@@ -35,21 +37,27 @@ class AddOrderFragment : BottomSheetDialogFragment(), View.OnClickListener {
 			= inflater.inflate(R.layout.fragment_add_order, container, false)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		val currencyPairs = BuildConfig.CURRENCY_PAIRS.map { it.toCurrencyPair() }
+		val fragment = this
 
-		this.currency_pair.adapter = ArrayAdapter<CurrencyPair>(this.context, android.R.layout.simple_list_item_1, currencyPairs)
+		launch {
+			val tradingPairs = BitstampApi.getTradingPairs().orEmpty().sortedBy { it.description }
+
+			launch(UI) {
+				fragment.currency_pair.adapter = ArrayAdapter<TradingPair>(fragment.context, android.R.layout.simple_list_item_1, tradingPairs)
+			}
+		}
 
 		this.add.setOnClickListener(this)
 	}
 
 	private fun createOrderFromUserInputs(): Order? {
-		val currencyPair = this.currency_pair.selectedItem as CurrencyPair? ?: return null
+		val tradingPair = this.currency_pair.selectedItem as TradingPair? ?: return null
 		val fees = this.fees.text?.toString()?.toFloatOrNull() ?: this.getString(R.string.default_fees).toFloatOrNull() ?: return null
 		val id = this.order_id.text?.toString()?.toIntOrNull() ?: return null
 		val quantity = this.quantity?.text?.toString()?.toDoubleOrNull() ?: return null
 		val unitPrice = this.unit_price?.text?.toString()?.toDoubleOrNull() ?: return null
 
-		return Order(currencyPair, fees / 100f, id, quantity, unitPrice)
+		return Order(tradingPair, fees / 100f, id, quantity, unitPrice)
 	}
 
 	private fun notifyOrderAdded() {

@@ -15,17 +15,22 @@ import io.bitcoin.R
 import io.bitcoin.adapter.ConfigureExchangeAdapter
 import io.bitcoin.extension.getExchanges
 import io.bitcoin.extension.saveExchanges
+import io.bitcoin.model.TradingPair
+import io.bitcoin.network.BitstampApi
 import kotlinx.android.synthetic.main.fragment_configure_exchange.configure
 import kotlinx.android.synthetic.main.fragment_configure_exchange.list
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 class ConfigureExchangeFragment : BottomSheetDialogFragment(), View.OnClickListener {
 	private val adapter by lazy {
 		val selectedExchanges = PreferenceManager.getDefaultSharedPreferences(this.context).getExchanges().toMutableList()
-		ConfigureExchangeAdapter(BuildConfig.CURRENCY_PAIRS, selectedExchanges)
+		ConfigureExchangeAdapter(this.tradingPairs, selectedExchanges)
 	}
+	private val tradingPairs = mutableListOf<TradingPair>()
 
 	override fun onClick(view: View) {
-		this.saveExchanges(this.adapter.selectedCurrencyPairs.toSet())
+		this.saveExchanges(this.adapter.selectedTradingPairs.toSet())
 		this.notifyExchangesUpdated()
 		this.dismiss()
 	}
@@ -34,6 +39,16 @@ class ConfigureExchangeFragment : BottomSheetDialogFragment(), View.OnClickListe
 			= inflater.inflate(R.layout.fragment_configure_exchange, container, false)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		launch {
+			BitstampApi.getTradingPairs()?.let {
+				this@ConfigureExchangeFragment.tradingPairs.addAll(it.sortedBy { it.description })
+
+				launch(UI) {
+					this@ConfigureExchangeFragment.adapter.notifyDataSetChanged()
+				}
+			}
+		}
+
 		this.configure.setOnClickListener(this)
 		this.list.also {
 			it.adapter = this.adapter

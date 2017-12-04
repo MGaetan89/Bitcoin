@@ -7,22 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.bitcoin.R
-import io.bitcoin.model.CurrencyPair
 import io.bitcoin.model.Order
+import io.bitcoin.model.TradingPair
 import java.text.NumberFormat
 
 class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
-	private val lastPrices = mutableMapOf<CurrencyPair, Double>()
+	private val lastPrices = mutableMapOf<TradingPair, Double>()
 	private val orders = mutableListOf<Order>()
 
-	fun getCurrencyPairs() = this.orders.map { it.currencyPair.toTag() }
+	fun getCurrencyPairs() = this.orders.map { it.tradingPair.urlSymbol }
 
 	override fun getItemCount() = this.orders.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val order = this.orders[position]
 
-		holder.bindTo(order, this.lastPrices[order.currencyPair])
+		holder.bindTo(order, this.lastPrices[order.tradingPair])
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder.of(parent)
@@ -44,11 +44,11 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 		this.notifyDataSetChanged()
 	}
 
-	fun updatePrice(currencyPair: CurrencyPair, price: Double) {
-		this.lastPrices[currencyPair] = price
+	fun updatePrice(tradingPair: TradingPair, price: Double) {
+		this.lastPrices[tradingPair] = price
 
 		this.orders.forEachIndexed { index, order ->
-			if (order.currencyPair == currencyPair) {
+			if (order.tradingPair == tradingPair) {
 				this.notifyItemChanged(index)
 			}
 		}
@@ -64,8 +64,8 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 		private val unitPrice: TextView = view.findViewById(R.id.unit_price)
 
 		fun bindTo(order: Order, lastPrice: Double?) {
-			val priceNumberFormat = order.currencyPair.getNumberFormat()
-			val quantityNumberFormat = order.currencyPair.reciprocal().getNumberFormat()
+			val priceNumberFormat = order.tradingPair.getCounterNumberFormat()
+			val quantityNumberFormat = order.tradingPair.getNumberFormat()
 
 			if (lastPrice != null) {
 				val gain = order.getGain(lastPrice)
@@ -88,7 +88,7 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 				this.gainPercent.setTextColor(color)
 			}
 
-			this.currencyPair.text = order.currencyPair.toString()
+			this.currencyPair.text = order.tradingPair.toString()
 			this.id.text = this.id.resources.getString(R.string.order_id, order.id)
 			this.quantity.text = quantityNumberFormat.format(order.quantity)
 			this.unitPrice.text = priceNumberFormat.format(order.unitPrice)

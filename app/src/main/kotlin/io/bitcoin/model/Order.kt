@@ -1,7 +1,7 @@
 package io.bitcoin.model
 
 class Order(
-		@JvmField val currencyPair: CurrencyPair, private val fees: Float, @JvmField val id: Int,
+		@JvmField val tradingPair: TradingPair, private val fees: Float, @JvmField val id: Int,
 		@JvmField val quantity: Double, @JvmField val unitPrice: Double
 ) {
 	fun getGain(lastPrice: Double): Double {

@@ -13,7 +13,6 @@ In order to be able to build and run *Bitcoin for Bitstamp*, you have to edit yo
 
 ```properties
 pusher.api_key="PUSHER_API_KEY"
-currency_pairs=new String[] {CURRENCY_PAIRS}
 ```
 
 ## License

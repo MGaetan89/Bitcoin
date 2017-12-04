@@ -21,7 +21,6 @@ android {
 		resConfigs 'en', 'fr'
 
 		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key", "\"\"")
-		buildConfigField "String[]", "CURRENCY_PAIRS", properties.getProperty("currency_pairs", "new String[0]")
 	}
 
 	buildTypes {
@@ -61,11 +60,21 @@ androidExtensions {
 	experimental = true
 }
 
+kotlin {
+	experimental {
+		coroutines 'enable'
+	}
+}
+
 dependencies {
 	implementation "com.android.support:design:$supportLibraryVersion"
 	implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 	implementation "com.pusher:pusher-java-client:$pusherVersion"
+	implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+	implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+	implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+	implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
 	testImplementation "com.squareup.assertj:assertj-android:$assertJAndroidVersion"
 	testImplementation "junit:junit:$jUnitVersion"

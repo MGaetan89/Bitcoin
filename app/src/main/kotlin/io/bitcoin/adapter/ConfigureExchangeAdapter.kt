@@ -7,49 +7,49 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import io.bitcoin.R
-import io.bitcoin.extension.toCurrencyPair
+import io.bitcoin.model.TradingPair
 
 class ConfigureExchangeAdapter(
-		private val currencyPairs: Array<String>, val selectedCurrencyPairs: MutableList<String>
+		private val tradingPairs: List<TradingPair>, val selectedTradingPairs: MutableList<String>
 ) : RecyclerView.Adapter<ConfigureExchangeAdapter.ViewHolder>() {
-	override fun getItemCount() = this.currencyPairs.size
+	override fun getItemCount() = this.tradingPairs.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bindTo(this.currencyPairs[position])
+		holder.bindTo(this.tradingPairs[position])
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
-			= ViewHolder.of(parent, this.currencyPairs, this.selectedCurrencyPairs)
+			= ViewHolder.of(parent, this.tradingPairs, this.selectedTradingPairs)
 
 	class ViewHolder(
-			view: View, private val currencyPairs: Array<String>, private val selectedCurrencyPairs: MutableList<String>
+			view: View, private val tradingPairs: List<TradingPair>, private val selectedTradingPairs: MutableList<String>
 	) : RecyclerView.ViewHolder(view), CompoundButton.OnCheckedChangeListener {
 		private val checkbox = view.findViewById<CheckBox>(android.R.id.checkbox).also {
 			it.setOnCheckedChangeListener(this)
 		}
 
-		fun bindTo(currencyPair: String) {
-			this.checkbox.isChecked = currencyPair in this.selectedCurrencyPairs
-			this.checkbox.text = currencyPair.toCurrencyPair().toString()
+		fun bindTo(tradingPair: TradingPair) {
+			this.checkbox.isChecked = tradingPair.urlSymbol in this.selectedTradingPairs
+			this.checkbox.text = tradingPair.toString()
 		}
 
 		override fun onCheckedChanged(button: CompoundButton, isChecked: Boolean) {
-			val currencyPair = currencyPairs.getOrNull(this.adapterPosition) ?: return
+			val tradingPair = this.tradingPairs.getOrNull(this.adapterPosition) ?: return
 
 			if (isChecked) {
-				if (currencyPair !in selectedCurrencyPairs) {
-					selectedCurrencyPairs.add(currencyPair)
+				if (tradingPair.urlSymbol !in this.selectedTradingPairs) {
+					this.selectedTradingPairs.add(tradingPair.urlSymbol)
 				}
 			} else {
-				selectedCurrencyPairs.remove(currencyPair)
+				this.selectedTradingPairs.remove(tradingPair.urlSymbol)
 			}
 		}
 
 		companion object {
-			fun of(parent: ViewGroup, currencyPairs: Array<String>, selectedCurrencyPairs: MutableList<String>): ViewHolder {
+			fun of(parent: ViewGroup, tradingPairs: List<TradingPair>, selectedTradingPairs: MutableList<String>): ViewHolder {
 				val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_configure_exchange, parent, false)
 
-				return ViewHolder(view, currencyPairs, selectedCurrencyPairs)
+				return ViewHolder(view, tradingPairs, selectedTradingPairs)
 			}
 		}
 	}

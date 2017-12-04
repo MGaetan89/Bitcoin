@@ -23,12 +23,13 @@ import io.bitcoin.R
 import io.bitcoin.adapter.OrderAdapter
 import io.bitcoin.extension.getOrders
 import io.bitcoin.extension.removeOrder
-import io.bitcoin.extension.toCurrencyPair
 import io.bitcoin.extension.toPrices
+import io.bitcoin.model.TradingPair
 import io.bitcoin.network.BitstampApi
 import io.bitcoin.network.BitstampApi.Channel
 import io.bitcoin.network.BitstampApi.Event
 import kotlinx.android.synthetic.main.fragment_orders.list
+import kotlinx.coroutines.experimental.launch
 
 class OrdersFragment : Fragment(), SubscriptionEventListener {
 	private val adapter by lazy { OrderAdapter() }
@@ -42,11 +43,12 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 
 					adapter.updateOrders(orders)
 
-					BitstampApi.subscribeTo(Channel.order_book, Event.data, orders.map { it.currencyPair.toTag() }, this@OrdersFragment)
+					BitstampApi.subscribeTo(Channel.order_book, Event.data, orders.map { it.tradingPair.urlSymbol }, this@OrdersFragment)
 				}
 			}
 		}
 	}
+	private val tradingPairs = mutableListOf<TradingPair>()
 
 	init {
 		this.setHasOptionsMenu(true)
@@ -68,9 +70,12 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 	override fun onEvent(channelName: String, eventName: String, data: String) {
 		data.toPrices().bid?.let {
 			this.activity?.runOnUiThread {
-				val currencyPair = channelName.toCurrencyPair(Channel.order_book.name)
+				val urlSymbol = channelName.replaceFirst(Channel.order_book.name, "").trimStart('_')
+				val tradingPair = this.tradingPairs.firstOrNull { it.urlSymbol == urlSymbol }
 
-				this.adapter.updatePrice(currencyPair, it)
+				if (tradingPair != null) {
+					this.adapter.updatePrice(tradingPair, it)
+				}
 			}
 		}
 	}
@@ -108,6 +113,12 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		launch {
+			BitstampApi.getTradingPairs()?.let {
+				this@OrdersFragment.tradingPairs.addAll(it.sortedBy { it.description })
+			}
+		}
+
 		this.list.also {
 			it.adapter = this.adapter
 			it.itemAnimator = null
