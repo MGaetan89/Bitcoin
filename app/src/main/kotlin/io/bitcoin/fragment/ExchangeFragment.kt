@@ -40,7 +40,7 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 
 					val channels = PreferenceManager.getDefaultSharedPreferences(context).getExchanges()
 
-					adapter.updateTradingPairs(channels.mapNotNull { it.toTradingPair(Channel.order_book.name, tradingPairs) })
+					adapter.updateTradingPairs(channels.mapNotNull { it.toTradingPair(Channel.order_book.name, tradingPairs) }.sortedBy { it.description })
 
 					BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this@ExchangeFragment)
 				}
@@ -71,8 +71,10 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 		val prices = data.toPrices()
 
 		tradingPair?.let {
+			val adapter = this.adapter
+
 			launch(UI) {
-				this@ExchangeFragment.adapter.updatePrice(it, prices)
+				adapter.updatePrice(it, prices)
 			}
 		}
 	}
@@ -98,18 +100,23 @@ class ExchangeFragment : Fragment(), SubscriptionEventListener {
 	override fun onResume() {
 		super.onResume()
 
+		val adapter = this.adapter
+		val context = this.context
+		val listener = this
+		val tradingPairs = this.tradingPairs
+
 		launch {
 			BitstampApi.getTradingPairs()?.let {
-				this@ExchangeFragment.tradingPairs.clear()
-				this@ExchangeFragment.tradingPairs.addAll(it.sortedBy { it.description })
+				tradingPairs.clear()
+				tradingPairs.addAll(it.sortedBy { it.description })
 
-				val channels = PreferenceManager.getDefaultSharedPreferences(this@ExchangeFragment.context).getExchanges()
+				val channels = PreferenceManager.getDefaultSharedPreferences(context).getExchanges()
 
 				launch(UI) {
-					this@ExchangeFragment.adapter.updateTradingPairs(channels.mapNotNull { it.toTradingPair(Channel.order_book.name, this@ExchangeFragment.tradingPairs) })
+					adapter.updateTradingPairs(channels.mapNotNull { it.toTradingPair(Channel.order_book.name, tradingPairs) }.sortedBy { it.description })
 				}
 
-				BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, this@ExchangeFragment)
+				BitstampApi.subscribeTo(Channel.order_book, Event.data, channels, listener)
 			}
 		}
 

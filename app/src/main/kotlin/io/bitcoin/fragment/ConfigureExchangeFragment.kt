@@ -39,12 +39,15 @@ class ConfigureExchangeFragment : BottomSheetDialogFragment(), View.OnClickListe
 			= inflater.inflate(R.layout.fragment_configure_exchange, container, false)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		val adapter = this.adapter
+		val tradingPairs = this.tradingPairs
+
 		launch {
 			BitstampApi.getTradingPairs()?.let {
-				this@ConfigureExchangeFragment.tradingPairs.addAll(it.sortedBy { it.description })
+				tradingPairs.addAll(it.sortedBy { it.description })
 
 				launch(UI) {
-					this@ConfigureExchangeFragment.adapter.notifyDataSetChanged()
+					adapter.notifyDataSetChanged()
 				}
 			}
 		}

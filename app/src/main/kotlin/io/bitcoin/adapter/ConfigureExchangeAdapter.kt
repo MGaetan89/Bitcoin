@@ -29,7 +29,7 @@ class ConfigureExchangeAdapter(
 		}
 
 		fun bindTo(tradingPair: TradingPair) {
-			this.checkbox.isChecked = tradingPair.urlSymbol in this.selectedTradingPairs
+			this.checkbox.isChecked = tradingPair.toUrlSymbol() in this.selectedTradingPairs
 			this.checkbox.text = tradingPair.toString()
 		}
 
@@ -37,11 +37,11 @@ class ConfigureExchangeAdapter(
 			val tradingPair = this.tradingPairs.getOrNull(this.adapterPosition) ?: return
 
 			if (isChecked) {
-				if (tradingPair.urlSymbol !in this.selectedTradingPairs) {
-					this.selectedTradingPairs.add(tradingPair.urlSymbol)
+				if (tradingPair.toUrlSymbol() !in this.selectedTradingPairs) {
+					this.selectedTradingPairs.add(tradingPair.toUrlSymbol())
 				}
 			} else {
-				this.selectedTradingPairs.remove(tradingPair.urlSymbol)
+				this.selectedTradingPairs.remove(tradingPair.toUrlSymbol())
 			}
 		}
 

@@ -1,3 +1,4 @@
+# Kotlin rules
 -dontwarn kotlin.**
 -keep class kotlin.** { *; }
 -keep class kotlin.Metadata { *; }
@@ -19,3 +20,14 @@
 -keepclassmembers class io.bitcoin.model.** {
    <fields>;
 }
+
+# OkHttp rules
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
+# Retrofit rules
+-dontnote retrofit2.Platform
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions

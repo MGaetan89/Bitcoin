@@ -1,5 +1,6 @@
 package io.bitcoin.network
 
+import android.util.Log
 import com.pusher.client.Pusher
 import com.pusher.client.channel.SubscriptionEventListener
 import io.bitcoin.BuildConfig
@@ -46,7 +47,11 @@ object BitstampApi {
 			val channelName = if (it.isEmpty()) channel.name else "${channel}_$it"
 
 			if (this.pusher.getChannel(channelName)?.isSubscribed != true) {
-				this.pusher.subscribe(channelName).bind(event.name, listener)
+				try {
+					this.pusher.subscribe(channelName).bind(event.name, listener)
+				} catch (exception: IllegalArgumentException) {
+					Log.d("BitstampApi", "Already subscribed to $channelName", exception)
+				}
 			}
 		}
 	}

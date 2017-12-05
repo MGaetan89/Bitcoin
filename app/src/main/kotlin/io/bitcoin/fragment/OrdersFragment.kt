@@ -71,11 +71,12 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 
 	override fun onEvent(channelName: String, eventName: String, data: String) {
 		data.toPrices().bid?.let {
+			val adapter = this.adapter
 			val tradingPair = channelName.toTradingPair(Channel.order_book.name, this@OrdersFragment.tradingPairs)
 
 			launch(UI) {
 				if (tradingPair != null) {
-					this@OrdersFragment.adapter.updatePrice(tradingPair, it)
+					adapter.updatePrice(tradingPair, it)
 				}
 			}
 		}
@@ -102,17 +103,22 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 	override fun onResume() {
 		super.onResume()
 
+		val adapter = this.adapter
+		val context = this.context
+		val listener = this
+		val tradingPairs = this.tradingPairs
+
 		launch {
 			BitstampApi.getTradingPairs()?.let {
-				this@OrdersFragment.tradingPairs.clear()
-				this@OrdersFragment.tradingPairs.addAll(it.sortedBy { it.description })
+				tradingPairs.clear()
+				tradingPairs.addAll(it.sortedBy { it.description })
 
-				val orders = PreferenceManager.getDefaultSharedPreferences(this@OrdersFragment.context).getOrders()
+				val orders = PreferenceManager.getDefaultSharedPreferences(context).getOrders()
 
 				launch(UI) {
-					this@OrdersFragment.adapter.updateOrders(orders)
+					adapter.updateOrders(orders)
 
-					BitstampApi.subscribeTo(Channel.order_book, Event.data, this@OrdersFragment.adapter.getUrlSymbols(), this@OrdersFragment)
+					BitstampApi.subscribeTo(Channel.order_book, Event.data, adapter.getUrlSymbols(), listener)
 				}
 			}
 		}

@@ -37,13 +37,15 @@ class AddOrderFragment : BottomSheetDialogFragment(), View.OnClickListener {
 			= inflater.inflate(R.layout.fragment_add_order, container, false)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		val fragment = this
+		val context = this.context
+		@Suppress("LocalVariableName")
+		val currency_pair = this.currency_pair
 
 		launch {
 			val tradingPairs = BitstampApi.getTradingPairs().orEmpty().sortedBy { it.description }
 
 			launch(UI) {
-				fragment.currency_pair.adapter = ArrayAdapter<TradingPair>(fragment.context, android.R.layout.simple_list_item_1, tradingPairs)
+				currency_pair.adapter = ArrayAdapter<TradingPair>(context, android.R.layout.simple_list_item_1, tradingPairs)
 			}
 		}
 
