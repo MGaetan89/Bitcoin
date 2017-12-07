@@ -31,5 +31,16 @@
 		android:background="@color/primary"
 		app:itemIconTint="@color/stateful_text"
 		app:itemTextColor="@color/stateful_text"
+		app:layout_insetEdge="bottom"
 		app:menu="@menu/bottom_navigation" />
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fab"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|end"
+		android:layout_margin="@dimen/margin"
+		android:visibility="gone"
+		app:layout_anchorGravity="bottom|end"
+		tools:visibility="visible" />
 </android.support.design.widget.CoordinatorLayout>

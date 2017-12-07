@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.DividerItemDecoration
@@ -13,9 +14,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.pusher.client.channel.SubscriptionEventListener
@@ -33,8 +31,9 @@ import kotlinx.android.synthetic.main.fragment_orders.list
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-class OrdersFragment : Fragment(), SubscriptionEventListener {
+class OrdersFragment : Fragment(), View.OnClickListener, SubscriptionEventListener {
 	private val adapter by lazy { OrderAdapter() }
+	private val floatingActionButton by lazy { this.activity?.findViewById<FloatingActionButton>(R.id.fab) }
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			when (intent.action) {
@@ -52,18 +51,18 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 	}
 	private val tradingPairs = mutableListOf<TradingPair>()
 
-	init {
-		this.setHasOptionsMenu(true)
-	}
-
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 
 		this.activity?.setTitle(R.string.orders)
+		this.floatingActionButton?.let {
+			it.setImageResource(R.drawable.ic_add)
+			it.setOnClickListener(this)
+		}
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		inflater.inflate(R.menu.orders, menu)
+	override fun onClick(view: View) {
+		this.displayAddOrder()
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -82,15 +81,9 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 		}
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-		R.id.menu_add_order -> {
-			this.displayAddOrder()
-			true
-		}
-		else -> super.onOptionsItemSelected(item)
-	}
-
 	override fun onPause() {
+		this.floatingActionButton?.visibility = View.GONE
+
 		this.context?.let {
 			LocalBroadcastManager.getInstance(it).unregisterReceiver(this.receiver)
 		}
@@ -102,6 +95,8 @@ class OrdersFragment : Fragment(), SubscriptionEventListener {
 
 	override fun onResume() {
 		super.onResume()
+
+		this.floatingActionButton?.visibility = View.VISIBLE
 
 		val adapter = this.adapter
 		val context = this.context
