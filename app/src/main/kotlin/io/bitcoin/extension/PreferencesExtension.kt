@@ -18,7 +18,7 @@ fun SharedPreferences.getOrders(): List<Order> {
 
 fun SharedPreferences.removeOrder(order: Order) {
 	val orders = this.getOrders()
-			.filter { it != order }
+			.filter { it.id != order.id }
 			.map { it.toJson() }
 			.toSet()
 
