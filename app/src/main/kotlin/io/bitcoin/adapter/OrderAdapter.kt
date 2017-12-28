@@ -11,21 +11,34 @@ import io.bitcoin.model.Order
 import io.bitcoin.model.TradingPair
 import java.text.NumberFormat
 
-class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
+class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 	private val lastPrices = mutableMapOf<TradingPair, Double>()
 	private val orders = mutableListOf<Order>()
 
-	override fun getItemCount() = this.orders.size
+	override fun getItemCount() = this.orders.size + 1
+
+	override fun getItemViewType(position: Int) = if (position == this.orders.size) VIEW_TYPE_TOTAL else VIEW_TYPE_ORDER
 
 	fun getUrlSymbols() = this.orders.map { it.tradingPair.toUrlSymbol() }
 
-	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		val order = this.orders[position]
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		when (holder) {
+			is OrderViewHolder -> {
+				val order = this.orders[position]
 
-		holder.bindTo(order, this.lastPrices[order.tradingPair])
+				holder.bindTo(order, this.lastPrices[order.tradingPair])
+			}
+			is TotalViewHolder -> holder.bindTotal(this.orders, this.lastPrices)
+		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder.of(parent)
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+		return when (viewType) {
+			VIEW_TYPE_ORDER -> OrderViewHolder.of(parent)
+			VIEW_TYPE_TOTAL -> TotalViewHolder.of(parent)
+			else -> throw IllegalArgumentException("Unknown viewType '$viewType'")
+		}
+	}
 
 	fun removeOrder(order: Order) {
 		val index = this.orders.indexOf(order)
@@ -34,6 +47,7 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 			this.orders.removeAt(index)
 
 			this.notifyItemRemoved(index)
+			this.notifyItemChanged(this.orders.size)
 		}
 	}
 
@@ -52,9 +66,21 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 				this.notifyItemChanged(index)
 			}
 		}
+
+		this.notifyItemChanged(this.orders.size)
 	}
 
-	class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+	private companion object {
+		private const val VIEW_TYPE_ORDER = 0
+		private const val VIEW_TYPE_TOTAL = 1
+
+		val percentFormat: NumberFormat = NumberFormat.getPercentInstance().apply {
+			this.maximumFractionDigits = 2
+			this.minimumFractionDigits = 2
+		}
+	}
+
+	class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		private val color: View = view.findViewById(R.id.color)
 		private val gain: TextView = view.findViewById(R.id.gain)
 		private val gainPercent: TextView = view.findViewById(R.id.gain_percent)
@@ -95,15 +121,45 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 		}
 
 		companion object {
-			private val percentFormat = NumberFormat.getPercentInstance().apply {
-				this.maximumFractionDigits = 2
-				this.minimumFractionDigits = 2
-			}
-
-			fun of(parent: ViewGroup): ViewHolder {
+			fun of(parent: ViewGroup): OrderViewHolder {
 				val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_order, parent, false)
 
-				return ViewHolder(view)
+				return OrderViewHolder(view)
+			}
+		}
+	}
+
+	class TotalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+		private val color: View = view.findViewById(R.id.color)
+		private val currency: TextView = view.findViewById(R.id.currency)
+		private val gain: TextView = view.findViewById(R.id.gain)
+		private val gainPercent: TextView = view.findViewById(R.id.gain_percent)
+		private val label: TextView = view.findViewById(R.id.label)
+
+		fun bindTotal(orders: List<Order>, lastPrices: Map<TradingPair, Double>) {
+			val priceNumberFormat = NumberFormat.getNumberInstance().also {
+				it.maximumFractionDigits = 2
+				it.minimumFractionDigits = 2
+			}
+			val gain = orders.sumByDouble { it.getGain(lastPrices[it.tradingPair] ?: 0.0) }
+			val gainPercent = orders.sumByDouble { it.getGainPercent(lastPrices[it.tradingPair] ?: 0.0) }
+			val colorResource = if (gain < 0.0) R.color.ask else R.color.bid
+			val color = ContextCompat.getColor(this.gain.context, colorResource)
+
+			this.color.setBackgroundResource(colorResource)
+			this.currency.text = orders.firstOrNull()?.tradingPair?.name?.split("/")?.last()
+			this.gain.text = priceNumberFormat.format(gain)
+			this.gain.setTextColor(color)
+			this.gainPercent.text = percentFormat.format(gainPercent)
+			this.gainPercent.setTextColor(color)
+			this.label.text = this.label.context.getString(R.string.total)
+		}
+
+		companion object {
+			fun of(parent: ViewGroup): TotalViewHolder {
+				val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_order_total, parent, false)
+
+				return TotalViewHolder(view)
 			}
 		}
 	}

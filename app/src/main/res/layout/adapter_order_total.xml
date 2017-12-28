@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="?attr/listPreferredItemHeightSmall"
+	android:background="?attr/selectableItemBackground"
+	android:clickable="true"
+	android:focusable="true">
+
+	<View
+		android:id="@+id/color"
+		android:layout_width="4dp"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:background="@color/ask" />
+
+	<TextView
+		android:id="@+id/label"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_marginStart="@dimen/margin"
+		android:text="@string/total"
+		android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintHeight_default="wrap"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/gain"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin_half"
+		android:layout_marginStart="@dimen/margin"
+		android:gravity="end"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintBaseline_toBaselineOf="@+id/label"
+		app:layout_constraintEnd_toStartOf="@+id/currency"
+		app:layout_constraintStart_toEndOf="@+id/label"
+		tools:text="@sample/orders.json/orders/gain"
+		tools:textColor="@color/ask" />
+
+	<TextView
+		android:id="@+id/currency"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/label"
+		app:layout_constraintEnd_toStartOf="@+id/gain_percent_prefix"
+		tools:text="EUR" />
+
+	<TextView
+		android:id="@+id/gain_percent_prefix"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="("
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/label"
+		app:layout_constraintEnd_toStartOf="@+id/gain_percent"
+		tools:ignore="HardcodedText" />
+
+	<TextView
+		android:id="@+id/gain_percent"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintBaseline_toBaselineOf="@+id/label"
+		app:layout_constraintEnd_toStartOf="@+id/gain_percent_suffix"
+		tools:text="@sample/orders.json/orders/gain_percent"
+		tools:textColor="@color/ask" />
+
+	<TextView
+		android:id="@+id/gain_percent_suffix"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:text=")"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/label"
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:ignore="HardcodedText" />
+</android.support.constraint.ConstraintLayout>

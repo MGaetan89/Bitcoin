@@ -11,5 +11,6 @@
 	<string name="order_id_label">Order Id</string>
 	<string name="orders">Orders</string>
 	<string name="quantity">Quantity</string>
+	<string name="total">Total</string>
 	<string name="unit_price">Unit Price</string>
 </resources>
