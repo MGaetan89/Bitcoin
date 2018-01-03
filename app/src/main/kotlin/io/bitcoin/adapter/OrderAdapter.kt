@@ -15,7 +15,7 @@ class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 	private val lastPrices = mutableMapOf<TradingPair, Double>()
 	private val orders = mutableListOf<Order>()
 
-	override fun getItemCount() = this.orders.size + 1
+	override fun getItemCount() = if (this.orders.isEmpty()) 0 else this.orders.size + 1
 
 	override fun getItemViewType(position: Int) = if (position == this.orders.size) VIEW_TYPE_TOTAL else VIEW_TYPE_ORDER
 
@@ -73,11 +73,6 @@ class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 	private companion object {
 		private const val VIEW_TYPE_ORDER = 0
 		private const val VIEW_TYPE_TOTAL = 1
-
-		val percentFormat: NumberFormat = NumberFormat.getPercentInstance().apply {
-			this.maximumFractionDigits = 2
-			this.minimumFractionDigits = 2
-		}
 	}
 
 	class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -121,6 +116,11 @@ class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 		}
 
 		companion object {
+			private val percentFormat: NumberFormat = NumberFormat.getPercentInstance().apply {
+				this.maximumFractionDigits = 2
+				this.minimumFractionDigits = 2
+			}
+
 			fun of(parent: ViewGroup): OrderViewHolder {
 				val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_order, parent, false)
 
@@ -133,7 +133,6 @@ class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 		private val color: View = view.findViewById(R.id.color)
 		private val currency: TextView = view.findViewById(R.id.currency)
 		private val gain: TextView = view.findViewById(R.id.gain)
-		private val gainPercent: TextView = view.findViewById(R.id.gain_percent)
 		private val label: TextView = view.findViewById(R.id.label)
 
 		fun bindTotal(orders: List<Order>, lastPrices: Map<TradingPair, Double>) {
@@ -141,8 +140,7 @@ class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 				it.maximumFractionDigits = 2
 				it.minimumFractionDigits = 2
 			}
-			val gain = orders.sumByDouble { it.getGain(lastPrices[it.tradingPair] ?: 0.0) }
-			val gainPercent = orders.sumByDouble { it.getGainPercent(lastPrices[it.tradingPair] ?: 0.0) }
+			val gain = orders.sumByDouble { lastPrices[it.tradingPair]?.let { lastPrice -> it.getGain(lastPrice) } ?: 0.0 }
 			val colorResource = if (gain < 0.0) R.color.ask else R.color.bid
 			val color = ContextCompat.getColor(this.gain.context, colorResource)
 
@@ -150,8 +148,6 @@ class OrderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 			this.currency.text = orders.firstOrNull()?.tradingPair?.name?.split("/")?.last()
 			this.gain.text = priceNumberFormat.format(gain)
 			this.gain.setTextColor(color)
-			this.gainPercent.text = percentFormat.format(gainPercent)
-			this.gainPercent.setTextColor(color)
 			this.label.text = this.label.context.getString(R.string.total)
 		}
 

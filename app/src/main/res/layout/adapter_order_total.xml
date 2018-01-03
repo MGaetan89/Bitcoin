@@ -50,37 +50,6 @@
 		android:layout_marginEnd="@dimen/margin"
 		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
 		app:layout_constraintBaseline_toBaselineOf="@+id/label"
-		app:layout_constraintEnd_toStartOf="@+id/gain_percent_prefix"
-		tools:text="EUR" />
-
-	<TextView
-		android:id="@+id/gain_percent_prefix"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="("
-		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-		app:layout_constraintBaseline_toBaselineOf="@+id/label"
-		app:layout_constraintEnd_toStartOf="@+id/gain_percent"
-		tools:ignore="HardcodedText" />
-
-	<TextView
-		android:id="@+id/gain_percent"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-		app:layout_constraintBaseline_toBaselineOf="@+id/label"
-		app:layout_constraintEnd_toStartOf="@+id/gain_percent_suffix"
-		tools:text="@sample/orders.json/orders/gain_percent"
-		tools:textColor="@color/ask" />
-
-	<TextView
-		android:id="@+id/gain_percent_suffix"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginEnd="@dimen/margin"
-		android:text=")"
-		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-		app:layout_constraintBaseline_toBaselineOf="@+id/label"
 		app:layout_constraintEnd_toEndOf="parent"
-		tools:ignore="HardcodedText" />
+		tools:text="EUR" />
 </android.support.constraint.ConstraintLayout>
