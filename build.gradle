@@ -1,10 +1,10 @@
 buildscript {
-    ext.androidGradlePlugin = '3.1.0-alpha06'
+    ext.androidGradlePlugin = '3.1.0-alpha07'
     ext.assertJAndroidVersion = '1.1.1'
     ext.buildToolsVersion = '27.0.3'
     ext.compileSdkVersion = 27
     ext.constraintLayoutVersion = '1.1.0-beta4'
-    ext.coroutinesVersion = '0.20'
+    ext.coroutinesVersion = '0.21'
     ext.jsonVersion = '20170516'
     ext.jUnitVersion = '4.12'
     ext.kotlinVersion = '1.2.10'
