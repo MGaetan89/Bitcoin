@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="add">Add</string>
-	<string name="add_order">Add Order</string>
-	<string name="app_name">Bitcoin for Bitstamp</string>
-	<string name="configure">Configure</string>
-	<string name="exchange">Exchange</string>
-	<string name="fees">Fees</string>
-	<string name="no_price">-</string>
-	<string name="order_id">#%1$d</string>
-	<string name="order_id_label">Order Id</string>
+	<string name="account">Account</string>
+	<string name="amount">Amount</string>
+	<string name="app_name">Bitstamp (unofficial)</string>
+	<string name="ask">Ask</string>
+	<string name="bid">Bid</string>
+	<string name="buy">Buy</string>
+	<string name="high_24">24h high</string>
+	<string name="id_prefix">#</string>
+	<string name="low_24">24h low</string>
+	<string name="order_book">Order Book</string>
 	<string name="orders">Orders</string>
-	<string name="quantity">Quantity</string>
-	<string name="total">Total</string>
-	<string name="unit_price">Unit Price</string>
+	<string name="overview">Overview</string>
+	<string name="price">Price</string>
+	<string name="prices">Prices</string>
+	<string name="public_positions">Public Positions</string>
+	<string name="sell">Sell</string>
+	<string name="transactions">Transactions</string>
+	<string name="value">Value</string>
+	<string name="volume">Volume</string>
+	<string name="vwap">VWAP</string>
 </resources>

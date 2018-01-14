@@ -13,7 +13,7 @@ android {
 	buildToolsVersion rootProject.buildToolsVersion
 
 	defaultConfig {
-		applicationId 'io.bitcoin'
+		applicationId 'io.crypto.bitstamp'
 		minSdkVersion rootProject.minSdkVersion
 		targetSdkVersion rootProject.targetSdkVersion
 		versionCode rootProject.versionCode
@@ -26,10 +26,10 @@ android {
 	buildTypes {
 		debug {
 			postprocessing {
-				removeUnusedCode true
-				removeUnusedResources true
-				obfuscate true
-				optimizeCode true
+				removeUnusedCode false
+				removeUnusedResources false
+				obfuscate false
+				optimizeCode false
 				proguardFiles 'proguard-rules.pro'
 			}
 		}

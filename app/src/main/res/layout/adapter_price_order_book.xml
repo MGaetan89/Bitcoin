@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<android.support.constraint.Guideline
+		android:id="@+id/guideline"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		app:layout_constraintGuide_percent="0.5" />
+
+	<TextView
+		android:id="@+id/amount_bid"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/margin_half"
+		android:layout_marginStart="@dimen/margin"
+		android:layout_marginTop="@dimen/margin_half"
+		android:gravity="end"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/bid"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="@sample/orders.json/orders/bids/amount" />
+
+	<TextView
+		android:id="@+id/bid"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin_half"
+		android:layout_marginStart="@dimen/margin_half"
+		android:gravity="end"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:textColor="@color/bid"
+		app:layout_constraintBaseline_toBaselineOf="@+id/amount_bid"
+		app:layout_constraintEnd_toStartOf="@+id/guideline"
+		app:layout_constraintStart_toEndOf="@+id/amount_bid"
+		tools:text="@sample/orders.json/orders/bids/price" />
+
+	<TextView
+		android:id="@+id/ask"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin_half"
+		android:layout_marginStart="@dimen/margin_half"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:textColor="@color/ask"
+		app:layout_constraintBaseline_toBaselineOf="@+id/amount_bid"
+		app:layout_constraintEnd_toStartOf="@+id/amount_ask"
+		app:layout_constraintStart_toEndOf="@+id/guideline"
+		tools:text="@sample/orders.json/orders/asks/price" />
+
+	<TextView
+		android:id="@+id/amount_ask"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/amount_bid"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/ask"
+		tools:text="@sample/orders.json/orders/asks/amount" />
+</android.support.constraint.ConstraintLayout>

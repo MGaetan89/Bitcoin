@@ -1,40 +1,48 @@
 buildscript {
-    ext.androidGradlePlugin = '3.1.0-alpha07'
-    ext.assertJAndroidVersion = '1.1.1'
-    ext.buildToolsVersion = '27.0.3'
-    ext.compileSdkVersion = 27
-    ext.constraintLayoutVersion = '1.1.0-beta4'
-    ext.coroutinesVersion = '0.21'
-    ext.jsonVersion = '20170516'
-    ext.jUnitVersion = '4.12'
-    ext.kotlinVersion = '1.2.10'
-    ext.minSdkVersion = 21
-    ext.okHttpVersion = '3.9.1'
-    ext.pusherVersion = '1.6.0'
-    ext.retrofitVersion = '2.3.0'
-    ext.supportLibraryVersion = '27.0.2'
-    ext.targetSdkVersion = 27
-    ext.versionCode = 1
-    ext.versionName = '1.0'
+	ext.androidGradlePlugin = '3.1.0-alpha08'
+	ext.assertJAndroidVersion = '1.1.1'
+	ext.buildToolsVersion = '27.0.3'
+	ext.compileSdkVersion = 27
+	ext.constraintLayoutVersion = '1.1.0-beta4'
+	ext.coroutinesVersion = '0.21.1'
+	ext.jsonVersion = '20170516'
+	ext.jUnitVersion = '4.12'
+	ext.kotlinVersion = '1.2.20-eap-71'
+	ext.minSdkVersion = 21
+	ext.okHttpVersion = '3.9.1'
+	ext.pusherVersion = '1.6.0'
+	ext.retrofitVersion = '2.3.0'
+	ext.supportLibraryVersion = '27.0.2'
+	ext.targetSdkVersion = 27
+	ext.versionCode = 1
+	ext.versionName = '1.0'
 
-    repositories {
+	repositories {
 		google()
 		jcenter()
-    }
 
-    dependencies {
-        classpath "com.android.tools.build:gradle:$androidGradlePlugin"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
+		maven {
+			url "https://dl.bintray.com/kotlin/kotlin-eap"
+		}
+	}
+
+	dependencies {
+		classpath "com.android.tools.build:gradle:$androidGradlePlugin"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+	}
 }
 
 allprojects {
-    repositories {
+	repositories {
 		google()
 		jcenter()
-    }
+
+		maven {
+			url "https://dl.bintray.com/kotlin/kotlin-eap"
+		}
+	}
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+	delete rootProject.buildDir
 }

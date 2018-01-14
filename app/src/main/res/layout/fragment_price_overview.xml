@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".fragment.PriceOverviewFragment">
+
+	<android.support.constraint.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<android.support.constraint.Barrier
+			android:id="@+id/barrier_left"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:barrierDirection="end"
+			app:constraint_referenced_ids="high_24_label,low_24_label,volume_label" />
+
+		<android.support.constraint.Barrier
+			android:id="@+id/barrier_right"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:barrierDirection="end"
+			app:constraint_referenced_ids="ask_label,bid_label,vwap_label" />
+
+		<android.support.constraint.Guideline
+			android:id="@+id/guideline"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			app:layout_constraintGuide_percent="0.5" />
+
+		<TextView
+			android:id="@+id/last"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin"
+			android:layout_marginTop="@dimen/margin"
+			android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="@sample/tickers.json/tickers/last" />
+
+		<TextView
+			android:id="@+id/change_percent"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			android:textColor="@color/ask"
+			app:layout_constraintBottom_toTopOf="@+id/change"
+			app:layout_constraintStart_toStartOf="@+id/change"
+			tools:text="-2.44%" />
+
+		<TextView
+			android:id="@+id/change"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin_double"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			android:textColor="@color/ask"
+			app:layout_constraintBaseline_toBaselineOf="@+id/last"
+			app:layout_constraintStart_toEndOf="@+id/last"
+			tools:text="-0.03968" />
+
+		<TextView
+			android:id="@+id/date"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintStart_toStartOf="@+id/last"
+			app:layout_constraintTop_toBottomOf="@+id/last"
+			tools:text="@sample/tickers.json/tickers/timestamp" />
+
+		<TextView
+			android:id="@+id/high_24_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/high_24"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintBaseline_toBaselineOf="@+id/high_24"
+			app:layout_constraintStart_toStartOf="@+id/last" />
+
+		<TextView
+			android:id="@+id/high_24"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin"
+			android:layout_marginTop="@dimen/margin_double"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			app:layout_constraintEnd_toStartOf="@+id/guideline"
+			app:layout_constraintStart_toEndOf="@+id/barrier_left"
+			app:layout_constraintTop_toBottomOf="@+id/date"
+			tools:text="@sample/tickers.json/tickers/high" />
+
+		<TextView
+			android:id="@+id/ask_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin"
+			android:text="@string/ask"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintBaseline_toBaselineOf="@+id/high_24"
+			app:layout_constraintStart_toEndOf="@+id/guideline" />
+
+		<TextView
+			android:id="@+id/ask"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/margin"
+			android:layout_marginStart="@dimen/margin"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			android:textColor="@color/ask"
+			app:layout_constraintBaseline_toBaselineOf="@+id/high_24"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/barrier_right"
+			tools:text="@sample/tickers.json/tickers/ask" />
+
+		<TextView
+			android:id="@+id/low_24_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/low_24"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintBaseline_toBaselineOf="@+id/low_24"
+			app:layout_constraintStart_toStartOf="@+id/last" />
+
+		<TextView
+			android:id="@+id/low_24"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin"
+			android:layout_marginTop="@dimen/margin_half"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			app:layout_constraintEnd_toStartOf="@+id/guideline"
+			app:layout_constraintStart_toEndOf="@+id/barrier_left"
+			app:layout_constraintTop_toBottomOf="@+id/high_24_label"
+			tools:text="@sample/tickers.json/tickers/low" />
+
+		<TextView
+			android:id="@+id/bid_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/bid"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintBaseline_toBaselineOf="@+id/low_24"
+			app:layout_constraintStart_toStartOf="@+id/ask_label" />
+
+		<TextView
+			android:id="@+id/bid"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/margin"
+			android:layout_marginStart="@dimen/margin"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			android:textColor="@color/bid"
+			app:layout_constraintBaseline_toBaselineOf="@+id/low_24"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/barrier_right"
+			tools:text="@sample/tickers.json/tickers/bid" />
+
+		<TextView
+			android:id="@+id/volume_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/volume"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintBaseline_toBaselineOf="@+id/volume"
+			app:layout_constraintStart_toStartOf="@+id/last" />
+
+		<TextView
+			android:id="@+id/volume"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/margin"
+			android:layout_marginTop="@dimen/margin_half"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			app:layout_constraintEnd_toStartOf="@+id/guideline"
+			app:layout_constraintStart_toEndOf="@+id/barrier_left"
+			app:layout_constraintTop_toBottomOf="@+id/low_24_label"
+			tools:text="@sample/tickers.json/tickers/volume" />
+
+		<TextView
+			android:id="@+id/vwap_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/vwap"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+			app:layout_constraintBaseline_toBaselineOf="@+id/volume"
+			app:layout_constraintStart_toStartOf="@+id/ask_label" />
+
+		<TextView
+			android:id="@+id/vwap"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/margin"
+			android:layout_marginStart="@dimen/margin"
+			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			app:layout_constraintBaseline_toBaselineOf="@+id/volume"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/barrier_right"
+			tools:text="@sample/tickers.json/tickers/vwap" />
+	</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

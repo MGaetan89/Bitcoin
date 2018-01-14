@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item
-		android:id="@+id/menu_exchange"
-		android:icon="@drawable/ic_exchange"
-		android:title="@string/exchange" />
 
 	<item
-		android:id="@+id/menu_orders"
-		android:icon="@drawable/id_orders"
-		android:title="@string/orders" />
+		android:id="@+id/menu_prices"
+		android:icon="@drawable/ic_prices"
+		android:title="@string/prices" />
+
+	<item
+		android:id="@+id/menu_public_positions"
+		android:icon="@drawable/ic_public_positions"
+		android:title="@string/public_positions" />
+
+	<item
+		android:id="@+id/menu_account"
+		android:icon="@drawable/ic_account"
+		android:title="@string/account" />
 </menu>
