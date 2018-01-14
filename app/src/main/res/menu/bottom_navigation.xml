@@ -7,9 +7,9 @@
 		android:title="@string/prices" />
 
 	<item
-		android:id="@+id/menu_public_positions"
-		android:icon="@drawable/ic_public_positions"
-		android:title="@string/public_positions" />
+		android:id="@+id/menu_positions"
+		android:icon="@drawable/ic_positions"
+		android:title="@string/positions" />
 
 	<item
 		android:id="@+id/menu_account"

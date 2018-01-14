@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.inflate
 import io.crypto.bitstamp.extension.setTextColorResource
+import io.crypto.bitstamp.extension.toFormattedDate
+import io.crypto.bitstamp.extension.toFormattedString
+import io.crypto.bitstamp.extension.toFormattedTime
 import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.model.Transaction
 import kotlinx.android.extensions.LayoutContainer
@@ -22,20 +25,8 @@ import kotlinx.android.synthetic.main.adapter_price_transaction.value
 import kotlinx.android.synthetic.main.adapter_price_transaction.value_currency
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import java.text.DateFormat
-import java.text.NumberFormat
 
 class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceTransactionsAdapter.ViewHolder>() {
-	private val amountFormat = NumberFormat.getNumberInstance().also {
-		it.maximumFractionDigits = this.tradingPair.baseDecimals
-		it.minimumFractionDigits = this.tradingPair.baseDecimals
-	}
-	private val dateFormat = DateFormat.getDateInstance()
-	private val priceFormat = NumberFormat.getNumberInstance().also {
-		it.maximumFractionDigits = this.tradingPair.counterDecimals
-		it.minimumFractionDigits = this.tradingPair.counterDecimals
-	}
-	private val timeFormat = DateFormat.getTimeInstance()
 	private val transactions = mutableListOf<Transaction>()
 
 	override fun getItemCount() = this.transactions.size
@@ -44,16 +35,16 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		val transaction = this.transactions.getOrNull(position) ?: return
 		val typeObject = transaction.typeObject
 
-		holder.amount.text = this.amountFormat.format(transaction.amount)
+		holder.amount.text = transaction.amount.toFormattedString(this.tradingPair.baseDecimals)
 		holder.amount_currency.text = this.tradingPair.baseCurrency
-		holder.date.text = this.dateFormat.format(transaction.date * 1000)
-		holder.price.text = this.priceFormat.format(transaction.price)
+		holder.date.text = transaction.date.toFormattedDate()
+		holder.price.text = transaction.price.toFormattedString(this.tradingPair.counterDecimals)
 		holder.price_currency.text = this.tradingPair.counterCurrency
-		holder.time.text = this.timeFormat.format(transaction.date * 1000)
+		holder.time.text = transaction.date.toFormattedTime()
 		holder.transaction_id.text = "${transaction.transactionId}"
 		holder.type.setText(typeObject.textRes)
 		holder.type.setTextColorResource(typeObject.colorRes)
-		holder.value.text = this.priceFormat.format(transaction.amount * transaction.price)
+		holder.value.text = (transaction.amount * transaction.price).toFormattedString(this.tradingPair.counterDecimals)
 		holder.value_currency.text = this.tradingPair.counterCurrency
 	}
 

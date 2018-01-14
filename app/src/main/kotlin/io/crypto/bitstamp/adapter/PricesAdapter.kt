@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.inflate
+import io.crypto.bitstamp.extension.toFormattedString
+import io.crypto.bitstamp.extension.toFormattedTime
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
 import kotlinx.android.extensions.LayoutContainer
@@ -15,9 +17,6 @@ import kotlinx.android.synthetic.main.adapter_price.name
 import kotlinx.android.synthetic.main.adapter_price.time
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import java.text.DateFormat
-import java.text.NumberFormat
-import java.util.Date
 
 class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.Adapter<PricesAdapter.ViewHolder>() {
 	interface OnPriceEventListener {
@@ -28,7 +27,6 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 		fun onPriceClicked(tradingPair: TradingPair)
 	}
 
-	private val dateFormat = DateFormat.getTimeInstance()
 	private val prices = mutableListOf<Pair<TradingPair, Ticker>>()
 
 	override fun getItemCount() = this.prices.size
@@ -37,14 +35,10 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 		val price = this.prices.getOrNull(position) ?: return
 		val tradingPair = price.first
 		val ticker = price.second
-		val numberFormat = NumberFormat.getNumberInstance().apply {
-			this.maximumFractionDigits = tradingPair.counterDecimals
-			this.minimumFractionDigits = tradingPair.counterDecimals
-		}
 
-		holder.ask.text = numberFormat.format(ticker.ask)
-		holder.bid.text = numberFormat.format(ticker.bid)
-		holder.time.text = this.dateFormat.format(Date(ticker.timestamp * 1000))
+		holder.ask.text = ticker.ask.toFormattedString(tradingPair.counterDecimals)
+		holder.bid.text = ticker.bid.toFormattedString(tradingPair.counterDecimals)
+		holder.time.text = ticker.timestamp.toFormattedTime()
 		holder.name.text = tradingPair.name
 	}
 
