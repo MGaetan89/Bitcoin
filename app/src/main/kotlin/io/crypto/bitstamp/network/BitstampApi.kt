@@ -4,7 +4,7 @@ import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
-import okhttp3.ResponseBody
+import io.crypto.bitstamp.model.UserTransaction
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -24,5 +24,5 @@ interface BitstampApi {
 	fun getTransactions(@Path("currency_pair") currencyPair: String): Call<List<PriceTransaction>>
 
 	@POST("/api/v2/user_transactions/")
-	fun getUserTransactions(): Call<ResponseBody>
+	fun getUserTransactions(): Call<List<UserTransaction>>
 }

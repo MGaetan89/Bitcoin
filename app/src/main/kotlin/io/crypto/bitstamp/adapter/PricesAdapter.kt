@@ -92,12 +92,10 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 	}
 
 	private class PricesDiffCallback(private val oldItems: List<TradingPair>, private val newItems: List<TradingPair>) : DiffUtil.Callback() {
-		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems[newItemPosition].name == this.oldItems[oldItemPosition].name
-		}
+		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems[newItemPosition].name == this.oldItems[oldItemPosition].name
+			return this.newItems.getOrNull(newItemPosition)?.urlSymbol == this.oldItems.getOrNull(oldItemPosition)?.urlSymbol
 		}
 
 		override fun getNewListSize() = this.newItems.size

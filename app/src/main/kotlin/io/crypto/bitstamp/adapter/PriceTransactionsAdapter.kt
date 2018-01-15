@@ -10,8 +10,8 @@ import io.crypto.bitstamp.extension.setTextColorResource
 import io.crypto.bitstamp.extension.toFormattedDate
 import io.crypto.bitstamp.extension.toFormattedString
 import io.crypto.bitstamp.extension.toFormattedTime
-import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.model.PriceTransaction
+import io.crypto.bitstamp.model.TradingPair
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.adapter_price_transaction.amount
 import kotlinx.android.synthetic.main.adapter_price_transaction.amount_currency
@@ -69,11 +69,12 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 
 	private class TransactionsDiffCallback(private val oldItems: List<PriceTransaction>, private val newItems: List<PriceTransaction>) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems[newItemPosition].transactionId == this.oldItems[oldItemPosition].transactionId
+			return this.newItems.getOrNull(newItemPosition)?.amount == this.oldItems.getOrNull(oldItemPosition)?.amount
+					&& this.newItems.getOrNull(newItemPosition)?.price == this.oldItems.getOrNull(oldItemPosition)?.price
 		}
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems[newItemPosition].transactionId == this.oldItems[oldItemPosition].transactionId
+			return this.newItems.getOrNull(newItemPosition)?.transactionId == this.oldItems.getOrNull(oldItemPosition)?.transactionId
 		}
 
 		override fun getNewListSize() = this.newItems.size

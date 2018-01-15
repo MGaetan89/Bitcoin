@@ -1,14 +1,14 @@
 package io.crypto.bitstamp.network
 
 import io.crypto.bitstamp.model.PriceOrderBook
+import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
-import io.crypto.bitstamp.model.PriceTransaction
+import io.crypto.bitstamp.model.UserTransaction
 import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.ByteString
 import retrofit2.Retrofit
@@ -46,11 +46,11 @@ object BitstampServices : Interceptor {
 				?.body() ?: emptyList()
 	}
 
-	suspend fun getUserTransactions(): ResponseBody? {
+	suspend fun getUserTransactions(): List<UserTransaction> {
 		return this.privateApi.getUserTransactions()
 				.execute()
 				.takeIf { it.isSuccessful }
-				?.body()
+				?.body() ?: emptyList()
 	}
 
 	override fun intercept(chain: Interceptor.Chain): Response {
