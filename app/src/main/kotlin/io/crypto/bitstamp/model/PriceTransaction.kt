@@ -5,7 +5,7 @@ import android.support.annotation.StringRes
 import com.squareup.moshi.Json
 import io.crypto.bitstamp.R
 
-data class Transaction(
+data class PriceTransaction(
 		val amount: Float,
 		val date: Long,
 		val price: Float,

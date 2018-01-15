@@ -1,9 +1,9 @@
 package io.crypto.bitstamp.network
 
-import io.crypto.bitstamp.model.OrderBook
+import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
-import io.crypto.bitstamp.model.Transaction
+import io.crypto.bitstamp.model.PriceTransaction
 import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -18,11 +18,11 @@ object BitstampServices : Interceptor {
 	private val api = this.createService(false)
 	private val privateApi = this.createService(true)
 
-	suspend fun getOrderBook(currencyPair: String): OrderBook {
+	suspend fun getOrderBook(currencyPair: String): PriceOrderBook {
 		return this.api.getOrderBook(currencyPair)
 				.execute()
 				.takeIf { it.isSuccessful }
-				?.body() ?: OrderBook.EMPTY
+				?.body() ?: PriceOrderBook.EMPTY
 	}
 
 	suspend fun getTicker(currencyPair: String): Ticker {
@@ -39,7 +39,7 @@ object BitstampServices : Interceptor {
 				?.body() ?: emptyList()
 	}
 
-	suspend fun getTransactions(currencyPair: String): List<Transaction> {
+	suspend fun getTransactions(currencyPair: String): List<PriceTransaction> {
 		return this.api.getTransactions(currencyPair)
 				.execute()
 				.takeIf { it.isSuccessful }

@@ -3,10 +3,10 @@ package io.crypto.bitstamp.model
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class OrderBookTest {
+class PriceOrderBookTest {
 	@Test
 	fun empty() {
-		val empty = OrderBook.EMPTY
+		val empty = PriceOrderBook.EMPTY
 
 		assertThat(empty.asks).isEmpty()
 		assertThat(empty.bids).isEmpty()

@@ -11,7 +11,7 @@ import io.crypto.bitstamp.extension.toFormattedDate
 import io.crypto.bitstamp.extension.toFormattedString
 import io.crypto.bitstamp.extension.toFormattedTime
 import io.crypto.bitstamp.model.TradingPair
-import io.crypto.bitstamp.model.Transaction
+import io.crypto.bitstamp.model.PriceTransaction
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.adapter_price_transaction.amount
 import kotlinx.android.synthetic.main.adapter_price_transaction.amount_currency
@@ -27,7 +27,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceTransactionsAdapter.ViewHolder>() {
-	private val transactions = mutableListOf<Transaction>()
+	private val transactions = mutableListOf<PriceTransaction>()
 
 	override fun getItemCount() = this.transactions.size
 
@@ -54,7 +54,7 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		return ViewHolder(view)
 	}
 
-	suspend fun updateTransactions(transactions: List<Transaction>) {
+	suspend fun updateTransactions(transactions: List<PriceTransaction>) {
 		val diffResult = DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
 
 		this.transactions.clear()
@@ -67,7 +67,7 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 
 	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
-	private class TransactionsDiffCallback(private val oldItems: List<Transaction>, private val newItems: List<Transaction>) : DiffUtil.Callback() {
+	private class TransactionsDiffCallback(private val oldItems: List<PriceTransaction>, private val newItems: List<PriceTransaction>) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
 			return this.newItems[newItemPosition].transactionId == this.oldItems[oldItemPosition].transactionId
 		}

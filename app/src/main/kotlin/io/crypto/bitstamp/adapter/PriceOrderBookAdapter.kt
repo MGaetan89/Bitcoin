@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.inflate
 import io.crypto.bitstamp.extension.toFormattedString
-import io.crypto.bitstamp.model.OrderBook
+import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.TradingPair
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.adapter_price_order_book.amount_ask
@@ -18,7 +18,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceOrderBookAdapter.ViewHolder>() {
-	private var orderBook = OrderBook.EMPTY
+	private var orderBook = PriceOrderBook.EMPTY
 
 	override fun getItemCount() = this.orderBook.asks.size
 
@@ -38,7 +38,7 @@ class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView
 		return ViewHolder(view)
 	}
 
-	suspend fun updateOrderBook(orderBook: OrderBook) {
+	suspend fun updateOrderBook(orderBook: PriceOrderBook) {
 		val diffResult = DiffUtil.calculateDiff(OrderBookDiffCallback(this.orderBook, orderBook), true)
 
 		this.orderBook = orderBook
@@ -50,17 +50,17 @@ class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView
 
 	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
-	private class OrderBookDiffCallback(private val oldOrderBook: OrderBook, private val newOrderBook: OrderBook) : DiffUtil.Callback() {
+	private class OrderBookDiffCallback(private val oldPriceOrderBook: PriceOrderBook, private val newPriceOrderBook: PriceOrderBook) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newOrderBook.asks.contentEquals(this.oldOrderBook.asks) && this.newOrderBook.bids.contentEquals(this.oldOrderBook.bids)
+			return this.newPriceOrderBook.asks.contentEquals(this.oldPriceOrderBook.asks) && this.newPriceOrderBook.bids.contentEquals(this.oldPriceOrderBook.bids)
 		}
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newOrderBook.timestamp == this.oldOrderBook.timestamp
+			return this.newPriceOrderBook.timestamp == this.oldPriceOrderBook.timestamp
 		}
 
-		override fun getNewListSize() = this.newOrderBook.asks.size
+		override fun getNewListSize() = this.newPriceOrderBook.asks.size
 
-		override fun getOldListSize() = this.oldOrderBook.asks.size
+		override fun getOldListSize() = this.oldPriceOrderBook.asks.size
 	}
 }
