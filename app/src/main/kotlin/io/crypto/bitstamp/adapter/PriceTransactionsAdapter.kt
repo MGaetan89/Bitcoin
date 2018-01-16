@@ -33,6 +33,14 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		val transaction = this.transactions.getOrNull(position) ?: return
 		val typeObject = transaction.typeObject
 
+		if (typeObject != null) {
+			holder.type.setText(typeObject.textRes)
+			holder.type.setTextColorResource(typeObject.colorRes)
+		} else {
+			holder.type.text = null
+			holder.type.setTextColorResource(R.color.text)
+		}
+
 		holder.amount.text = transaction.amount.toFormattedString(this.tradingPair.baseDecimals)
 		holder.amount_currency.text = this.tradingPair.baseCurrency
 		holder.date.text = transaction.date.toFormattedDate()
@@ -40,8 +48,6 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		holder.price_currency.text = this.tradingPair.counterCurrency
 		holder.time.text = transaction.date.toFormattedTime()
 		holder.transaction_id.text = "${transaction.transactionId}"
-		holder.type.setText(typeObject.textRes)
-		holder.type.setTextColorResource(typeObject.colorRes)
 		holder.value.text = (transaction.amount * transaction.price).toFormattedString(this.tradingPair.counterDecimals)
 		holder.value_currency.text = this.tradingPair.counterCurrency
 	}

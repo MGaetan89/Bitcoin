@@ -35,10 +35,10 @@ class PriceTransactionTest {
 		assertThat(transaction.typeObject).isEqualTo(PriceTransaction.Type.SELL)
 	}
 
-	@Test(expected = IndexOutOfBoundsException::class)
+	@Test
 	fun typeObject_unknown() {
 		val transaction = PriceTransaction(0.00569300f, 1515853451L, 14417.94f, 45359339L, 2)
 
-		transaction.typeObject
+		assertThat(transaction.typeObject).isNull()
 	}
 }

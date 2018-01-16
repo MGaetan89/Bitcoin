@@ -17,5 +17,5 @@ data class PriceTransaction(
 		SELL(R.string.sell, R.color.ask)
 	}
 
-	val typeObject get() = Type.values()[this.type]
+	val typeObject get() = Type.values().getOrNull(this.type)
 }

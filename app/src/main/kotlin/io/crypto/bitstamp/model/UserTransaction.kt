@@ -33,19 +33,12 @@ data class UserTransaction(
 		@Json(name = "xrp_eur") val xrpEur: Float?,
 		@Json(name = "xrp_usd") val xrpUsd: Float?
 ) {
-	enum class Type(@StringRes val textRes: Int) {
-		DEPOSIT(R.string.deposit),
-		WITHDRAWAL(R.string.withdrawal),
-		MARKET_TRADE(R.string.market_trade),
-		SUB_ACCOUNT_TRANSFER(R.string.sub_account_transfer)
+	enum class Type(val typeId: Int, @StringRes val textRes: Int) {
+		DEPOSIT(0, R.string.deposit),
+		WITHDRAWAL(1, R.string.withdrawal),
+		MARKET_TRADE(2, R.string.market_trade),
+		SUB_ACCOUNT_TRANSFER(14, R.string.sub_account_transfer)
 	}
 
-	val typeObject: Type?
-		get() = when (this.type) {
-			0 -> Type.DEPOSIT
-			1 -> Type.WITHDRAWAL
-			2 -> Type.MARKET_TRADE
-			14 -> Type.SUB_ACCOUNT_TRANSFER
-			else -> null
-		}
+	val typeObject get() = Type.values().firstOrNull { it.typeId == this.type }
 }
