@@ -7,6 +7,7 @@
 	<string name="bid">Bid</string>
 	<string name="buy">Buy</string>
 	<string name="deposit">Deposit</string>
+	<string name="fee">Fee</string>
 	<string name="high_24">24h high</string>
 	<string name="id_prefix">#</string>
 	<string name="low_24">24h low</string>
