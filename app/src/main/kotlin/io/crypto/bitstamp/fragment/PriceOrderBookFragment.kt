@@ -38,11 +38,11 @@ class PriceOrderBookFragment : BaseFragment() {
 			listOf(launch {
 				val orderBook = BitstampServices.getOrderBook(tradingPair.urlSymbol)
 
-				adapter.updateOrderBook(orderBook)
-
 				launch(UI) {
+					adapter.updateOrderBook(orderBook)
+
 					if (layoutManager.findFirstVisibleItemPosition() == 0) {
-						list.smoothScrollToPosition(0)
+						layoutManager.scrollToPositionWithOffset(0, 0)
 					}
 				}
 			})

@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.adapter_price_transaction.transaction_id
 import kotlinx.android.synthetic.main.adapter_price_transaction.type
 import kotlinx.android.synthetic.main.adapter_price_transaction.value
 import kotlinx.android.synthetic.main.adapter_price_transaction.value_currency
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceTransactionsAdapter.ViewHolder>() {
 	private val transactions = mutableListOf<PriceTransaction>()
@@ -54,15 +52,13 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		return ViewHolder(view)
 	}
 
-	suspend fun updateTransactions(transactions: List<PriceTransaction>) {
+	fun updateTransactions(transactions: List<PriceTransaction>) {
 		val diffResult = DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
 
 		this.transactions.clear()
 		this.transactions.addAll(transactions)
 
-		launch(UI) {
-			diffResult.dispatchUpdatesTo(this@PriceTransactionsAdapter)
-		}
+		diffResult.dispatchUpdatesTo(this)
 	}
 
 	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer

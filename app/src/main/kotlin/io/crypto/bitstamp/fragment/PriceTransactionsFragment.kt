@@ -38,11 +38,11 @@ class PriceTransactionsFragment : BaseFragment() {
 			listOf(launch {
 				val transactions = BitstampServices.getTransactions(tradingPair.urlSymbol)
 
-				adapter.updateTransactions(transactions)
-
 				launch(UI) {
+					adapter.updateTransactions(transactions)
+
 					if (layoutManager.findFirstVisibleItemPosition() == 0) {
-						list.smoothScrollToPosition(0)
+						layoutManager.scrollToPositionWithOffset(0, 0)
 					}
 				}
 			})

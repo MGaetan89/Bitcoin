@@ -14,8 +14,6 @@ import kotlinx.android.synthetic.main.adapter_price_order_book.amount_ask
 import kotlinx.android.synthetic.main.adapter_price_order_book.amount_bid
 import kotlinx.android.synthetic.main.adapter_price_order_book.ask
 import kotlinx.android.synthetic.main.adapter_price_order_book.bid
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceOrderBookAdapter.ViewHolder>() {
 	private var orderBook = PriceOrderBook.EMPTY
@@ -38,14 +36,12 @@ class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView
 		return ViewHolder(view)
 	}
 
-	suspend fun updateOrderBook(orderBook: PriceOrderBook) {
+	fun updateOrderBook(orderBook: PriceOrderBook) {
 		val diffResult = DiffUtil.calculateDiff(OrderBookDiffCallback(this.orderBook, orderBook), true)
 
 		this.orderBook = orderBook
 
-		launch(UI) {
-			diffResult.dispatchUpdatesTo(this@PriceOrderBookAdapter)
-		}
+		diffResult.dispatchUpdatesTo(this)
 	}
 
 	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer

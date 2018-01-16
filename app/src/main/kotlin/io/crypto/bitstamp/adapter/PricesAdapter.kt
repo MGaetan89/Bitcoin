@@ -15,8 +15,6 @@ import kotlinx.android.synthetic.main.adapter_price.ask
 import kotlinx.android.synthetic.main.adapter_price.bid
 import kotlinx.android.synthetic.main.adapter_price.name
 import kotlinx.android.synthetic.main.adapter_price.time
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.Adapter<PricesAdapter.ViewHolder>() {
 	interface OnPriceEventListener {
@@ -48,29 +46,25 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 		return ViewHolder(view)
 	}
 
-	suspend fun updateTicker(urlSymbol: String, ticker: Ticker) {
-		val index = this.prices.indexOfFirst { it.first.urlSymbol == urlSymbol }.takeIf { it >= 0 }
-				?: return
+	fun updateTicker(urlSymbol: String, ticker: Ticker) {
+		val index = this.prices.indexOfFirst { it.first.urlSymbol == urlSymbol }
+				.takeIf { it >= 0 } ?: return
 		val (tradingPair, oldTicker) = this.prices[index]
 
 		if (ticker.isNewerThan(oldTicker)) {
 			this.prices[index] = Pair(tradingPair, ticker)
 
-			launch(UI) {
-				notifyItemChanged(index)
-			}
+			this.notifyItemChanged(index)
 		}
 	}
 
-	suspend fun updateTradingPairs(tradingPairs: List<TradingPair>) {
+	fun updateTradingPairs(tradingPairs: List<TradingPair>) {
 		val diffResult = DiffUtil.calculateDiff(PricesDiffCallback(this.prices.map { it.first }, tradingPairs), false)
 
 		this.prices.clear()
 		this.prices.addAll(tradingPairs.map { it to Ticker.EMPTY })
 
-		launch(UI) {
-			diffResult.dispatchUpdatesTo(this@PricesAdapter)
-		}
+		diffResult.dispatchUpdatesTo(this)
 	}
 
 	inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {

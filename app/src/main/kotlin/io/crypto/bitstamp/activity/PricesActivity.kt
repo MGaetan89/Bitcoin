@@ -11,6 +11,7 @@ import io.crypto.bitstamp.adapter.PricesAdapter
 import io.crypto.bitstamp.extension.startActivity
 import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.network.BitstampServices
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
@@ -57,7 +58,9 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 				launch {
 					val ticker = BitstampServices.getTicker(it)
 
-					adapter.updateTicker(it, ticker)
+					launch(UI) {
+						adapter.updateTicker(it, ticker)
+					}
 				}
 			}
 		}
@@ -70,7 +73,9 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 			urlSymbols.clear()
 			urlSymbols.addAll(tradingPairs.map { it.urlSymbol })
 
-			adapter.updateTradingPairs(tradingPairs)
+			launch(UI) {
+				adapter.updateTradingPairs(tradingPairs)
+			}
 		}
 	}
 }

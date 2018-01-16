@@ -32,11 +32,11 @@ class AccountTransactionsFragment : BaseFragment() {
 			listOf(launch {
 				val transactions = BitstampServices.getUserTransactions()
 
-				adapter.updateTransactions(transactions)
-
 				launch(UI) {
+					adapter.updateTransactions(transactions)
+
 					if (layoutManager.findFirstVisibleItemPosition() == 0) {
-						list.smoothScrollToPosition(0)
+						layoutManager.scrollToPositionWithOffset(0, 0)
 					}
 				}
 			})

@@ -9,8 +9,6 @@ import io.crypto.bitstamp.extension.inflate
 import io.crypto.bitstamp.model.UserTransaction
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.adapter_account_transaction.id
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 class AccountTransactionsAdapter : RecyclerView.Adapter<AccountTransactionsAdapter.ViewHolder>() {
 	private val transactions = mutableListOf<UserTransaction>()
@@ -29,15 +27,13 @@ class AccountTransactionsAdapter : RecyclerView.Adapter<AccountTransactionsAdapt
 		return ViewHolder(view)
 	}
 
-	suspend fun updateTransactions(transactions: List<UserTransaction>) {
+	fun updateTransactions(transactions: List<UserTransaction>) {
 		val diffResult = DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
 
 		this.transactions.clear()
 		this.transactions.addAll(transactions)
 
-		launch(UI) {
-			diffResult.dispatchUpdatesTo(this@AccountTransactionsAdapter)
-		}
+		diffResult.dispatchUpdatesTo(this)
 	}
 
 	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
