@@ -42,12 +42,12 @@ class AccountTransactionsAdapter : RecyclerView.Adapter<AccountTransactionsAdapt
 
 		holder.amount.text = transactionInfo?.amount?.toFormattedString(2) // base decimals
 		holder.amount_currency.text = transactionInfo?.baseCurrency
-		holder.date.text = transaction.date.toFormattedDate()
+		holder.date.text = transaction.date?.toFormattedDate()
 		holder.fee.text = transactionInfo?.fee?.toFormattedString(2) // counter decimals
 		holder.fee_currency.text = transactionInfo?.counterCurrency
 		holder.price.text = transactionInfo?.price?.toFormattedString(2) // counter decimals
 		holder.price_currency.text = transactionInfo?.counterCurrency
-		holder.time.text = transaction.date.toFormattedTime()
+		holder.time.text = transaction.date?.toFormattedTime()
 		holder.transaction_id.text = "${transaction.id}"
 		holder.type.setTextColorResource(transaction.color)
 		holder.value.text = transactionInfo?.value?.toFormattedString(2) // counter decimals

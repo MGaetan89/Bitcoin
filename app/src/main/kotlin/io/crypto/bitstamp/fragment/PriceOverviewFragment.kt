@@ -9,6 +9,7 @@ import io.crypto.bitstamp.extension.setTextColorResource
 import io.crypto.bitstamp.extension.toFormattedDateTime
 import io.crypto.bitstamp.extension.toFormattedPercent
 import io.crypto.bitstamp.extension.toFormattedString
+import io.crypto.bitstamp.extension.toVariationColor
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.network.BitstampServices
@@ -57,11 +58,7 @@ class PriceOverviewFragment : BaseFragment() {
 	private fun updateViews(ticker: Ticker) {
 		val change = ticker.last - ticker.open
 		val changePercent = change / ticker.last
-		val changeColor = when {
-			change < 0 -> R.color.ask
-			change > 0 -> R.color.bid
-			else -> R.color.text
-		}
+		val changeColor = change.toVariationColor()
 
 		this.ask.text = ticker.ask.toFormattedString(this.tradingPair.counterDecimals)
 		this.bid.text = ticker.bid.toFormattedString(this.tradingPair.counterDecimals)

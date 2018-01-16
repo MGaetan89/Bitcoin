@@ -5,6 +5,7 @@ import android.support.annotation.StringRes
 import com.squareup.moshi.Json
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.toTimestamp
+import io.crypto.bitstamp.extension.toVariationColor
 
 data class UserTransaction(
 		val bch: Float?,
@@ -47,9 +48,7 @@ data class UserTransaction(
 		get() {
 			return when (this.typeObject) {
 				Type.DEPOSIT -> R.color.accent
-				Type.MARKET_TRADE -> if (this.transactionInfo?.amount ?: 0f > 0f) R.color.bid else R.color.ask
-				Type.SUB_ACCOUNT_TRANSFER -> R.color.text
-				Type.WITHDRAWAL -> R.color.text
+				Type.MARKET_TRADE -> transactionInfo?.amount?.toVariationColor() ?: R.color.text
 				else -> R.color.text
 			}
 		}
