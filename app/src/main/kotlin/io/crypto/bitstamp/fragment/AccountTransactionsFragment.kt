@@ -21,6 +21,18 @@ class AccountTransactionsFragment : BaseFragment() {
 	private val adapter by lazy { AccountTransactionsAdapter() }
 	private val layoutManager by lazy { LinearLayoutManager(this.context) }
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		launch {
+			val tradingPairs = BitstampServices.getTradingPairs()
+
+			launch(UI) {
+				adapter.updateTradingPairs(tradingPairs)
+			}
+		}
+	}
+
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		return inflater.inflate(R.layout.fragment_account_transactions, container, false)
 	}
