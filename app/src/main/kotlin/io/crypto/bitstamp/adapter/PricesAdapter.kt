@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.adapter_price.bid
 import kotlinx.android.synthetic.main.adapter_price.name
 import kotlinx.android.synthetic.main.adapter_price.time
 
-class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.Adapter<PricesAdapter.ViewHolder>() {
+class PricesAdapter(private val listener: OnPriceEventListener) :
+	RecyclerView.Adapter<PricesAdapter.ViewHolder>() {
 	interface OnPriceEventListener {
 		fun onAskClicked(tradingPair: TradingPair)
 
@@ -48,7 +49,7 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 
 	fun updateTicker(urlSymbol: String, ticker: Ticker) {
 		val index = this.prices.indexOfFirst { it.first.urlSymbol == urlSymbol }
-				.takeIf { it >= 0 } ?: return
+			.takeIf { it >= 0 } ?: return
 		val (tradingPair, oldTicker) = this.prices[index]
 
 		if (ticker.isNewerThan(oldTicker)) {
@@ -59,7 +60,10 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 	}
 
 	fun updateTradingPairs(tradingPairs: List<TradingPair>) {
-		val diffResult = DiffUtil.calculateDiff(PricesDiffCallback(this.prices.map { it.first }, tradingPairs), false)
+		val diffResult = DiffUtil.calculateDiff(
+			PricesDiffCallback(this.prices.map { it.first }, tradingPairs),
+			false
+		)
 
 		this.prices.clear()
 		this.prices.addAll(tradingPairs.map { it to Ticker.EMPTY })
@@ -67,7 +71,8 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 		diffResult.dispatchUpdatesTo(this)
 	}
 
-	inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {
+	inner class ViewHolder(override val containerView: View) :
+		RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {
 		init {
 			this.ask.setOnClickListener(this)
 			this.bid.setOnClickListener(this)
@@ -85,11 +90,16 @@ class PricesAdapter(private val listener: OnPriceEventListener) : RecyclerView.A
 		}
 	}
 
-	private class PricesDiffCallback(private val oldItems: List<TradingPair>, private val newItems: List<TradingPair>) : DiffUtil.Callback() {
+	private class PricesDiffCallback(
+		private val oldItems: List<TradingPair>,
+		private val newItems: List<TradingPair>
+	) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems.getOrNull(newItemPosition)?.urlSymbol == this.oldItems.getOrNull(oldItemPosition)?.urlSymbol
+			return this.newItems.getOrNull(newItemPosition)?.urlSymbol == this.oldItems.getOrNull(
+				oldItemPosition
+			)?.urlSymbol
 		}
 
 		override fun getNewListSize() = this.newItems.size

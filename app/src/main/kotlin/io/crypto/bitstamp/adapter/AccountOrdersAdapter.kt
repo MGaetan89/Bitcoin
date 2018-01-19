@@ -78,13 +78,19 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 		this.notifyDataSetChanged()
 	}
 
-	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+		LayoutContainer
 
-	private class OrdersDiffCallback(private val oldItems: List<OpenOrder>, private val newItems: List<OpenOrder>) : DiffUtil.Callback() {
+	private class OrdersDiffCallback(
+		private val oldItems: List<OpenOrder>,
+		private val newItems: List<OpenOrder>
+	) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems.getOrNull(newItemPosition)?.id == this.oldItems.getOrNull(oldItemPosition)?.id
+			return this.newItems.getOrNull(newItemPosition)?.id == this.oldItems.getOrNull(
+				oldItemPosition
+			)?.id
 		}
 
 		override fun getNewListSize() = this.newItems.size

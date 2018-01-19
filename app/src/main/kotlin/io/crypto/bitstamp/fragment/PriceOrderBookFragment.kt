@@ -27,7 +27,11 @@ class PriceOrderBookFragment : BaseFragment() {
 	private val layoutManager by lazy { LinearLayoutManager(this.context) }
 	private val tradingPair by lazy { this.arguments!!.getParcelable<TradingPair>(TradingPair.EXTRA) }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
 		return inflater.inflate(R.layout.fragment_price_order_book, container, false)
 	}
 
@@ -53,7 +57,12 @@ class PriceOrderBookFragment : BaseFragment() {
 		this.list.let {
 			it.adapter = this.adapter
 			it.layoutManager = this.layoutManager
-			it.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+			it.addItemDecoration(
+				DividerItemDecoration(
+					this.context,
+					DividerItemDecoration.VERTICAL
+				)
+			)
 		}
 	}
 }

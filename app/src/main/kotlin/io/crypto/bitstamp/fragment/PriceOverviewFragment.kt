@@ -37,7 +37,11 @@ class PriceOverviewFragment : BaseFragment() {
 
 	private val tradingPair by lazy { this.arguments!!.getParcelable<TradingPair>(TradingPair.EXTRA) }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
 		return inflater.inflate(R.layout.fragment_price_overview, container, false)
 	}
 
@@ -71,6 +75,7 @@ class PriceOverviewFragment : BaseFragment() {
 		this.last.text = ticker.last.toFormattedString(this.tradingPair.counterDecimals)
 		this.low_24.text = ticker.low.toFormattedString(this.tradingPair.counterDecimals)
 		this.volume.text = ticker.volume.toFormattedString(this.tradingPair.baseDecimals)
-		this.vwap.text = ticker.volumeWeightedAveragePrice.toFormattedString(this.tradingPair.baseDecimals)
+		this.vwap.text =
+				ticker.volumeWeightedAveragePrice.toFormattedString(this.tradingPair.baseDecimals)
 	}
 }

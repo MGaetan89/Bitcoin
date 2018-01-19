@@ -11,7 +11,11 @@ class AccountOverviewFragment : BaseFragment() {
 		fun newInstance() = AccountOverviewFragment()
 	}
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
 		return inflater.inflate(R.layout.fragment_account_overview, container, false)
 	}
 }

@@ -10,7 +10,11 @@ import io.crypto.bitstamp.fragment.PriceOverviewFragment
 import io.crypto.bitstamp.fragment.PriceTransactionsFragment
 import io.crypto.bitstamp.model.TradingPair
 
-class PricePagerAdapter(private val tradingPair: TradingPair, private val resources: Resources, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class PricePagerAdapter(
+	private val tradingPair: TradingPair,
+	private val resources: Resources,
+	fragmentManager: FragmentManager
+) : FragmentStatePagerAdapter(fragmentManager) {
 	override fun getCount() = 3
 
 	override fun getItem(position: Int): Fragment {

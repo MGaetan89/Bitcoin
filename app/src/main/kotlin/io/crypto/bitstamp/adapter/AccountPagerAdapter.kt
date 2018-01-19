@@ -9,7 +9,8 @@ import io.crypto.bitstamp.fragment.AccountOrdersFragment
 import io.crypto.bitstamp.fragment.AccountOverviewFragment
 import io.crypto.bitstamp.fragment.AccountTransactionsFragment
 
-class AccountPagerAdapter(private val resources: Resources, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class AccountPagerAdapter(private val resources: Resources, fragmentManager: FragmentManager) :
+	FragmentStatePagerAdapter(fragmentManager) {
 	override fun getCount() = 3
 
 	override fun getItem(position: Int): Fragment {

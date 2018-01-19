@@ -9,13 +9,13 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @SuppressLint("ParcelCreator")
 data class TradingPair(
-		@Json(name = "base_decimals") val baseDecimals: Int,
-		@Json(name = "counter_decimals") val counterDecimals: Int,
-		val description: String,
-		@Json(name = "minimum_order") val minimumOrder: String,
-		val name: String,
-		val trading: Trading,
-		@Json(name = "url_symbol") val urlSymbol: String
+	@Json(name = "base_decimals") val baseDecimals: Int,
+	@Json(name = "counter_decimals") val counterDecimals: Int,
+	val description: String,
+	@Json(name = "minimum_order") val minimumOrder: String,
+	val name: String,
+	val trading: Trading,
+	@Json(name = "url_symbol") val urlSymbol: String
 ) : Parcelable {
 	companion object {
 		const val EXTRA = BuildConfig.APPLICATION_ID + ".extra.trading_pair"

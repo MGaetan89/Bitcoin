@@ -35,7 +35,8 @@ class AccountTransactionsAdapter : RecyclerView.Adapter<AccountTransactionsAdapt
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val transaction = this.transactions.getOrNull(position) ?: return
 		val transactionInfo = transaction.transactionInfo
-		val tradingPair = this.tradingPairs.firstOrNull { it.urlSymbol == transactionInfo?.urlSymbol }
+		val tradingPair =
+			this.tradingPairs.firstOrNull { it.urlSymbol == transactionInfo?.urlSymbol }
 		val baseDecimals = tradingPair?.baseDecimals ?: 0
 		val counterDecimals = tradingPair?.counterDecimals ?: 0
 
@@ -73,7 +74,8 @@ class AccountTransactionsAdapter : RecyclerView.Adapter<AccountTransactionsAdapt
 	}
 
 	fun updateTransactions(transactions: List<UserTransaction>) {
-		val diffResult = DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
+		val diffResult =
+			DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
 
 		this.transactions.clear()
 		this.transactions.addAll(transactions)
@@ -81,13 +83,19 @@ class AccountTransactionsAdapter : RecyclerView.Adapter<AccountTransactionsAdapt
 		diffResult.dispatchUpdatesTo(this)
 	}
 
-	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+		LayoutContainer
 
-	private class TransactionsDiffCallback(private val oldItems: List<UserTransaction>, private val newItems: List<UserTransaction>) : DiffUtil.Callback() {
+	private class TransactionsDiffCallback(
+		private val oldItems: List<UserTransaction>,
+		private val newItems: List<UserTransaction>
+	) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems.getOrNull(newItemPosition)?.id == this.oldItems.getOrNull(oldItemPosition)?.id
+			return this.newItems.getOrNull(newItemPosition)?.id == this.oldItems.getOrNull(
+				oldItemPosition
+			)?.id
 		}
 
 		override fun getNewListSize() = this.newItems.size

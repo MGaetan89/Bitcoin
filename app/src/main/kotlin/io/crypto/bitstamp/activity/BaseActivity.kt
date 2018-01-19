@@ -22,7 +22,8 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.TimeUnit
 
-abstract class BaseActivity : AppCompatActivity(), ViewStub.OnInflateListener, BottomNavigationView.OnNavigationItemSelectedListener {
+abstract class BaseActivity : AppCompatActivity(), ViewStub.OnInflateListener,
+	BottomNavigationView.OnNavigationItemSelectedListener {
 	private val jobs = mutableListOf<Job>()
 
 	private var running = false
@@ -48,11 +49,17 @@ abstract class BaseActivity : AppCompatActivity(), ViewStub.OnInflateListener, B
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.menu_account -> {
-				this.startActivity<AccountActivity>(Intent.FLAG_ACTIVITY_NEW_TASK, Intent.FLAG_ACTIVITY_CLEAR_TASK)
+				this.startActivity<AccountActivity>(
+					Intent.FLAG_ACTIVITY_NEW_TASK,
+					Intent.FLAG_ACTIVITY_CLEAR_TASK
+				)
 				true
 			}
 			R.id.menu_prices -> {
-				this.startActivity<PricesActivity>(Intent.FLAG_ACTIVITY_NEW_TASK, Intent.FLAG_ACTIVITY_CLEAR_TASK)
+				this.startActivity<PricesActivity>(
+					Intent.FLAG_ACTIVITY_NEW_TASK,
+					Intent.FLAG_ACTIVITY_CLEAR_TASK
+				)
 				true
 			}
 			else -> false
@@ -83,7 +90,11 @@ abstract class BaseActivity : AppCompatActivity(), ViewStub.OnInflateListener, B
 
 	protected abstract fun getToolbarTitle(): CharSequence
 
-	protected fun runPeriodically(time: Long = 2L, unit: TimeUnit = TimeUnit.SECONDS, action: () -> List<Job>) {
+	protected fun runPeriodically(
+		time: Long = 2L,
+		unit: TimeUnit = TimeUnit.SECONDS,
+		action: () -> List<Job>
+	) {
 		if (this.running) {
 			launch {
 				val jobs = action()

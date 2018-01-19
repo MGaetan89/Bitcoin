@@ -6,11 +6,11 @@ import com.squareup.moshi.Json
 import io.crypto.bitstamp.R
 
 data class PriceTransaction(
-		val amount: Float,
-		val date: Long,
-		val price: Float,
-		@Json(name = "tid") val transactionId: Long,
-		val type: Int
+	val amount: Float,
+	val date: Long,
+	val price: Float,
+	@Json(name = "tid") val transactionId: Long,
+	val type: Int
 ) {
 	enum class Type(@StringRes val textRes: Int, @ColorRes val colorRes: Int) {
 		BUY(R.string.buy, R.color.bid),

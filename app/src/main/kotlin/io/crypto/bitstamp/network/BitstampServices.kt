@@ -21,44 +21,44 @@ object BitstampServices : Interceptor {
 
 	suspend fun getOpenOrders(): List<OpenOrder> {
 		return this.privateApi.getOpenOrders()
-				.execute()
-				.takeIf { it.isSuccessful }
-				?.body() ?: emptyList()
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: emptyList()
 	}
 
 	suspend fun getOrderBook(currencyPair: String): PriceOrderBook {
 		return this.api.getOrderBook(currencyPair)
-				.execute()
-				.takeIf { it.isSuccessful }
-				?.body() ?: PriceOrderBook.EMPTY
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: PriceOrderBook.EMPTY
 	}
 
 	suspend fun getTicker(currencyPair: String): Ticker {
 		return this.api.getTicker(currencyPair)
-				.execute()
-				.takeIf { it.isSuccessful }
-				?.body() ?: Ticker.EMPTY
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: Ticker.EMPTY
 	}
 
 	suspend fun getTradingPairs(): List<TradingPair> {
 		return this.api.getTradingPairs()
-				.execute()
-				.takeIf { it.isSuccessful }
-				?.body() ?: emptyList()
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: emptyList()
 	}
 
 	suspend fun getTransactions(currencyPair: String): List<PriceTransaction> {
 		return this.api.getTransactions(currencyPair)
-				.execute()
-				.takeIf { it.isSuccessful }
-				?.body() ?: emptyList()
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: emptyList()
 	}
 
 	suspend fun getUserTransactions(): List<UserTransaction> {
 		return this.privateApi.getUserTransactions()
-				.execute()
-				.takeIf { it.isSuccessful }
-				?.body() ?: emptyList()
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: emptyList()
 	}
 
 	override fun intercept(chain: Interceptor.Chain): Response {
@@ -74,13 +74,13 @@ object BitstampServices : Interceptor {
 
 		// Request creation
 		val requestBody = FormBody.Builder()
-				.add("key", key)
-				.add("nonce", nonce)
-				.add("signature", signature)
-				.build()
+			.add("key", key)
+			.add("nonce", nonce)
+			.add("signature", signature)
+			.build()
 		val request = chain.request().newBuilder()
-				.post(requestBody)
-				.build()
+			.post(requestBody)
+			.build()
 
 		return chain.proceed(request)
 	}
@@ -97,10 +97,10 @@ object BitstampServices : Interceptor {
 		})
 
 		return Retrofit.Builder()
-				.baseUrl("https://www.bitstamp.net/api/")
-				.addConverterFactory(MoshiConverterFactory.create())
-				.client(clientBuilder.build())
-				.build()
-				.create(BitstampApi::class.java)
+			.baseUrl("https://www.bitstamp.net/api/")
+			.addConverterFactory(MoshiConverterFactory.create())
+			.client(clientBuilder.build())
+			.build()
+			.create(BitstampApi::class.java)
 	}
 }

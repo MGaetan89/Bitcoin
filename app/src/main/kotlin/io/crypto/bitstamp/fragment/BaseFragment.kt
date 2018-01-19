@@ -25,7 +25,11 @@ abstract class BaseFragment : Fragment() {
 		this.running = true
 	}
 
-	protected fun runPeriodically(time: Long = 2L, unit: TimeUnit = TimeUnit.SECONDS, action: () -> List<Job>) {
+	protected fun runPeriodically(
+		time: Long = 2L,
+		unit: TimeUnit = TimeUnit.SECONDS,
+		action: () -> List<Job>
+	) {
 		if (this.running) {
 			launch {
 				val jobs = action()

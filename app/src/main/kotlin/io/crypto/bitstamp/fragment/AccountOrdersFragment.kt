@@ -21,7 +21,11 @@ class AccountOrdersFragment : BaseFragment() {
 	private val adapter by lazy { AccountOrdersAdapter() }
 	private val layoutManager by lazy { LinearLayoutManager(this.context) }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
 		return inflater.inflate(R.layout.fragment_account_orders, container, false)
 	}
 
@@ -55,7 +59,12 @@ class AccountOrdersFragment : BaseFragment() {
 		this.list.let {
 			it.adapter = this.adapter
 			it.layoutManager = this.layoutManager
-			it.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+			it.addItemDecoration(
+				DividerItemDecoration(
+					this.context,
+					DividerItemDecoration.VERTICAL
+				)
+			)
 		}
 	}
 }

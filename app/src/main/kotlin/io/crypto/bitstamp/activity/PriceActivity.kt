@@ -30,7 +30,8 @@ class PriceActivity : BaseActivity() {
 	override fun onInflate(stub: ViewStub, inflated: View) {
 		this.viewPager = inflated as ViewPager
 		this.viewPager?.let {
-			it.adapter = PricePagerAdapter(this.tradingPair, this.resources, this.supportFragmentManager)
+			it.adapter =
+					PricePagerAdapter(this.tradingPair, this.resources, this.supportFragmentManager)
 		}
 
 		super.onInflate(stub, inflated)

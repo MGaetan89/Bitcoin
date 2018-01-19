@@ -24,7 +24,8 @@ import kotlinx.android.synthetic.main.adapter_price_transaction.type
 import kotlinx.android.synthetic.main.adapter_price_transaction.value
 import kotlinx.android.synthetic.main.adapter_price_transaction.value_currency
 
-class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceTransactionsAdapter.ViewHolder>() {
+class PriceTransactionsAdapter(private val tradingPair: TradingPair) :
+	RecyclerView.Adapter<PriceTransactionsAdapter.ViewHolder>() {
 	private val transactions = mutableListOf<PriceTransaction>()
 
 	override fun getItemCount() = this.transactions.size
@@ -48,7 +49,8 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		holder.price_currency.text = this.tradingPair.counterCurrency
 		holder.time.text = transaction.date.toFormattedTime()
 		holder.transaction_id.text = "${transaction.transactionId}"
-		holder.value.text = (transaction.amount * transaction.price).toFormattedString(this.tradingPair.counterDecimals)
+		holder.value.text =
+				(transaction.amount * transaction.price).toFormattedString(this.tradingPair.counterDecimals)
 		holder.value_currency.text = this.tradingPair.counterCurrency
 	}
 
@@ -59,7 +61,8 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 	}
 
 	fun updateTransactions(transactions: List<PriceTransaction>) {
-		val diffResult = DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
+		val diffResult =
+			DiffUtil.calculateDiff(TransactionsDiffCallback(this.transactions, transactions), true)
 
 		this.transactions.clear()
 		this.transactions.addAll(transactions)
@@ -67,16 +70,26 @@ class PriceTransactionsAdapter(private val tradingPair: TradingPair) : RecyclerV
 		diffResult.dispatchUpdatesTo(this)
 	}
 
-	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+		LayoutContainer
 
-	private class TransactionsDiffCallback(private val oldItems: List<PriceTransaction>, private val newItems: List<PriceTransaction>) : DiffUtil.Callback() {
+	private class TransactionsDiffCallback(
+		private val oldItems: List<PriceTransaction>,
+		private val newItems: List<PriceTransaction>
+	) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems.getOrNull(newItemPosition)?.amount == this.oldItems.getOrNull(oldItemPosition)?.amount
-					&& this.newItems.getOrNull(newItemPosition)?.price == this.oldItems.getOrNull(oldItemPosition)?.price
+			return this.newItems.getOrNull(newItemPosition)?.amount == this.oldItems.getOrNull(
+				oldItemPosition
+			)?.amount
+					&& this.newItems.getOrNull(newItemPosition)?.price == this.oldItems.getOrNull(
+				oldItemPosition
+			)?.price
 		}
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newItems.getOrNull(newItemPosition)?.transactionId == this.oldItems.getOrNull(oldItemPosition)?.transactionId
+			return this.newItems.getOrNull(newItemPosition)?.transactionId == this.oldItems.getOrNull(
+				oldItemPosition
+			)?.transactionId
 		}
 
 		override fun getNewListSize() = this.newItems.size

@@ -7,7 +7,7 @@ buildscript {
 	ext.coroutinesVersion = '0.21.1'
 	ext.jsonVersion = '20170516'
 	ext.jUnitVersion = '4.12'
-	ext.kotlinVersion = '1.2.20-eap-71'
+	ext.kotlinVersion = '1.2.20'
 	ext.minSdkVersion = 21
 	ext.okHttpVersion = '3.9.1'
 	ext.pusherVersion = '1.6.0'
@@ -20,10 +20,6 @@ buildscript {
 	repositories {
 		google()
 		jcenter()
-
-		maven {
-			url "https://dl.bintray.com/kotlin/kotlin-eap"
-		}
 	}
 
 	dependencies {
@@ -36,10 +32,6 @@ allprojects {
 	repositories {
 		google()
 		jcenter()
-
-		maven {
-			url "https://dl.bintray.com/kotlin/kotlin-eap"
-		}
 	}
 }
 

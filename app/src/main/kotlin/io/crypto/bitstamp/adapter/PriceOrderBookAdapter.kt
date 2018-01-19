@@ -15,7 +15,8 @@ import kotlinx.android.synthetic.main.adapter_price_order_book.amount_bid
 import kotlinx.android.synthetic.main.adapter_price_order_book.ask
 import kotlinx.android.synthetic.main.adapter_price_order_book.bid
 
-class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView.Adapter<PriceOrderBookAdapter.ViewHolder>() {
+class PriceOrderBookAdapter(private val tradingPair: TradingPair) :
+	RecyclerView.Adapter<PriceOrderBookAdapter.ViewHolder>() {
 	private var orderBook = PriceOrderBook.EMPTY
 
 	override fun getItemCount() = this.orderBook.asks.size
@@ -37,18 +38,25 @@ class PriceOrderBookAdapter(private val tradingPair: TradingPair) : RecyclerView
 	}
 
 	fun updateOrderBook(orderBook: PriceOrderBook) {
-		val diffResult = DiffUtil.calculateDiff(OrderBookDiffCallback(this.orderBook, orderBook), true)
+		val diffResult =
+			DiffUtil.calculateDiff(OrderBookDiffCallback(this.orderBook, orderBook), true)
 
 		this.orderBook = orderBook
 
 		diffResult.dispatchUpdatesTo(this)
 	}
 
-	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+		LayoutContainer
 
-	private class OrderBookDiffCallback(private val oldPriceOrderBook: PriceOrderBook, private val newPriceOrderBook: PriceOrderBook) : DiffUtil.Callback() {
+	private class OrderBookDiffCallback(
+		private val oldPriceOrderBook: PriceOrderBook,
+		private val newPriceOrderBook: PriceOrderBook
+	) : DiffUtil.Callback() {
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			return this.newPriceOrderBook.asks.contentEquals(this.oldPriceOrderBook.asks) && this.newPriceOrderBook.bids.contentEquals(this.oldPriceOrderBook.bids)
+			return this.newPriceOrderBook.asks.contentEquals(this.oldPriceOrderBook.asks) && this.newPriceOrderBook.bids.contentEquals(
+				this.oldPriceOrderBook.bids
+			)
 		}
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

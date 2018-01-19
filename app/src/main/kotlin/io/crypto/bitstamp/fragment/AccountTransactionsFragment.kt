@@ -33,7 +33,11 @@ class AccountTransactionsFragment : BaseFragment() {
 		}
 	}
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
 		return inflater.inflate(R.layout.fragment_account_transactions, container, false)
 	}
 
@@ -59,7 +63,12 @@ class AccountTransactionsFragment : BaseFragment() {
 		this.list.let {
 			it.adapter = this.adapter
 			it.layoutManager = this.layoutManager
-			it.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+			it.addItemDecoration(
+				DividerItemDecoration(
+					this.context,
+					DividerItemDecoration.VERTICAL
+				)
+			)
 		}
 	}
 }
