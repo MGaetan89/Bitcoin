@@ -12,7 +12,9 @@ import io.crypto.bitstamp.extension.toFormattedString
 import io.crypto.bitstamp.extension.toFormattedTime
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.TradingPair
+import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.adapter_account_order.cancel_order
 import kotlinx.android.synthetic.main.adapter_account_order.status
 import kotlinx.android.synthetic.main.adapter_account_transaction.date
 import kotlinx.android.synthetic.main.adapter_account_transaction.time
@@ -24,6 +26,8 @@ import kotlinx.android.synthetic.main.adapter_price_transaction.price_currency
 import kotlinx.android.synthetic.main.adapter_price_transaction.transaction_id
 import kotlinx.android.synthetic.main.adapter_price_transaction.value
 import kotlinx.android.synthetic.main.adapter_price_transaction.value_currency
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolder>() {
 	private val orders = mutableListOf<OpenOrder>()
@@ -38,6 +42,7 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 		val tradingPair = this.tradingPairs.firstOrNull { it.urlSymbol == order.urlSymbol }
 		val baseDecimals = tradingPair?.baseDecimals ?: 0
 		val counterDecimals = tradingPair?.counterDecimals ?: 0
+		val status = this.ordersStatus[order.id]
 
 		if (typeObject != null) {
 			holder.type.setText(typeObject.textRes)
@@ -49,10 +54,11 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 
 		holder.amount.text = order.amount.toFormattedString(baseDecimals)
 		holder.amount_currency.text = tradingPair?.baseCurrency
+		holder.cancel_order.visibility = if (status == "Open") View.VISIBLE else View.GONE
 		holder.date.text = order.date?.toFormattedDate()
 		holder.price.text = order.price.toFormattedString(counterDecimals)
 		holder.price_currency.text = tradingPair?.counterCurrency
-		holder.status.text = this.ordersStatus[order.id]
+		holder.status.text = status
 		holder.time.text = order.date?.toFormattedTime()
 		holder.transaction_id.text = "${order.id}"
 		holder.value.text = order.value.toFormattedString(counterDecimals)
@@ -91,8 +97,30 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 		this.notifyDataSetChanged()
 	}
 
-	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-		LayoutContainer
+	inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+		View.OnClickListener, LayoutContainer {
+		init {
+			this.cancel_order.setOnClickListener(this)
+		}
+
+		override fun onClick(view: View) {
+			when (view.id) {
+				R.id.cancel_order -> orders.getOrNull(this.adapterPosition)?.id?.let(this::cancelOrder)
+			}
+		}
+
+		private fun cancelOrder(id: Long) {
+			launch {
+				val changedOrderId = BitstampServices.cancelOrder(id).id
+
+				if (changedOrderId == id) {
+					launch(UI) {
+						updateOrderStatus(id, "Canceled")
+					}
+				}
+			}
+		}
+	}
 
 	private class OrdersDiffCallback(
 		private val oldItems: List<OpenOrder>,

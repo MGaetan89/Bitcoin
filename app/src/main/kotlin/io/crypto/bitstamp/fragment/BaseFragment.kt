@@ -25,6 +25,12 @@ abstract class BaseFragment : Fragment() {
 		this.running = true
 	}
 
+	override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+		super.setUserVisibleHint(isVisibleToUser)
+
+		this.running = isVisibleToUser
+	}
+
 	protected fun runPeriodically(
 		time: Long = 2L,
 		unit: TimeUnit = TimeUnit.SECONDS,

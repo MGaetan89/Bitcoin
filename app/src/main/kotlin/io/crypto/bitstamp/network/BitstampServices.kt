@@ -1,5 +1,6 @@
 package io.crypto.bitstamp.network
 
+import io.crypto.bitstamp.model.CanceledOrder
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.OpenOrderStatus
 import io.crypto.bitstamp.model.PriceOrderBook
@@ -19,6 +20,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object BitstampServices : Interceptor {
 	private val api = this.createService(false)
 	private val privateApi = this.createService(true)
+
+	suspend fun cancelOrder(id: Long): CanceledOrder {
+		return this.privateApi.cancelOrder(id)
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: CanceledOrder.EMPTY
+	}
 
 	suspend fun getOpenOrders(): List<OpenOrder> {
 		return this.privateApi.getOpenOrders()
@@ -76,7 +84,7 @@ object BitstampServices : Interceptor {
 		val secret = ByteString.encodeUtf8("")
 
 		// Signature generation
-		val nonce = System.currentTimeMillis().toString()
+		val nonce = System.nanoTime().toString()
 		val message = nonce + customerId + key
 		val signature = ByteString.encodeUtf8(message).hmacSha256(secret).hex().toUpperCase()
 
