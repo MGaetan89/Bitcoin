@@ -1,5 +1,6 @@
 package io.crypto.bitstamp.network
 
+import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
@@ -17,6 +18,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object BitstampServices : Interceptor {
 	private val api = this.createService(false)
 	private val privateApi = this.createService(true)
+
+	suspend fun getOpenOrders(): List<OpenOrder> {
+		return this.privateApi.getOpenOrders()
+				.execute()
+				.takeIf { it.isSuccessful }
+				?.body() ?: emptyList()
+	}
 
 	suspend fun getOrderBook(currencyPair: String): PriceOrderBook {
 		return this.api.getOrderBook(currencyPair)

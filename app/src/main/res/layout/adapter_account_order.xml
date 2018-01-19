@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<android.support.constraint.Barrier
+		android:id="@+id/barrier"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="end"
+		app:constraint_referenced_ids="amount_label,price_label,value_label" />
+
+	<TextView
+		android:id="@+id/type"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin"
+		android:layout_marginTop="@dimen/margin_half"
+		android:textAllCaps="true"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="@string/buy"
+		tools:textColor="@color/bid" />
+
+	<TextView
+		android:id="@+id/amount_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/amount"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/amount"
+		app:layout_constraintStart_toStartOf="@+id/type" />
+
+	<TextView
+		android:id="@+id/amount"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintStart_toEndOf="@+id/barrier"
+		app:layout_constraintTop_toBottomOf="@+id/type"
+		tools:text="@sample/transactions.json/transactions/amount" />
+
+	<TextView
+		android:id="@+id/amount_currency"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_half"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/amount"
+		app:layout_constraintStart_toEndOf="@+id/amount"
+		tools:text="BTC" />
+
+	<TextView
+		android:id="@+id/id_prefix"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/id_prefix"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/transaction_id"
+		app:layout_constraintEnd_toStartOf="@+id/transaction_id" />
+
+	<TextView
+		android:id="@+id/transaction_id"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		app:layout_constraintBaseline_toBaselineOf="@+id/amount"
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:text="@sample/transactions.json/transactions/tid" />
+
+	<TextView
+		android:id="@+id/price_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/price"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/price"
+		app:layout_constraintStart_toStartOf="@+id/type" />
+
+	<TextView
+		android:id="@+id/price"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintStart_toEndOf="@+id/barrier"
+		app:layout_constraintTop_toBottomOf="@+id/amount_label"
+		tools:text="@sample/transactions.json/transactions/price" />
+
+	<TextView
+		android:id="@+id/price_currency"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_half"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/price"
+		app:layout_constraintStart_toEndOf="@+id/price"
+		tools:text="USD" />
+
+	<TextView
+		android:id="@+id/date"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		app:layout_constraintBaseline_toBaselineOf="@+id/price"
+		app:layout_constraintEnd_toEndOf="@+id/transaction_id"
+		tools:text="@sample/transactions.json/transactions/date" />
+
+	<TextView
+		android:id="@+id/value_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/value"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/value"
+		app:layout_constraintStart_toStartOf="@+id/type" />
+
+	<TextView
+		android:id="@+id/value"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/margin_half"
+		android:layout_marginStart="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/barrier"
+		app:layout_constraintTop_toBottomOf="@+id/price_label"
+		tools:text="@sample/transactions.json/transactions/price" />
+
+	<TextView
+		android:id="@+id/value_currency"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_half"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/value"
+		app:layout_constraintStart_toEndOf="@+id/value"
+		tools:text="USD" />
+
+	<TextView
+		android:id="@+id/time"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		app:layout_constraintBaseline_toBaselineOf="@+id/value"
+		app:layout_constraintEnd_toEndOf="@+id/transaction_id"
+		tools:text="@sample/transactions.json/transactions/date" />
+</android.support.constraint.ConstraintLayout>
