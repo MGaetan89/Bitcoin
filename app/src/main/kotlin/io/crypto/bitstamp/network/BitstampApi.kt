@@ -1,6 +1,7 @@
 package io.crypto.bitstamp.network
 
 import io.crypto.bitstamp.model.OpenOrder
+import io.crypto.bitstamp.model.OpenOrderStatus
 import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
@@ -10,6 +11,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface BitstampApi {
 	@POST("/api/v2/open_orders/all/")
@@ -17,6 +19,9 @@ interface BitstampApi {
 
 	@GET("/api/v2/order_book/{currency_pair}/")
 	fun getOrderBook(@Path("currency_pair") currencyPair: String): Call<PriceOrderBook>
+
+	@POST("/api/order_status/")
+	fun getOrderStatus(@Query("id") id: Long): Call<OpenOrderStatus>
 
 	@GET("/api/v2/ticker/{currency_pair}/")
 	fun getTicker(@Path("currency_pair") currencyPair: String): Call<Ticker>

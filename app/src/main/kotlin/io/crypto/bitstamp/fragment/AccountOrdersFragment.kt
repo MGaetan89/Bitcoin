@@ -43,6 +43,15 @@ class AccountOrdersFragment : BaseFragment() {
 		this.runPeriodically(10) {
 			listOf(launch {
 				val orders = BitstampServices.getOpenOrders()
+				val orderIds = orders.map { it.id }
+
+				orderIds.forEach {
+					val status = BitstampServices.getOrderStatus(it).status.orEmpty()
+
+					launch(UI) {
+						adapter.updateOrderStatus(it, status)
+					}
+				}
 
 				launch(UI) {
 					adapter.updateOrders(orders)

@@ -13,6 +13,7 @@ import io.crypto.bitstamp.extension.toFormattedTime
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.TradingPair
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.adapter_account_order.status
 import kotlinx.android.synthetic.main.adapter_account_transaction.date
 import kotlinx.android.synthetic.main.adapter_account_transaction.time
 import kotlinx.android.synthetic.main.adapter_account_transaction.type
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.adapter_price_transaction.value_currency
 
 class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolder>() {
 	private val orders = mutableListOf<OpenOrder>()
+	private val ordersStatus = mutableMapOf<Long, String>()
 	private val tradingPairs = mutableListOf<TradingPair>()
 
 	override fun getItemCount() = this.orders.size
@@ -50,6 +52,7 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 		holder.date.text = order.date?.toFormattedDate()
 		holder.price.text = order.price.toFormattedString(counterDecimals)
 		holder.price_currency.text = tradingPair?.counterCurrency
+		holder.status.text = this.ordersStatus[order.id]
 		holder.time.text = order.date?.toFormattedTime()
 		holder.transaction_id.text = "${order.id}"
 		holder.value.text = order.value.toFormattedString(counterDecimals)
@@ -69,6 +72,16 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 		this.orders.addAll(orders)
 
 		diffResult.dispatchUpdatesTo(this)
+	}
+
+	fun updateOrderStatus(id: Long, status: String) {
+		this.ordersStatus[id] = status
+
+		this.orders.indexOfFirst { it.id == id }
+			.takeIf { it >= 0 }
+			?.let {
+				this.notifyItemChanged(it)
+			}
 	}
 
 	fun updateTradingPairs(tradingPairs: List<TradingPair>) {

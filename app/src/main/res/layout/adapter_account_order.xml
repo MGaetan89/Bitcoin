@@ -124,10 +124,8 @@
 		android:id="@+id/value"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/margin_half"
 		android:layout_marginStart="@dimen/margin"
 		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toEndOf="@+id/barrier"
 		app:layout_constraintTop_toBottomOf="@+id/price_label"
 		tools:text="@sample/open_orders.json/orders/price" />
@@ -150,4 +148,25 @@
 		app:layout_constraintBaseline_toBaselineOf="@+id/value"
 		app:layout_constraintEnd_toEndOf="@+id/transaction_id"
 		tools:text="@sample/open_orders.json/orders/datetime" />
+
+	<TextView
+		android:id="@+id/status_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/status"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		app:layout_constraintBaseline_toBaselineOf="@+id/status"
+		app:layout_constraintStart_toStartOf="@+id/type" />
+
+	<TextView
+		android:id="@+id/status"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/margin_half"
+		android:layout_marginStart="@dimen/margin"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/barrier"
+		app:layout_constraintTop_toBottomOf="@+id/value_label"
+		tools:text="@sample/open_orders.json/orders/status" />
 </android.support.constraint.ConstraintLayout>

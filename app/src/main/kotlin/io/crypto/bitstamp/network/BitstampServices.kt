@@ -1,6 +1,7 @@
 package io.crypto.bitstamp.network
 
 import io.crypto.bitstamp.model.OpenOrder
+import io.crypto.bitstamp.model.OpenOrderStatus
 import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
@@ -31,6 +32,13 @@ object BitstampServices : Interceptor {
 			.execute()
 			.takeIf { it.isSuccessful }
 			?.body() ?: PriceOrderBook.EMPTY
+	}
+
+	suspend fun getOrderStatus(id: Long): OpenOrderStatus {
+		return this.privateApi.getOrderStatus(id)
+			.execute()
+			.takeIf { it.isSuccessful }
+			?.body() ?: OpenOrderStatus.EMPTY
 	}
 
 	suspend fun getTicker(currencyPair: String): Ticker {
@@ -73,13 +81,20 @@ object BitstampServices : Interceptor {
 		val signature = ByteString.encodeUtf8(message).hmacSha256(secret).hex().toUpperCase()
 
 		// Request creation
-		val requestBody = FormBody.Builder()
+		val url = chain.request().url()
+		val newUrlBuilder = url.newBuilder()
+		val formBodyBuilder = FormBody.Builder()
 			.add("key", key)
 			.add("nonce", nonce)
 			.add("signature", signature)
-			.build()
+		url.queryParameterNames().forEach {
+			formBodyBuilder.add(it, url.queryParameterValues(it).first())
+			newUrlBuilder.removeAllQueryParameters(it)
+		}
+
 		val request = chain.request().newBuilder()
-			.post(requestBody)
+			.post(formBodyBuilder.build())
+			.url(newUrlBuilder.build())
 			.build()
 
 		return chain.proceed(request)
