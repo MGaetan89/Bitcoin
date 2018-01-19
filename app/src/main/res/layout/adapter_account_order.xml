@@ -42,7 +42,7 @@
 		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
 		app:layout_constraintStart_toEndOf="@+id/barrier"
 		app:layout_constraintTop_toBottomOf="@+id/type"
-		tools:text="@sample/transactions.json/transactions/amount" />
+		tools:text="@sample/open_orders.json/orders/amount" />
 
 	<TextView
 		android:id="@+id/amount_currency"
@@ -71,7 +71,7 @@
 		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 		app:layout_constraintBaseline_toBaselineOf="@+id/amount"
 		app:layout_constraintEnd_toEndOf="parent"
-		tools:text="@sample/transactions.json/transactions/tid" />
+		tools:text="@sample/open_orders.json/orders/id" />
 
 	<TextView
 		android:id="@+id/price_label"
@@ -90,7 +90,7 @@
 		android:textAppearance="@style/TextAppearance.AppCompat.Body2"
 		app:layout_constraintStart_toEndOf="@+id/barrier"
 		app:layout_constraintTop_toBottomOf="@+id/amount_label"
-		tools:text="@sample/transactions.json/transactions/price" />
+		tools:text="@sample/open_orders.json/orders/price" />
 
 	<TextView
 		android:id="@+id/price_currency"
@@ -109,7 +109,7 @@
 		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 		app:layout_constraintBaseline_toBaselineOf="@+id/price"
 		app:layout_constraintEnd_toEndOf="@+id/transaction_id"
-		tools:text="@sample/transactions.json/transactions/date" />
+		tools:text="@sample/open_orders.json/orders/datetime" />
 
 	<TextView
 		android:id="@+id/value_label"
@@ -130,7 +130,7 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toEndOf="@+id/barrier"
 		app:layout_constraintTop_toBottomOf="@+id/price_label"
-		tools:text="@sample/transactions.json/transactions/price" />
+		tools:text="@sample/open_orders.json/orders/price" />
 
 	<TextView
 		android:id="@+id/value_currency"
@@ -149,5 +149,5 @@
 		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 		app:layout_constraintBaseline_toBaselineOf="@+id/value"
 		app:layout_constraintEnd_toEndOf="@+id/transaction_id"
-		tools:text="@sample/transactions.json/transactions/date" />
+		tools:text="@sample/open_orders.json/orders/datetime" />
 </android.support.constraint.ConstraintLayout>
