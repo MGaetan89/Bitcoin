@@ -57,6 +57,10 @@ android {
 		main.java.srcDirs = ['src/main/kotlin']
 		test.java.srcDirs = ['src/test/kotlin']
 	}
+
+	testOptions.unitTests.all {
+		jacoco.includeNoLocationClasses = true
+	}
 }
 
 androidExtensions {

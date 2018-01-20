@@ -25,7 +25,9 @@ buildscript {
 
 	dependencies {
 		classpath "com.android.tools.build:gradle:$androidGradlePlugin"
-		classpath "com.dicedmelon.gradle:jacoco-android:$jacocoAndroidGradlePlugin"
+		classpath("com.dicedmelon.gradle:jacoco-android:$jacocoAndroidGradlePlugin") {
+			exclude group: 'org.codehaus.groovy'
+		}
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 	}
 }
