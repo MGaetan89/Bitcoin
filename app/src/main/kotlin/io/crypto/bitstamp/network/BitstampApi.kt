@@ -1,5 +1,6 @@
 package io.crypto.bitstamp.network
 
+import io.crypto.bitstamp.model.AccountBalance
 import io.crypto.bitstamp.model.CanceledOrder
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.OpenOrderStatus
@@ -17,6 +18,9 @@ import retrofit2.http.Query
 interface BitstampApi {
 	@POST("/api/v2/cancel_order/")
 	fun cancelOrder(@Query("id") id: Long): Call<CanceledOrder>
+
+	@POST("/api/v2/balance/")
+	fun getAccountBalance(): Call<AccountBalance>
 
 	@POST("/api/v2/open_orders/all/")
 	fun getOpenOrders(): Call<List<OpenOrder>>

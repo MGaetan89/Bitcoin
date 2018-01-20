@@ -4,6 +4,7 @@
 	<string name="amount">Amount</string>
 	<string name="app_name">Bitstamp (unofficial)</string>
 	<string name="ask">Ask</string>
+	<string name="balance">Balance</string>
 	<string name="bid">Bid</string>
 	<string name="buy">Buy</string>
 	<string name="cancel">Cancel</string>
