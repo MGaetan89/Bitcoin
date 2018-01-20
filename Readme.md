@@ -1,11 +1,12 @@
-# ![Bitcoin for Bitstamp](app/src/main/res/mipmap-mdpi/ic_launcher.png) Bitcoin for Bitstamp
+# ![Bitstamp (unofficial)](app/src/main/res/mipmap-mdpi/ic_launcher.png) Bitstamp (unofficial)
 
 [![Build Status](https://travis-ci.org/MGaetan89/Bitcoin.svg?branch=master)](https://travis-ci.org/MGaetan89/Bitcoin)
-[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/MGaetan89/Bitcoin/master/LICENSE)
+[![Codecov](https://codecov.io/gh/MGaetan89/Bitcoin/branch/master/graph/badge.svg)](https://codecov.io/gh/MGaetan89/Bitcoin)
 [![Minimum API](https://img.shields.io/badge/API-21%2B-brightgreen.svg)](https://android-arsenal.com/api?level=21)
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/MGaetan89/Bitcoin/master/LICENSE)
 [![Support on Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/MGaetan89)
 
-*Bitcoin for Bitstamp* gives you access to Bitstamp's cryptocurrencies prices. It also gives you the ability to enter your positions to see there performance.
+*Bitstamp* is an unofficial Android application to access [Bitstamp](https://www.bitstamp.net/)'s exchange and your user account.
 
 ## Build the app
 
@@ -18,7 +19,7 @@ pusher.api_key="PUSHER_API_KEY"
 ## License
 
 ```
-Copyright 2017 MGaetan89
+Copyright 2017-2018 MGaetan89
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
