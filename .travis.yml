@@ -1,20 +1,46 @@
 language: android
 
+sudo: true
+
 android:
   components:
-    - android-27
+    - android-$ANDROID_TARGET
     - build-tools-27.0.3
     - platform-tools
+    - sys-img-$ANDROID_ABI-google_apis-$ANDROID_TARGET
     - tools
+
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=10
+
+  matrix:
+    - ANDROID_TARGET=21   ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=22   ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=23   ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=24   ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=25   ANDROID_ABI=armeabi-v7a
 
 before_install:
   - yes | sdkmanager "platforms;android-27"
 
+before_script:
+  - android list targets
+  - echo no | android create avd -f -n "test_$ANDROID_TARGET" -t "android-$ANDROID_TARGET" -b $ANDROID_ABI -g "google_apis"
+  - android list avd
+  - emulator -memory 1536 -avd "test_$ANDROID_TARGET" -no-audio -no-boot-anim -no-window -wipe-data &
+  - android-wait-for-emulator
+  - adb devices
+  - adb shell input keyevent 82 &
+
 script:
-  - ./gradlew jacocoTestReportDebug assembleAndroidTest
+  - ./gradlew jacocoTestReportDebug assembleAndroidTest connectedDebugAndroidTest createDebugCoverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+after_failure:
+  - adb logcat -d
 
 cache:
   directories:

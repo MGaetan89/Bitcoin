@@ -15,6 +15,7 @@ buildscript {
 	ext.retrofitVersion = '2.3.0'
 	ext.supportLibraryVersion = '27.0.2'
 	ext.targetSdkVersion = 27
+	ext.testSupportLibraryVersion = '1.0.1'
 	ext.versionCode = 1
 	ext.versionName = '1.0'
 
