@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
+apply plugin: 'com.vanniktech.android.junit.jacoco'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -57,14 +57,15 @@ android {
 		main.java.srcDirs = ['src/main/kotlin']
 		test.java.srcDirs = ['src/test/kotlin']
 	}
-
-	testOptions.unitTests.all {
-		jacoco.includeNoLocationClasses = true
-	}
 }
 
 androidExtensions {
 	experimental = true
+}
+
+junitJacoco {
+	jacocoVersion = '0.7.9'
+	includeNoLocationClasses = true
 }
 
 kotlin {
