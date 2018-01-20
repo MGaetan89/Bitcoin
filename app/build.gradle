@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -32,6 +33,8 @@ android {
 				optimizeCode false
 				proguardFiles 'proguard-rules.pro'
 			}
+
+			testCoverageEnabled true
 		}
 
 		release {
