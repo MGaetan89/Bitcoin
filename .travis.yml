@@ -1,7 +1,5 @@
 language: android
 
-sudo: true
-
 android:
   components:
     - android-$ANDROID_TARGET
