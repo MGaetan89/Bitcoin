@@ -56,133 +56,37 @@ data class UserTransaction(
 	val date get() = this.datetime.toTimestamp()
 
 	val transactionInfo: TransactionInfo?
-		get() = this.bchBtc?.let { TransactionInfo(this.bch!!, it, this.fee, this.btc!!, "bchbtc") }
-				?: this.bchEur?.let {
-					TransactionInfo(
-						this.bch!!,
-						it,
-						this.fee,
-						this.eur!!,
-						"bcheur"
-					)
-				}
-				?: this.bchUsd?.let {
-					TransactionInfo(
-						this.bch!!,
-						it,
-						this.fee,
-						this.usd!!,
-						"bchusd"
-					)
-				}
-				?: this.btcEur?.let {
-					TransactionInfo(
-						this.btc!!,
-						it,
-						this.fee,
-						this.eur!!,
-						"btceur"
-					)
-				}
-				?: this.btcUsd?.let {
-					TransactionInfo(
-						this.btc!!,
-						it,
-						this.fee,
-						this.usd!!,
-						"btcusd"
-					)
-				}
-				?: this.ethBtc?.let {
-					TransactionInfo(
-						this.eth!!,
-						it,
-						this.fee,
-						this.btc!!,
-						"ethbtc"
-					)
-				}
-				?: this.ethEur?.let {
-					TransactionInfo(
-						this.eth!!,
-						it,
-						this.fee,
-						this.eur!!,
-						"etheur"
-					)
-				}
-				?: this.ethUsd?.let {
-					TransactionInfo(
-						this.eth!!,
-						it,
-						this.fee,
-						this.usd!!,
-						"ethusd"
-					)
-				}
-				?: this.eurUsd?.let {
-					TransactionInfo(
-						this.eur!!,
-						it,
-						this.fee,
-						this.usd!!,
-						"eurusd"
-					)
-				}
-				?: this.ltcBtc?.let {
-					TransactionInfo(
-						this.ltc!!,
-						it,
-						this.fee,
-						this.btc!!,
-						"ltcbtc"
-					)
-				}
-				?: this.ltcEur?.let {
-					TransactionInfo(
-						this.ltc!!,
-						it,
-						this.fee,
-						this.eur!!,
-						"ltceur"
-					)
-				}
-				?: this.ltcUsd?.let {
-					TransactionInfo(
-						this.ltc!!,
-						it,
-						this.fee,
-						this.usd!!,
-						"ltcusd"
-					)
-				}
-				?: this.xrpBtc?.let {
-					TransactionInfo(
-						this.xrp!!,
-						it,
-						this.fee,
-						this.btc!!,
-						"xrpbtc"
-					)
-				}
-				?: this.xrpEur?.let {
-					TransactionInfo(
-						this.xrp!!,
-						it,
-						this.fee,
-						this.eur!!,
-						"xrpeur"
-					)
-				}
-				?: this.xrpUsd?.let {
-					TransactionInfo(
-						this.xrp!!,
-						it,
-						this.fee,
-						this.usd!!,
-						"xrpusd"
-					)
-				}
+		get() = this.bchBtc?.let {
+			TransactionInfo(this.bch!!, it, this.fee, this.btc!!, "bchbtc")
+		} ?: this.bchEur?.let {
+			TransactionInfo(this.bch!!, it, this.fee, this.eur!!, "bcheur")
+		} ?: this.bchUsd?.let {
+			TransactionInfo(this.bch!!, it, this.fee, this.usd!!, "bchusd")
+		} ?: this.btcEur?.let {
+			TransactionInfo(this.btc!!, it, this.fee, this.eur!!, "btceur")
+		} ?: this.btcUsd?.let {
+			TransactionInfo(this.btc!!, it, this.fee, this.usd!!, "btcusd")
+		} ?: this.ethBtc?.let {
+			TransactionInfo(this.eth!!, it, this.fee, this.btc!!, "ethbtc")
+		} ?: this.ethEur?.let {
+			TransactionInfo(this.eth!!, it, this.fee, this.eur!!, "etheur")
+		} ?: this.ethUsd?.let {
+			TransactionInfo(this.eth!!, it, this.fee, this.usd!!, "ethusd")
+		} ?: this.eurUsd?.let {
+			TransactionInfo(this.eur!!, it, this.fee, this.usd!!, "eurusd")
+		} ?: this.ltcBtc?.let {
+			TransactionInfo(this.ltc!!, it, this.fee, this.btc!!, "ltcbtc")
+		} ?: this.ltcEur?.let {
+			TransactionInfo(this.ltc!!, it, this.fee, this.eur!!, "ltceur")
+		} ?: this.ltcUsd?.let {
+			TransactionInfo(this.ltc!!, it, this.fee, this.usd!!, "ltcusd")
+		} ?: this.xrpBtc?.let {
+			TransactionInfo(this.xrp!!, it, this.fee, this.btc!!, "xrpbtc")
+		} ?: this.xrpEur?.let {
+			TransactionInfo(this.xrp!!, it, this.fee, this.eur!!, "xrpeur")
+		} ?: this.xrpUsd?.let {
+			TransactionInfo(this.xrp!!, it, this.fee, this.usd!!, "xrpusd")
+		}
 
 	@get:StringRes
 	val typeLabel: Int
