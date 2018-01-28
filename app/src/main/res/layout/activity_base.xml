@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
@@ -7,14 +7,17 @@
 	tools:context=".activity.BaseActivity">
 
 	<android.support.design.widget.AppBarLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:id="@+id/app_bar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
 
 		<android.support.v7.widget.Toolbar
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:layout_scrollFlags="scroll|enterAlways" />
+			android:layout_height="wrap_content" />
 
 		<android.support.design.widget.TabLayout
 			android:id="@+id/tabs"
@@ -26,19 +29,23 @@
 
 	<ViewStub
 		android:id="@+id/activity_stub"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
 		android:inflatedId="@+id/activity"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+		app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
 	<android.support.design.widget.BottomNavigationView
 		android:id="@+id/bottom_navigation"
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom"
 		android:background="@color/primary"
 		app:itemIconTint="@color/stateful_text"
 		app:itemTextColor="@color/stateful_text"
-		app:layout_insetEdge="bottom"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
 		app:menu="@menu/bottom_navigation" />
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

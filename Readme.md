@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/MGaetan89/Bitcoin.svg?branch=master)](https://travis-ci.org/MGaetan89/Bitcoin)
 [![Codecov](https://codecov.io/gh/MGaetan89/Bitcoin/branch/master/graph/badge.svg)](https://codecov.io/gh/MGaetan89/Bitcoin)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1b189457a7f142c495b573dcadf7be82)](https://www.codacy.com/app/m-gaetan89/Bitcoin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MGaetan89/Bitcoin&amp;utm_campaign=Badge_Grade)
 [![Minimum API](https://img.shields.io/badge/API-21%2B-brightgreen.svg)](https://android-arsenal.com/api?level=21)
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/MGaetan89/Bitcoin/master/LICENSE)
 [![Support on Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/MGaetan89)

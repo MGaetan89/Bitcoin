@@ -28,7 +28,7 @@ class PriceActivity : BaseActivity() {
 	override fun getToolbarTitle() = this.tradingPair.description
 
 	override fun onInflate(stub: ViewStub, inflated: View) {
-		this.viewPager = inflated as ViewPager
+		this.viewPager = inflated as? ViewPager
 		this.viewPager?.let {
 			it.adapter =
 					PricePagerAdapter(this.tradingPair, this.resources, this.supportFragmentManager)

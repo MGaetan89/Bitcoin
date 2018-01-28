@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer name="pin_code_max_size">8</integer>
+	<integer name="pin_code_min_size">4</integer>
+</resources>

@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewStub
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.startActivity
+import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.synthetic.main.activity_base.activity_stub
 import kotlinx.android.synthetic.main.activity_base.bottom_navigation
 import kotlinx.android.synthetic.main.activity_base.tabs
@@ -49,10 +50,17 @@ abstract class BaseActivity : AppCompatActivity(), ViewStub.OnInflateListener,
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.menu_account -> {
-				this.startActivity<AccountActivity>(
-					Intent.FLAG_ACTIVITY_NEW_TASK,
-					Intent.FLAG_ACTIVITY_CLEAR_TASK
-				)
+				if (BitstampServices.account == null) {
+					this.startActivity<LoginActivity>(
+						Intent.FLAG_ACTIVITY_NEW_TASK,
+						Intent.FLAG_ACTIVITY_CLEAR_TASK
+					)
+				} else {
+					this.startActivity<AccountActivity>(
+						Intent.FLAG_ACTIVITY_NEW_TASK,
+						Intent.FLAG_ACTIVITY_CLEAR_TASK
+					)
+				}
 				true
 			}
 			R.id.menu_prices -> {

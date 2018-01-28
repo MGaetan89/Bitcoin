@@ -10,4 +10,8 @@
 		<item name="android:textColorPrimary">@color/text</item>
 		<item name="android:windowBackground">@color/background</item>
 	</style>
+
+	<style name="TextInputLayoutCounterTextAppearance" parent="TextAppearance.Design.Counter.Overflow">
+		<item name="android:textColor">@color/ask</item>
+	</style>
 </resources>

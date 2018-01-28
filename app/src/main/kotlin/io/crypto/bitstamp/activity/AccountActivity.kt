@@ -1,11 +1,14 @@
 package io.crypto.bitstamp.activity
 
+import android.content.Intent
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.view.ViewStub
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.adapter.AccountPagerAdapter
+import io.crypto.bitstamp.extension.startActivity
+import io.crypto.bitstamp.network.BitstampServices
 
 class AccountActivity : BaseActivity() {
 	private var viewPager: ViewPager? = null
@@ -31,5 +34,16 @@ class AccountActivity : BaseActivity() {
 		}
 
 		super.onInflate(stub, inflated)
+	}
+
+	override fun onResume() {
+		super.onResume()
+
+		if (BitstampServices.account == null) {
+			this.startActivity<LoginActivity>(
+				Intent.FLAG_ACTIVITY_NEW_TASK,
+				Intent.FLAG_ACTIVITY_CLEAR_TASK
+			)
+		}
 	}
 }

@@ -12,6 +12,10 @@
 
 		<activity android:name=".activity.AccountActivity" />
 
+		<activity android:name=".activity.AddAccountActivity" />
+
+		<activity android:name=".activity.LoginActivity" />
+
 		<activity
 			android:name=".activity.PriceActivity"
 			android:parentActivityName=".activity.PricesActivity" />

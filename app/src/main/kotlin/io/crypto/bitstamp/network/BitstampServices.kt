@@ -1,5 +1,6 @@
 package io.crypto.bitstamp.network
 
+import io.crypto.bitstamp.model.Account
 import io.crypto.bitstamp.model.AccountBalance
 import io.crypto.bitstamp.model.CanceledOrder
 import io.crypto.bitstamp.model.OpenOrder
@@ -19,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object BitstampServices : Interceptor {
+	var account: Account? = null
 	private val api = this.createService(false)
 	private val privateApi = this.createService(true)
 
@@ -87,20 +89,19 @@ object BitstampServices : Interceptor {
 
 	override fun intercept(chain: Interceptor.Chain): Response {
 		// External inputs
-		val customerId = ""
-		val key = ""
-		val secret = ByteString.encodeUtf8("")
+		val account = this.account ?: return chain.proceed(chain.request())
+		val (apiKey, customerId, secret) = account
 
 		// Signature generation
 		val nonce = System.nanoTime().toString()
-		val message = nonce + customerId + key
-		val signature = ByteString.encodeUtf8(message).hmacSha256(secret).hex().toUpperCase()
+		val signature = ByteString.encodeUtf8(nonce + customerId + apiKey)
+			.hmacSha256(ByteString.encodeUtf8(secret)).hex().toUpperCase()
 
 		// Request creation
 		val url = chain.request().url()
 		val newUrlBuilder = url.newBuilder()
 		val formBodyBuilder = FormBody.Builder()
-			.add("key", key)
+			.add("key", apiKey)
 			.add("nonce", nonce)
 			.add("signature", signature)
 		url.queryParameterNames().forEach {
