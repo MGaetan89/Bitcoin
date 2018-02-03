@@ -24,7 +24,7 @@ class AddAccountSaveAccountFragment : Fragment(), View.OnClickListener {
 
 	override fun onClick(view: View) {
 		when (view.id) {
-			R.id.back -> this.callback.navigateToSection(AddAccountEvent.Section.API_KEY)
+			R.id.back -> this.callback.navigateToSection(AddAccountEvent.Section.CHECK_INFORMATION)
 			R.id.save -> this.saveAccount()
 		}
 	}
