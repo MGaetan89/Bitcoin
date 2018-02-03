@@ -14,7 +14,6 @@ class StringExtensionTest {
 
 	@Test
 	fun parseJson() {
-		assertThat("{}".parseJson<ApiError>()).isEqualTo(ApiError("", "", ""))
 		assertThat(
 			"""
 			{
