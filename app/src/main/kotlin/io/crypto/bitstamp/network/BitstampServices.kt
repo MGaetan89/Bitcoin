@@ -22,7 +22,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object BitstampServices : Interceptor {
 	var account: Account? = null
 	private val api = this.createService(false)
-	private val privateApi = this.createService(true)
+	val privateApi = this.createService(true)
 
 	suspend fun cancelOrder(id: Long): CanceledOrder {
 		return this.privateApi.cancelOrder(id)

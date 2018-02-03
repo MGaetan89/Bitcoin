@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.activity.AddAccountEvent
+import io.crypto.bitstamp.extension.getCleanText
 import kotlinx.android.synthetic.main.fragment_add_account_api_key.api_key
 import kotlinx.android.synthetic.main.fragment_add_account_api_key.api_key_layout
 import kotlinx.android.synthetic.main.fragment_add_account_api_key.back
@@ -24,7 +25,7 @@ class AddAccountApiKeyFragment : Fragment(), View.OnClickListener {
 
 	override fun onClick(view: View) {
 		when (view.id) {
-			R.id.back -> this.callback.navigateToSection(AddAccountEvent.Section.USER_ID)
+			R.id.back -> this.displayPreviousScreen()
 			R.id.next -> this.displayNextScreen()
 		}
 	}
@@ -49,7 +50,7 @@ class AddAccountApiKeyFragment : Fragment(), View.OnClickListener {
 	}
 
 	private fun displayNextScreen() {
-		val apiKey = this.getApiKey()
+		val apiKey = this.api_key.getCleanText()
 		if (apiKey == null) {
 			this.api_key_layout.error = this.getString(R.string.no_api_key)
 			return
@@ -57,7 +58,7 @@ class AddAccountApiKeyFragment : Fragment(), View.OnClickListener {
 			this.api_key_layout.error = null
 		}
 
-		val secret = this.getSecret()
+		val secret = this.secret.getCleanText()
 		if (secret == null) {
 			this.secret_layout.error = this.getString(R.string.no_secret)
 			return
@@ -70,11 +71,7 @@ class AddAccountApiKeyFragment : Fragment(), View.OnClickListener {
 		this.callback.navigateToSection(AddAccountEvent.Section.CHECK_INFORMATION)
 	}
 
-	private fun getApiKey(): String? {
-		return this.api_key.text.trim().toString().takeIf { it.isNotEmpty() }
-	}
-
-	private fun getSecret(): String? {
-		return this.secret.text.trim().toString().takeIf { it.isNotEmpty() }
+	private fun displayPreviousScreen() {
+		this.callback.navigateToSection(AddAccountEvent.Section.USER_ID)
 	}
 }

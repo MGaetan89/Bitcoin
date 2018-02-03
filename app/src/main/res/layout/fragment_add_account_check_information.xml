@@ -49,12 +49,13 @@
 			android:layout_marginBottom="@dimen/margin"
 			android:layout_marginEnd="@dimen/margin"
 			android:layout_marginStart="@dimen/margin"
-			android:text="@string/connection_error"
+			android:gravity="center_horizontal"
 			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 			android:visibility="gone"
 			app:layout_constraintBottom_toTopOf="@+id/status"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
+			tools:text="@string/connection_error"
 			tools:visibility="visible" />
 
 		<Button

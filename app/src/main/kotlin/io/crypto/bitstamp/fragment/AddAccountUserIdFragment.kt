@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.activity.AddAccountEvent
+import io.crypto.bitstamp.extension.getCleanText
 import kotlinx.android.synthetic.main.fragment_add_account_user_id.next
 import kotlinx.android.synthetic.main.fragment_add_account_user_id.user_id
 import kotlinx.android.synthetic.main.fragment_add_account_user_id.user_id_layout
@@ -44,19 +45,14 @@ class AddAccountUserIdFragment : Fragment(), View.OnClickListener {
 	}
 
 	private fun displayNextScreen() {
-		val userId = this.getUserId()
+		val userId = this.user_id.getCleanText()
 		if (userId == null) {
 			this.user_id_layout.error = this.getString(R.string.no_user_id)
-			return
 		} else {
 			this.user_id_layout.error = null
+
+			this.callback.setUserId(userId)
+			this.callback.navigateToSection(AddAccountEvent.Section.API_KEY)
 		}
-
-		this.callback.setUserId(userId)
-		this.callback.navigateToSection(AddAccountEvent.Section.API_KEY)
-	}
-
-	private fun getUserId(): String? {
-		return this.user_id.text.trim().toString().takeIf { it.isNotEmpty() }
 	}
 }

@@ -1,5 +1,6 @@
 package io.crypto.bitstamp.extension
 
+import io.crypto.bitstamp.model.ApiError
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -9,6 +10,20 @@ class StringExtensionTest {
 	@Before
 	fun before() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+	}
+
+	@Test
+	fun parseJson() {
+		assertThat("{}".parseJson<ApiError>()).isEqualTo(ApiError("", "", ""))
+		assertThat(
+			"""
+			{
+				"status": "error",
+				"reason": "API key not found",
+				"code": "API0001"
+			}
+		""".trimIndent().parseJson<ApiError>()
+		).isEqualTo(ApiError("API0001", "API key not found", "error"))
 	}
 
 	@Test
