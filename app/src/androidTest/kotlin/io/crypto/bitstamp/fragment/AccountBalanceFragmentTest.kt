@@ -1,7 +1,7 @@
 package io.crypto.bitstamp.fragment
 
 import android.support.test.runner.AndroidJUnit4
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -11,7 +11,7 @@ class AccountBalanceFragmentTest {
 	fun newInstance() {
 		val fragment = AccountBalanceFragment.newInstance()
 
-		Assertions.assertThat(fragment).isInstanceOf(AccountBalanceFragment::class.java)
-		org.assertj.android.api.Assertions.assertThat(fragment.arguments).isNull()
+		assertThat(fragment).isInstanceOf(AccountBalanceFragment::class.java)
+		assertThat(fragment.arguments).isNull()
 	}
 }

@@ -1,6 +1,5 @@
 package io.crypto.bitstamp.adapter
 
-import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -16,23 +15,9 @@ class AccountAdapter(
 ) : RecyclerView.Adapter<AccountAdapter.ViewHolder>() {
 	interface OnAccountEventListener {
 		fun onAccountSelected(account: Account)
-
-		fun onAddAccount()
 	}
 
-	private enum class ViewType(@LayoutRes val layoutId: Int) {
-		ACCOUNT(R.layout.adapter_account),
-		ADD_ACCOUNT(R.layout.adapter_new_account)
-	}
-
-	override fun getItemCount() = this.accounts.size + 1
-
-	override fun getItemViewType(position: Int): Int {
-		return when {
-			position < this.accounts.size -> ViewType.ACCOUNT.ordinal
-			else -> ViewType.ADD_ACCOUNT.ordinal
-		}
-	}
+	override fun getItemCount() = this.accounts.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val account = this.accounts.getOrNull(position) ?: return
@@ -41,14 +26,13 @@ class AccountAdapter(
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-		val view = parent.inflate(ViewType.values()[viewType].layoutId)
+		val view = parent.inflate(R.layout.adapter_account)
 
 		return ViewHolder(view)
 	}
 
 	inner class ViewHolder(override val containerView: View) :
-		RecyclerView.ViewHolder(containerView),
-		LayoutContainer, View.OnClickListener {
+		RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {
 		val name = this.containerView.findViewById<TextView?>(R.id.name)
 
 		init {
@@ -56,11 +40,7 @@ class AccountAdapter(
 		}
 
 		override fun onClick(view: View) {
-			if (this.adapterPosition < accounts.size) {
-				listener.onAccountSelected(accounts[this.adapterPosition])
-			} else {
-				listener.onAddAccount()
-			}
+			accounts.getOrNull(this.adapterPosition)?.let(listener::onAccountSelected)
 		}
 	}
 }

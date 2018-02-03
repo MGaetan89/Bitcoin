@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".activity.LoginActivity"
-	tools:listitem="@layout/adapter_account" />
+	tools:context=".activity.LoginActivity">
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:listitem="@layout/adapter_account" />
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/add_account"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|end"
+		android:layout_margin="@dimen/margin"
+		android:contentDescription="@string/add_account"
+		android:src="@drawable/ic_add"
+		app:layout_anchor="@+id/list"
+		app:layout_anchorGravity="bottom|end" />
+</android.support.design.widget.CoordinatorLayout>

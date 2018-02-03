@@ -52,7 +52,11 @@ class AddAccountCheckInformationFragment
 	}
 
 	override fun onFailure(call: Call<AccountBalance>, t: Throwable) {
-		this.displayError(t.localizedMessage)
+		BitstampServices.account = null
+
+		if (this.isAdded) {
+			this.displayError(t.localizedMessage)
+		}
 	}
 
 	override fun onPause() {
@@ -62,12 +66,16 @@ class AddAccountCheckInformationFragment
 	}
 
 	override fun onResponse(call: Call<AccountBalance>, response: Response<AccountBalance>) {
-		if (response.isSuccessful) {
-			this.displaySuccess()
-		} else {
-			val errorResponse = response.errorBody()?.string()?.parseJson<ApiError>()
+		BitstampServices.account = null
 
-			this.displayError(errorResponse?.reason)
+		if (this.isAdded) {
+			if (response.isSuccessful) {
+				this.displaySuccess()
+			} else {
+				val errorResponse = response.errorBody()?.string()?.parseJson<ApiError>()
+
+				this.displayError(errorResponse?.reason)
+			}
 		}
 	}
 
@@ -82,7 +90,6 @@ class AddAccountCheckInformationFragment
 
 		BitstampServices.account = this.callback.getAccount()
 		BitstampServices.privateApi.getAccountBalance().enqueue(this)
-		BitstampServices.account = null
 	}
 
 	private fun displayError(errorMessage: String?) {

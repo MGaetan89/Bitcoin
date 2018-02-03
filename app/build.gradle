@@ -91,6 +91,7 @@ dependencies {
 
 	androidTestImplementation "com.android.support.test:runner:$testSupportLibraryVersion"
 	androidTestImplementation "com.android.support.test:rules:$testSupportLibraryVersion"
+	androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
 	androidTestImplementation "com.squareup.assertj:assertj-android:$assertJAndroidVersion"
 	androidTestImplementation "junit:junit:$jUnitVersion"
 }
