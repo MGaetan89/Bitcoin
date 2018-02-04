@@ -21,6 +21,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object BitstampServices : Interceptor {
 	var account: Account? = null
+	private val okHttpClient = this.createOkHttpClient(false)
+	val privateOkHttpClient = this.createOkHttpClient(true)
 	private val api = this.createService(false)
 	val privateApi = this.createService(true)
 
@@ -117,7 +119,7 @@ object BitstampServices : Interceptor {
 		return chain.proceed(request)
 	}
 
-	private fun createService(privateAccess: Boolean): BitstampApi {
+	private fun createOkHttpClient(privateAccess: Boolean): OkHttpClient {
 		val clientBuilder = OkHttpClient.Builder()
 
 		if (privateAccess) {
@@ -128,10 +130,14 @@ object BitstampServices : Interceptor {
 			this.level = HttpLoggingInterceptor.Level.BODY
 		})
 
+		return clientBuilder.build()
+	}
+
+	private fun createService(privateAccess: Boolean): BitstampApi {
 		return Retrofit.Builder()
-			.baseUrl("https://www.bitstamp.net/api/")
+			.baseUrl("https://www.bitstamp.net/")
 			.addConverterFactory(MoshiConverterFactory.create())
-			.client(clientBuilder.build())
+			.client(if (privateAccess) this.privateOkHttpClient else this.okHttpClient)
 			.build()
 			.create(BitstampApi::class.java)
 	}

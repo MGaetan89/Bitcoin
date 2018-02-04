@@ -22,7 +22,10 @@ android {
 		resConfigs 'en'
 		testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
-		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key", "\"\"")
+		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key", '""')
+		buildConfigField "String", "TEST_ACCOUNT_API_KEY", properties.getProperty("TEST_ACCOUNT_API_KEY") ?: System.getEnv("TEST_ACCOUNT_API_KEY") ?: '""'
+		buildConfigField "String", "TEST_ACCOUNT_SECRET", properties.getProperty("TEST_ACCOUNT_SECRET") ?: System.getEnv("TEST_ACCOUNT_SECRET") ?: '""'
+		buildConfigField "String", "TEST_ACCOUNT_USER_ID", properties.getProperty("TEST_ACCOUNT_USER_ID") ?: System.getEnv("TEST_ACCOUNT_USER_ID") ?: '""'
 	}
 
 	buildTypes {
