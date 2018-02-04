@@ -1,6 +1,7 @@
 package io.crypto.bitstamp.fragment
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -16,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AccountBalanceFragment : BaseFragment(), Callback<AccountBalance> {
+class AccountBalanceFragment : Fragment(), Callback<AccountBalance> {
 	companion object {
 		fun newInstance() = AccountBalanceFragment()
 	}

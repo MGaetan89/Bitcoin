@@ -1,6 +1,7 @@
 package io.crypto.bitstamp.fragment
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PriceOverviewFragment : BaseFragment(), Callback<Ticker> {
+class PriceOverviewFragment : Fragment(), Callback<Ticker> {
 	companion object {
 		fun newInstance(tradingPair: TradingPair) = PriceOverviewFragment().apply {
 			this.arguments = Bundle().apply {
