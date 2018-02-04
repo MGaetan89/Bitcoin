@@ -12,7 +12,6 @@ import io.crypto.bitstamp.extension.toFormattedString
 import io.crypto.bitstamp.extension.toFormattedTime
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.TradingPair
-import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.adapter_account_order.cancel_order
 import kotlinx.android.synthetic.main.adapter_account_order.status
@@ -26,10 +25,13 @@ import kotlinx.android.synthetic.main.adapter_price_transaction.price_currency
 import kotlinx.android.synthetic.main.adapter_price_transaction.transaction_id
 import kotlinx.android.synthetic.main.adapter_price_transaction.value
 import kotlinx.android.synthetic.main.adapter_price_transaction.value_currency
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
-class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolder>() {
+class AccountOrdersAdapter(private val listener: OnCancelOrderListener) :
+	RecyclerView.Adapter<AccountOrdersAdapter.ViewHolder>() {
+	interface OnCancelOrderListener {
+		fun onCancelOrder(position: Int, order: OpenOrder)
+	}
+
 	private val orders = mutableListOf<OpenOrder>()
 	private val ordersStatus = mutableMapOf<Long, String>()
 	private val tradingPairs = mutableListOf<TradingPair>()
@@ -97,28 +99,23 @@ class AccountOrdersAdapter : RecyclerView.Adapter<AccountOrdersAdapter.ViewHolde
 		this.notifyDataSetChanged()
 	}
 
-	inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-		View.OnClickListener, LayoutContainer {
+	inner class ViewHolder(override val containerView: View) :
+		RecyclerView.ViewHolder(containerView), View.OnClickListener, LayoutContainer {
 		init {
 			this.cancel_order.setOnClickListener(this)
 		}
 
 		override fun onClick(view: View) {
 			when (view.id) {
-				R.id.cancel_order -> orders.getOrNull(this.adapterPosition)?.id?.let(this::cancelOrder)
+				R.id.cancel_order -> this.cancelOrder()
 			}
 		}
 
-		private fun cancelOrder(id: Long) {
-			launch {
-				val changedOrderId = BitstampServices.cancelOrder(id).id
+		private fun cancelOrder() {
+			val position = this.adapterPosition
+			val order = orders.getOrNull(position) ?: return
 
-				if (changedOrderId == id) {
-					launch(UI) {
-						updateOrderStatus(id, "Canceled")
-					}
-				}
-			}
+			listener.onCancelOrder(position, order)
 		}
 	}
 
