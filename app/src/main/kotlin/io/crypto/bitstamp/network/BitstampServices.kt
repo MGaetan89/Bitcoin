@@ -5,7 +5,6 @@ import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
-import io.crypto.bitstamp.model.UserTransaction
 import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -45,13 +44,6 @@ object BitstampServices : Interceptor {
 
 	suspend fun getTransactions(currencyPair: String): List<PriceTransaction> {
 		return this.api.getTransactions(currencyPair)
-			.execute()
-			.takeIf { it.isSuccessful }
-			?.body() ?: emptyList()
-	}
-
-	suspend fun getUserTransactions(): List<UserTransaction> {
-		return this.privateApi.getUserTransactions()
 			.execute()
 			.takeIf { it.isSuccessful }
 			?.body() ?: emptyList()
