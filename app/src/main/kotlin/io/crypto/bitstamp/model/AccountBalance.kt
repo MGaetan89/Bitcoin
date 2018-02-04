@@ -40,17 +40,6 @@ data class AccountBalance(
 	@Json(name = "xrpeur_fee") val xrpEurFee: Float,
 	@Json(name = "xrpusd_fee") val xrpUsdFee: Float
 ) {
-	companion object {
-		val EMPTY = AccountBalance(
-			0f, 0f, 0f, 0f, 0f, 0f, 0f,
-			0f, 0f, 0f, 0f, 0f, 0f, 0f,
-			0f, 0f, 0f, 0f, 0f, 0f, 0f,
-			0f, 0f, 0f, 0f, 0f, 0f, 0f,
-			0f, 0f, 0f, 0f, 0f, 0f, 0f,
-			0f
-		)
-	}
-
 	val available: Map<String, Float>
 		get() = mapOf(
 			"BCH" to this.bchAvailable,
