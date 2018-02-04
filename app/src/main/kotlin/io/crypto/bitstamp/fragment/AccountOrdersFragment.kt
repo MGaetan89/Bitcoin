@@ -11,6 +11,7 @@ import io.crypto.bitstamp.R
 import io.crypto.bitstamp.adapter.AccountOrdersAdapter
 import io.crypto.bitstamp.model.CanceledOrder
 import io.crypto.bitstamp.model.OpenOrder
+import io.crypto.bitstamp.model.OpenOrderStatus
 import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.synthetic.main.fragment_account_orders.list
 import kotlinx.coroutines.experimental.android.UI
@@ -19,7 +20,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AccountOrdersFragment : BaseFragment(), AccountOrdersAdapter.OnCancelOrderListener {
+class AccountOrdersFragment
+	: BaseFragment(), Callback<List<OpenOrder>>, AccountOrdersAdapter.OnCancelOrderListener {
 	companion object {
 		fun newInstance() = AccountOrdersFragment()
 	}
@@ -63,6 +65,36 @@ class AccountOrdersFragment : BaseFragment(), AccountOrdersAdapter.OnCancelOrder
 		return inflater.inflate(R.layout.fragment_account_orders, container, false)
 	}
 
+	override fun onFailure(call: Call<List<OpenOrder>>, t: Throwable) {
+		if (this.isAdded) {
+			this.context?.let {
+				Toast.makeText(it, t.localizedMessage, Toast.LENGTH_SHORT).show()
+			}
+		}
+	}
+
+	override fun onResponse(call: Call<List<OpenOrder>>, response: Response<List<OpenOrder>>) {
+		if (this.isAdded) {
+			if (response.isSuccessful) {
+				val orders = response.body() ?: return
+
+				this.requestOrdersStatus(orders.map { it.id })
+
+				this.adapter.updateOrders(orders)
+
+				if (this.layoutManager.findFirstVisibleItemPosition() == 0) {
+					this.layoutManager.scrollToPositionWithOffset(0, 0)
+				}
+			} else {
+				this.context?.let {
+					response.errorBody()?.string()?.let { message ->
+						Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
+					}
+				}
+			}
+		}
+	}
+
 	override fun onResume() {
 		super.onResume()
 
@@ -74,28 +106,7 @@ class AccountOrdersFragment : BaseFragment(), AccountOrdersAdapter.OnCancelOrder
 			}
 		}
 
-		this.runPeriodically(10) {
-			listOf(launch {
-				val orders = BitstampServices.getOpenOrders()
-				val orderIds = orders.map { it.id }
-
-				orderIds.forEach {
-					val status = BitstampServices.getOrderStatus(it).status.orEmpty()
-
-					launch(UI) {
-						adapter.updateOrderStatus(it, status)
-					}
-				}
-
-				launch(UI) {
-					adapter.updateOrders(orders)
-
-					if (layoutManager.findFirstVisibleItemPosition() == 0) {
-						layoutManager.scrollToPositionWithOffset(0, 0)
-					}
-				}
-			})
-		}
+		BitstampServices.privateApi.getOpenOrders().enqueue(this)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,6 +119,26 @@ class AccountOrdersFragment : BaseFragment(), AccountOrdersAdapter.OnCancelOrder
 					DividerItemDecoration.VERTICAL
 				)
 			)
+		}
+	}
+
+	private fun requestOrdersStatus(ordersId: List<Long>) {
+		ordersId.forEach {
+			BitstampServices.privateApi.getOrderStatus(it)
+				.enqueue(object : Callback<OpenOrderStatus> {
+					override fun onFailure(call: Call<OpenOrderStatus>, t: Throwable) = Unit
+
+					override fun onResponse(
+						call: Call<OpenOrderStatus>,
+						response: Response<OpenOrderStatus>
+					) {
+						if (isAdded && response.isSuccessful) {
+							val status = response.body()?.status.orEmpty()
+
+							adapter.updateOrderStatus(it, status)
+						}
+					}
+				})
 		}
 	}
 }

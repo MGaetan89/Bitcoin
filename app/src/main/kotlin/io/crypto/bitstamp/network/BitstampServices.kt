@@ -1,8 +1,6 @@
 package io.crypto.bitstamp.network
 
 import io.crypto.bitstamp.model.Account
-import io.crypto.bitstamp.model.OpenOrder
-import io.crypto.bitstamp.model.OpenOrderStatus
 import io.crypto.bitstamp.model.PriceOrderBook
 import io.crypto.bitstamp.model.PriceTransaction
 import io.crypto.bitstamp.model.Ticker
@@ -24,25 +22,11 @@ object BitstampServices : Interceptor {
 	private val api = this.createService(false)
 	val privateApi = this.createService(true)
 
-	suspend fun getOpenOrders(): List<OpenOrder> {
-		return this.privateApi.getOpenOrders()
-			.execute()
-			.takeIf { it.isSuccessful }
-			?.body() ?: emptyList()
-	}
-
 	suspend fun getOrderBook(currencyPair: String): PriceOrderBook {
 		return this.api.getOrderBook(currencyPair)
 			.execute()
 			.takeIf { it.isSuccessful }
 			?.body() ?: PriceOrderBook.EMPTY
-	}
-
-	suspend fun getOrderStatus(id: Long): OpenOrderStatus {
-		return this.privateApi.getOrderStatus(id)
-			.execute()
-			.takeIf { it.isSuccessful }
-			?.body() ?: OpenOrderStatus.EMPTY
 	}
 
 	suspend fun getTicker(currencyPair: String): Ticker {
