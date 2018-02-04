@@ -86,33 +86,14 @@ class AddAccountCheckInformationFragmentTest {
 		onView(withId(R.id.add_account_check_information)).check(matches(isDisplayed()))
 
 		onView(withId(R.id.back)).perform(click())
-		onView(withId(R.id.api_key)).check(
-			matches(
-				allOf(
-					isDisplayed(),
-					withText(TEST_ACCOUNT_API_KEY)
-				)
-			)
-		)
-		onView(withId(R.id.secret)).check(
-			matches(
-				allOf(
-					isDisplayed(),
-					withText(TEST_ACCOUNT_SECRET)
-				)
-			)
-		)
+		onView(withId(R.id.api_key))
+			.check(matches(allOf(isDisplayed(), withText(TEST_ACCOUNT_API_KEY))))
+		onView(withId(R.id.secret))
+			.check(matches(allOf(isDisplayed(), withText(TEST_ACCOUNT_SECRET))))
 
 		onView(withId(R.id.back)).perform(click())
-		onView(withId(R.id.user_id)).check(
-			matches(
-				allOf(
-					isDisplayed(), withText(
-						TEST_ACCOUNT_USER_ID
-					)
-				)
-			)
-		)
+		onView(withId(R.id.user_id))
+			.check(matches(allOf(isDisplayed(), withText(TEST_ACCOUNT_USER_ID))))
 	}
 
 	@Test
