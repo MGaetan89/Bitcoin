@@ -6,15 +6,6 @@ import org.junit.Test
 
 class BitstampServicesTest {
 	@Test
-	fun getOrderBook() = runBlocking<Unit> {
-		val orderBook = BitstampServices.getOrderBook("btcusd")
-
-		assertThat(orderBook.asks).isNotEmpty()
-		assertThat(orderBook.bids).isNotEmpty()
-		assertThat(orderBook.timestamp).isGreaterThan(0L)
-	}
-
-	@Test
 	fun getTicker() = runBlocking<Unit> {
 		val ticker = BitstampServices.getTicker("xrpeur")
 
