@@ -54,7 +54,9 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 		super.onResume()
 
 		this.requestTradingPairs()
+	}
 
+	private fun requestTicker() {
 		this.urlSymbols.forEach {
 			BitstampServices.api.getTicker(it).enqueue(object : Callback<Ticker> {
 				override fun onFailure(call: Call<Ticker>, t: Throwable) {
@@ -93,6 +95,8 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 					urlSymbols.addAll(tradingPairs.map { it.urlSymbol })
 
 					adapter.updateTradingPairs(tradingPairs)
+
+					requestTicker()
 				}
 			}
 		})
