@@ -9,6 +9,11 @@ if (rootProject.file('local.properties').exists()) {
 	properties.load(rootProject.file('local.properties').newDataInputStream())
 }
 
+def pusherApiKey = properties.getProperty("pusher.api_key") ?: System.getenv("PUSHER_API_KEY")
+def testAccountApiKey = properties.getProperty("test_account.api_key") ?: System.getenv("TEST_ACCOUNT_API_KEY")
+def testAccountSecret = properties.getProperty("test_account.secret") ?: System.getenv("TEST_ACCOUNT_SECRET")
+def testAccountUserId = properties.getProperty("test_account.user_id") ?: System.getenv("TEST_ACCOUNT_USER_ID")
+
 android {
 	compileSdkVersion rootProject.compileSdkVersion
 	buildToolsVersion rootProject.buildToolsVersion
@@ -22,10 +27,10 @@ android {
 		resConfigs 'en'
 		testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
-		buildConfigField "String", "PUSHER_API_KEY", properties.getProperty("pusher.api_key", '""')
-		buildConfigField "String", "TEST_ACCOUNT_API_KEY", properties.getProperty("TEST_ACCOUNT_API_KEY") ?: System.getenv("TEST_ACCOUNT_API_KEY") ?: '""'
-		buildConfigField "String", "TEST_ACCOUNT_SECRET", properties.getProperty("TEST_ACCOUNT_SECRET") ?: System.getenv("TEST_ACCOUNT_SECRET") ?: '""'
-		buildConfigField "String", "TEST_ACCOUNT_USER_ID", properties.getProperty("TEST_ACCOUNT_USER_ID") ?: System.getenv("TEST_ACCOUNT_USER_ID") ?: '""'
+		buildConfigField "String", "PUSHER_API_KEY", '"' + pusherApiKey + '"'
+		buildConfigField "String", "TEST_ACCOUNT_API_KEY", '"' + testAccountApiKey + '"'
+		buildConfigField "String", "TEST_ACCOUNT_SECRET", '"' + testAccountSecret + '"'
+		buildConfigField "String", "TEST_ACCOUNT_USER_ID", '"' + testAccountUserId + '"'
 	}
 
 	buildTypes {
