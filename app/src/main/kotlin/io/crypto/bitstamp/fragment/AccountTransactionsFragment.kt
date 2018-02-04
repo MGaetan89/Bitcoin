@@ -10,11 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.adapter.AccountTransactionsAdapter
+import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.model.UserTransaction
 import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.synthetic.main.fragment_account_transactions.list
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,13 +29,7 @@ class AccountTransactionsFragment : Fragment(), Callback<List<UserTransaction>> 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		launch {
-			val tradingPairs = BitstampServices.getTradingPairs()
-
-			launch(UI) {
-				adapter.updateTradingPairs(tradingPairs)
-			}
-		}
+		this.requestTradingPairs()
 	}
 
 	override fun onCreateView(
@@ -95,5 +88,22 @@ class AccountTransactionsFragment : Fragment(), Callback<List<UserTransaction>> 
 				)
 			)
 		}
+	}
+
+	private fun requestTradingPairs() {
+		BitstampServices.api.getTradingPairs().enqueue(object : Callback<List<TradingPair>> {
+			override fun onFailure(call: Call<List<TradingPair>>, t: Throwable) = Unit
+
+			override fun onResponse(
+				call: Call<List<TradingPair>>,
+				response: Response<List<TradingPair>>
+			) {
+				if (isAdded && response.isSuccessful) {
+					val tradingPairs = response.body() ?: return
+
+					adapter.updateTradingPairs(tradingPairs)
+				}
+			}
+		})
 	}
 }

@@ -12,8 +12,6 @@ import io.crypto.bitstamp.extension.startActivity
 import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.network.BitstampServices
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,15 +79,22 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 	}
 
 	private fun requestTradingPairs() {
-		launch {
-			val tradingPairs = BitstampServices.getTradingPairs().sortedBy { it.name }
+		BitstampServices.api.getTradingPairs().enqueue(object : Callback<List<TradingPair>> {
+			override fun onFailure(call: Call<List<TradingPair>>, t: Throwable) = Unit
 
-			urlSymbols.clear()
-			urlSymbols.addAll(tradingPairs.map { it.urlSymbol })
+			override fun onResponse(
+				call: Call<List<TradingPair>>,
+				response: Response<List<TradingPair>>
+			) {
+				if (response.isSuccessful) {
+					val tradingPairs = response.body()?.sortedBy { it.name } ?: return
 
-			launch(UI) {
-				adapter.updateTradingPairs(tradingPairs)
+					urlSymbols.clear()
+					urlSymbols.addAll(tradingPairs.map { it.urlSymbol })
+
+					adapter.updateTradingPairs(tradingPairs)
+				}
 			}
-		}
+		})
 	}
 }

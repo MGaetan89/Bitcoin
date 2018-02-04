@@ -13,10 +13,9 @@ import io.crypto.bitstamp.adapter.AccountOrdersAdapter
 import io.crypto.bitstamp.model.CanceledOrder
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.OpenOrderStatus
+import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.synthetic.main.fragment_account_orders.list
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,13 +98,7 @@ class AccountOrdersFragment
 	override fun onResume() {
 		super.onResume()
 
-		launch {
-			val tradingPairs = BitstampServices.getTradingPairs()
-
-			launch(UI) {
-				adapter.updateTradingPairs(tradingPairs)
-			}
-		}
+		this.requestTradingPairs()
 
 		BitstampServices.privateApi.getOpenOrders().enqueue(this)
 	}
@@ -141,5 +134,22 @@ class AccountOrdersFragment
 					}
 				})
 		}
+	}
+
+	private fun requestTradingPairs() {
+		BitstampServices.api.getTradingPairs().enqueue(object : Callback<List<TradingPair>> {
+			override fun onFailure(call: Call<List<TradingPair>>, t: Throwable) = Unit
+
+			override fun onResponse(
+				call: Call<List<TradingPair>>,
+				response: Response<List<TradingPair>>
+			) {
+				if (isAdded && response.isSuccessful) {
+					val tradingPairs = response.body() ?: return
+
+					adapter.updateTradingPairs(tradingPairs)
+				}
+			}
+		})
 	}
 }
