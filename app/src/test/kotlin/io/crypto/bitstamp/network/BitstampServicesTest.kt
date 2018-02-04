@@ -26,11 +26,4 @@ class BitstampServicesTest {
 
 		assertThat(tradingPairs.size).isGreaterThan(0)
 	}
-
-	@Test
-	fun getTransactions() = runBlocking<Unit> {
-		val transactions = BitstampServices.getTransactions("ltcbtc")
-
-		assertThat(transactions.size).isGreaterThan(0)
-	}
 }
