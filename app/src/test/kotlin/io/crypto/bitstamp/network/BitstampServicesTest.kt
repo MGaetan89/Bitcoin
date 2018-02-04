@@ -6,21 +6,6 @@ import org.junit.Test
 
 class BitstampServicesTest {
 	@Test
-	fun getTicker() = runBlocking<Unit> {
-		val ticker = BitstampServices.getTicker("xrpeur")
-
-		assertThat(ticker.ask).isGreaterThan(0f)
-		assertThat(ticker.bid).isGreaterThan(0f)
-		assertThat(ticker.high).isGreaterThan(0f)
-		assertThat(ticker.last).isGreaterThan(0f)
-		assertThat(ticker.low).isGreaterThan(0f)
-		assertThat(ticker.open).isGreaterThan(0f)
-		assertThat(ticker.timestamp).isGreaterThan(0L)
-		assertThat(ticker.volume).isGreaterThan(0f)
-		assertThat(ticker.volumeWeightedAveragePrice).isGreaterThan(0f)
-	}
-
-	@Test
 	fun getTradingPairs() = runBlocking<Unit> {
 		val tradingPairs = BitstampServices.getTradingPairs()
 

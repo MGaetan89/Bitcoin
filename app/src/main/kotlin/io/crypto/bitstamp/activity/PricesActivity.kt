@@ -9,10 +9,14 @@ import android.widget.Toast
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.adapter.PricesAdapter
 import io.crypto.bitstamp.extension.startActivity
+import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
 import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 	private val adapter = PricesAdapter(this)
@@ -53,16 +57,26 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 
 		this.requestTradingPairs()
 
-		this.runPeriodically {
-			urlSymbols.map {
-				launch {
-					val ticker = BitstampServices.getTicker(it)
+		this.urlSymbols.forEach {
+			BitstampServices.api.getTicker(it).enqueue(object : Callback<Ticker> {
+				override fun onFailure(call: Call<Ticker>, t: Throwable) {
+					val context = this@PricesActivity
+					Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+				}
 
-					launch(UI) {
+				override fun onResponse(call: Call<Ticker>, response: Response<Ticker>) {
+					if (response.isSuccessful) {
+						val ticker = response.body() ?: return
+
 						adapter.updateTicker(it, ticker)
+					} else {
+						response.errorBody()?.string()?.let { message ->
+							val context = this@PricesActivity
+							Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+						}
 					}
 				}
-			}
+			})
 		}
 	}
 

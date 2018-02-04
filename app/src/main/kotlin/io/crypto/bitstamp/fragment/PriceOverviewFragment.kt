@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.setTextColorResource
 import io.crypto.bitstamp.extension.toFormattedDateTime
@@ -23,10 +24,11 @@ import kotlinx.android.synthetic.main.fragment_price_overview.last
 import kotlinx.android.synthetic.main.fragment_price_overview.low_24
 import kotlinx.android.synthetic.main.fragment_price_overview.volume
 import kotlinx.android.synthetic.main.fragment_price_overview.vwap
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class PriceOverviewFragment : BaseFragment() {
+class PriceOverviewFragment : BaseFragment(), Callback<Ticker> {
 	companion object {
 		fun newInstance(tradingPair: TradingPair) = PriceOverviewFragment().apply {
 			this.arguments = Bundle().apply {
@@ -45,18 +47,34 @@ class PriceOverviewFragment : BaseFragment() {
 		return inflater.inflate(R.layout.fragment_price_overview, container, false)
 	}
 
+	override fun onFailure(call: Call<Ticker>, t: Throwable) {
+		if (this.isAdded) {
+			this.context?.let {
+				Toast.makeText(it, t.localizedMessage, Toast.LENGTH_SHORT).show()
+			}
+		}
+	}
+
+	override fun onResponse(call: Call<Ticker>, response: Response<Ticker>) {
+		if (this.isAdded) {
+			if (response.isSuccessful) {
+				val ticker = response.body() ?: return
+
+				this.updateViews(ticker)
+			} else {
+				this.context?.let {
+					response.errorBody()?.string()?.let { message ->
+						Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
+					}
+				}
+			}
+		}
+	}
+
 	override fun onResume() {
 		super.onResume()
 
-		this.runPeriodically {
-			listOf(launch {
-				val ticker = BitstampServices.getTicker(tradingPair.urlSymbol)
-
-				launch(UI) {
-					updateViews(ticker)
-				}
-			})
-		}
+		BitstampServices.api.getTicker(this.tradingPair.urlSymbol).enqueue(this)
 	}
 
 	private fun updateViews(ticker: Ticker) {
