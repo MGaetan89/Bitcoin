@@ -5,7 +5,6 @@ import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import android.support.test.espresso.action.ViewActions.replaceText
-import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -143,10 +142,10 @@ class AddAccountCheckInformationFragmentTest {
 	private fun displayWrongCheckInformationSection() {
 		onView(withId(R.id.menu_account)).perform(click())
 		onView(withId(R.id.add_account)).perform(click())
-		onView(withId(R.id.user_id)).perform(typeText("user_id"), closeSoftKeyboard())
+		onView(withId(R.id.user_id)).perform(replaceText("user_id"), closeSoftKeyboard())
 		onView(withId(R.id.next)).perform(click())
-		onView(withId(R.id.api_key)).perform(typeText("api_key"), closeSoftKeyboard())
-		onView(withId(R.id.secret)).perform(typeText("secret"), closeSoftKeyboard())
+		onView(withId(R.id.api_key)).perform(replaceText("api_key"), closeSoftKeyboard())
+		onView(withId(R.id.secret)).perform(replaceText("secret"), closeSoftKeyboard())
 		onView(withId(R.id.next)).perform(click())
 		onView(withId(R.id.add_account_check_information)).check(matches(isDisplayed()))
 	}

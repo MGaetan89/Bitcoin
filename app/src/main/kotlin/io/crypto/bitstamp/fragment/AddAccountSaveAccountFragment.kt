@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.activity.AddAccountEvent
+import io.crypto.bitstamp.extension.getCleanText
 import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.android.synthetic.main.fragment_add_account_save_account.back
 import kotlinx.android.synthetic.main.fragment_add_account_save_account.information
@@ -24,7 +25,7 @@ class AddAccountSaveAccountFragment : Fragment(), View.OnClickListener {
 
 	override fun onClick(view: View) {
 		when (view.id) {
-			R.id.back -> this.callback.navigateToSection(AddAccountEvent.Section.CHECK_INFORMATION)
+			R.id.back -> this.displayPreviousScreen()
 			R.id.save -> this.saveAccount()
 		}
 	}
@@ -52,24 +53,27 @@ class AddAccountSaveAccountFragment : Fragment(), View.OnClickListener {
 		}
 	}
 
+	private fun displayPreviousScreen() {
+		this.callback.navigateToSection(AddAccountEvent.Section.CHECK_INFORMATION)
+	}
+
 	private fun getPin(): String? {
 		val maxSize = this.resources.getInteger(R.integer.pin_code_max_size)
 		val minSize = this.resources.getInteger(R.integer.pin_code_min_size)
 
-		return this.pin_code.text.trim().toString().takeIf { it.length in minSize..maxSize }
+		return this.pin_code.getCleanText()?.takeIf { it.length in minSize..maxSize }
 	}
 
 	private fun saveAccount() {
 		val pinCode = this.getPin()
 		if (pinCode == null) {
 			this.pin_code_layout.error = this.getString(R.string.no_pin_code)
-			return
 		} else {
 			this.pin_code_layout.error = null
+
+			BitstampServices.account = this.callback.getAccount()
+
+			this.callback.navigateToSection(AddAccountEvent.Section.LOGIN)
 		}
-
-		BitstampServices.account = this.callback.getAccount()
-
-		this.callback.navigateToSection(AddAccountEvent.Section.LOGIN)
 	}
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="account">Account</string>
 	<string name="add_account">Add an account</string>
 	<string name="amount">Amount</string>
@@ -31,7 +31,7 @@
 	<string name="orders">Orders</string>
 	<string name="overview">Overview</string>
 	<string name="pin_code">PIN Code</string>
-	<string name="pin_code_information">Enter a PIN code that you will need to provide to access your account. It must be between %1$d and %2$d digits.</string>
+	<string name="pin_code_information">Enter a PIN code that you will need to provide to access your account. It must be between <xliff:g example="4" id="min">%1$d</xliff:g> and <xliff:g example="8">%2$d</xliff:g> digits.</string>
 	<string name="positions">Positions</string>
 	<string name="price">Price</string>
 	<string name="prices">Prices</string>
