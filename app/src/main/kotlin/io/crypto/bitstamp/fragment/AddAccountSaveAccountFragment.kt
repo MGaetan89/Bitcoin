@@ -88,7 +88,7 @@ class AddAccountSaveAccountFragment : Fragment(), View.OnClickListener {
 				val masterKey = keyStoreWrapper.getAndroidKeyStoreAsymmetricKeyPair(pinCode)
 
 				val cipherWrapper = CipherWrapper()
-				val apiKey = cipherWrapper.encrypt(account.customerId, masterKey?.public)
+				val apiKey = cipherWrapper.encrypt(account.apiKey, masterKey?.public)
 				val secret = cipherWrapper.encrypt(account.secret, masterKey?.public)
 
 				val database = Room.databaseBuilder(
@@ -97,9 +97,9 @@ class AddAccountSaveAccountFragment : Fragment(), View.OnClickListener {
 				database.accountDao().saveAccount(Account(apiKey, account.customerId, secret))
 				database.close()
 
-				launch(UI) {
-					BitstampServices.account = account
+				BitstampServices.account = account
 
+				launch(UI) {
 					callback.navigateToSection(AddAccountEvent.Section.LOGIN)
 				}
 			}

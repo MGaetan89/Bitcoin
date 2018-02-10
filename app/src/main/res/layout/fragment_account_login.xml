@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	tools:context=".fragment.AccountLoginFragment">
+
+	<android.support.design.widget.TextInputLayout
+		android:id="@+id/pin_code_layout"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:layout_marginStart="@dimen/margin"
+		android:layout_marginTop="@dimen/margin"
+		android:hint="@string/pin_code"
+		app:counterEnabled="true"
+		app:counterMaxLength="@integer/pin_code_max_size"
+		app:counterOverflowTextAppearance="@style/TextInputLayoutCounterTextAppearance"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<android.support.design.widget.TextInputEditText
+			android:id="@+id/pin_code"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:imeOptions="actionGo"
+			android:inputType="number">
+
+			<requestFocus />
+		</android.support.design.widget.TextInputEditText>
+	</android.support.design.widget.TextInputLayout>
+
+	<Button
+		android:id="@+id/login"
+		style="@style/Widget.AppCompat.Button.Borderless.Colored"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/margin"
+		android:layout_marginEnd="@dimen/margin"
+		android:layout_marginTop="@dimen/margin"
+		android:text="@string/login"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/pin_code_layout" />
+</android.support.constraint.ConstraintLayout>

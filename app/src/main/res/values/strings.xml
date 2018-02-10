@@ -47,4 +47,5 @@
 	<string name="volume">Volume</string>
 	<string name="vwap">VWAP</string>
 	<string name="withdrawal">Withdrawal</string>
+	<string name="wrong_pin_code">Wrong PIN code</string>
 </resources>

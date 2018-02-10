@@ -12,6 +12,7 @@ import io.crypto.bitstamp.R
 import io.crypto.bitstamp.adapter.AccountAdapter
 import io.crypto.bitstamp.dao.BitstampDatabase
 import io.crypto.bitstamp.extension.startActivity
+import io.crypto.bitstamp.fragment.AccountLoginFragment
 import io.crypto.bitstamp.model.Account
 import io.crypto.bitstamp.network.BitstampServices
 import kotlinx.coroutines.experimental.android.UI
@@ -28,12 +29,8 @@ class LoginActivity : BaseActivity(), AccountAdapter.OnAccountEventListener, Vie
 	override fun getToolbarTitle(): CharSequence = this.getString(R.string.login)
 
 	override fun onAccountSelected(account: Account) {
-		BitstampServices.account = account
-
-		this.startActivity<AccountActivity>(
-			Intent.FLAG_ACTIVITY_NEW_TASK,
-			Intent.FLAG_ACTIVITY_CLEAR_TASK
-		)
+		AccountLoginFragment.newInstance(account)
+			.show(this.supportFragmentManager, "pin_code")
 	}
 
 	override fun onClick(view: View) {
