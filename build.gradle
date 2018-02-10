@@ -1,5 +1,5 @@
 buildscript {
-	ext.androidGradlePlugin = '3.1.0-beta1'
+	ext.androidGradlePlugin = '3.2.0-alpha02'
 	ext.assertJAndroidVersion = '1.1.1'
 	ext.buildToolsVersion = '27.0.3'
 	ext.compileSdkVersion = 27
