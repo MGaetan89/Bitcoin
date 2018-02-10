@@ -94,9 +94,9 @@ class AccountLoginFragment : DialogFragment(), View.OnClickListener {
 				val apiKey = cipherWrapper.decrypt(account.apiKey, masterKey.private)
 				val secret = cipherWrapper.decrypt(account.secret, masterKey.private)
 
-				launch(UI) {
-					BitstampServices.account = Account(apiKey, account.customerId, secret)
+				BitstampServices.account = Account(apiKey, account.customerId, secret)
 
+				launch(UI) {
 					context.startActivity<AccountActivity>(
 						Intent.FLAG_ACTIVITY_NEW_TASK,
 						Intent.FLAG_ACTIVITY_CLEAR_TASK
