@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.vanniktech.android.junit.jacoco'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 def properties = new Properties()
 
@@ -90,6 +91,9 @@ kotlin {
 }
 
 dependencies {
+	kapt "android.arch.persistence.room:compiler:$roomVersion"
+
+	implementation "android.arch.persistence.room:runtime:$roomVersion"
 	implementation "com.android.support:design:$supportLibraryVersion"
 	implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 	implementation "com.pusher:pusher-java-client:$pusherVersion"

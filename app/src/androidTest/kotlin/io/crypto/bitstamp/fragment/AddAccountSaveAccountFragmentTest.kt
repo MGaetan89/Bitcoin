@@ -1,6 +1,7 @@
 package io.crypto.bitstamp.fragment
 
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import android.support.test.espresso.action.ViewActions.replaceText
@@ -16,9 +17,13 @@ import io.crypto.bitstamp.BuildConfig.TEST_ACCOUNT_SECRET
 import io.crypto.bitstamp.BuildConfig.TEST_ACCOUNT_USER_ID
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.activity.PricesActivity
+import io.crypto.bitstamp.espresso.OkHttpIdlingResource
 import io.crypto.bitstamp.espresso.hasTextInputLayoutError
+import io.crypto.bitstamp.network.BitstampServices
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.core.AllOf.allOf
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,6 +33,16 @@ class AddAccountSaveAccountFragmentTest {
 	@JvmField
 	@Rule
 	var activityRule = ActivityTestRule(PricesActivity::class.java)
+
+	private lateinit var resource: OkHttpIdlingResource
+
+	@Before
+	fun before() {
+		this.resource =
+				OkHttpIdlingResource("OkHttp", BitstampServices.privateOkHttpClient.dispatcher())
+
+		IdlingRegistry.getInstance().register(this.resource)
+	}
 
 	@Test
 	fun back() {
@@ -83,6 +98,11 @@ class AddAccountSaveAccountFragmentTest {
 		// TODO
 	}
 
+	@After
+	fun after() {
+		IdlingRegistry.getInstance().unregister(this.resource)
+	}
+
 	private fun displaySaveAccountSection() {
 		onView(withId(R.id.menu_account)).perform(click())
 		onView(withId(R.id.add_account)).perform(click())
@@ -91,6 +111,7 @@ class AddAccountSaveAccountFragmentTest {
 		onView(withId(R.id.api_key)).perform(replaceText(TEST_ACCOUNT_API_KEY), closeSoftKeyboard())
 		onView(withId(R.id.secret)).perform(replaceText(TEST_ACCOUNT_SECRET), closeSoftKeyboard())
 		onView(withId(R.id.next)).perform(click())
-		onView(withId(R.id.add_account_check_information)).check(matches(isDisplayed()))
+		onView(withId(R.id.save_account)).perform(click())
+		onView(withId(R.id.add_account_save_account)).check(matches(isDisplayed()))
 	}
 }
