@@ -12,12 +12,4 @@ data class Ticker(
 	val timestamp: Long,
 	val volume: Float,
 	@Json(name = "vwap") val volumeWeightedAveragePrice: Float
-) {
-	companion object {
-		val EMPTY = Ticker(0f, 0f, 0f, 0f, 0f, 0f, 0L, 0f, 0f)
-	}
-
-	fun isNewerThan(ticker: Ticker): Boolean {
-		return ticker.timestamp < this.timestamp && (ticker.ask != this.ask || ticker.bid != this.bid)
-	}
-}
+)

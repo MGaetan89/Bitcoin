@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.extension.inflate
 import io.crypto.bitstamp.extension.toFormattedString
-import io.crypto.bitstamp.extension.toFormattedTime
-import io.crypto.bitstamp.model.Ticker
+import io.crypto.bitstamp.model.OrderBook
 import io.crypto.bitstamp.model.TradingPair
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.adapter_price.ask
 import kotlinx.android.synthetic.main.adapter_price.bid
 import kotlinx.android.synthetic.main.adapter_price.name
-import kotlinx.android.synthetic.main.adapter_price.time
 
 class PricesAdapter(private val listener: OnPriceEventListener) :
 	RecyclerView.Adapter<PricesAdapter.ViewHolder>() {
@@ -26,19 +24,16 @@ class PricesAdapter(private val listener: OnPriceEventListener) :
 		fun onPriceClicked(tradingPair: TradingPair)
 	}
 
-	private val prices = mutableListOf<Pair<TradingPair, Ticker>>()
+	private val prices = mutableListOf<Triple<TradingPair, Float, Float>>()
 
 	override fun getItemCount() = this.prices.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val price = this.prices.getOrNull(position) ?: return
-		val tradingPair = price.first
-		val ticker = price.second
 
-		holder.ask.text = ticker.ask.toFormattedString(tradingPair.counterDecimals)
-		holder.bid.text = ticker.bid.toFormattedString(tradingPair.counterDecimals)
-		holder.time.text = ticker.timestamp.toFormattedTime()
-		holder.name.text = tradingPair.name
+		holder.ask.text = price.second.toFormattedString(price.first.counterDecimals)
+		holder.bid.text = price.third.toFormattedString(price.first.counterDecimals)
+		holder.name.text = price.first.name
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,16 +42,16 @@ class PricesAdapter(private val listener: OnPriceEventListener) :
 		return ViewHolder(view)
 	}
 
-	fun updateTicker(urlSymbol: String, ticker: Ticker) {
+	fun updateTicker(urlSymbol: String, orderBook: OrderBook) {
 		val index = this.prices.indexOfFirst { it.first.urlSymbol == urlSymbol }
 			.takeIf { it >= 0 } ?: return
-		val (tradingPair, oldTicker) = this.prices[index]
+		val ask = orderBook.asks[0][0]
+		val bid = orderBook.bids[0][0]
+		val tradingPair = this.prices[index].first
 
-		if (ticker.isNewerThan(oldTicker)) {
-			this.prices[index] = Pair(tradingPair, ticker)
+		this.prices[index] = Triple(tradingPair, ask, bid)
 
-			this.notifyItemChanged(index)
-		}
+		this.notifyItemChanged(index)
 	}
 
 	fun updateTradingPairs(tradingPairs: List<TradingPair>) {
@@ -66,7 +61,7 @@ class PricesAdapter(private val listener: OnPriceEventListener) :
 		)
 
 		this.prices.clear()
-		this.prices.addAll(tradingPairs.map { it to Ticker.EMPTY })
+		this.prices.addAll(tradingPairs.map { Triple(it, 0f, 0f) })
 
 		diffResult.dispatchUpdatesTo(this)
 	}

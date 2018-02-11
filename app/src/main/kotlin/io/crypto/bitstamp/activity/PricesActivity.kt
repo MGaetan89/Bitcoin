@@ -1,5 +1,7 @@
 package io.crypto.bitstamp.activity
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,16 +11,13 @@ import android.widget.Toast
 import io.crypto.bitstamp.R
 import io.crypto.bitstamp.adapter.PricesAdapter
 import io.crypto.bitstamp.extension.startActivity
-import io.crypto.bitstamp.model.Ticker
 import io.crypto.bitstamp.model.TradingPair
-import io.crypto.bitstamp.network.BitstampServices
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.crypto.bitstamp.network.BitstampRepository
+import io.crypto.bitstamp.viewModel.OrderBookViewModel
+import io.crypto.bitstamp.viewModel.TradingPairsViewModel
 
 class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 	private val adapter = PricesAdapter(this)
-	private val urlSymbols = mutableListOf<String>()
 
 	override fun getContentResourceId() = R.layout.activity_prices
 
@@ -37,6 +36,29 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 	override fun onInflate(stub: ViewStub, inflated: View) {
 		super.onInflate(stub, inflated)
 
+		ViewModelProviders.of(this)
+			.get(TradingPairsViewModel::class.java)
+			.setRepository(BitstampRepository())
+			.getTradingPairs()
+			.observe(this, Observer {
+				val tradingPairs = it.orEmpty()
+				val urlSymbols = tradingPairs.map { it.urlSymbol }
+
+				adapter.updateTradingPairs(tradingPairs)
+
+				urlSymbols.forEach {
+					ViewModelProviders.of(this)
+						.get("OrderBookViewModel_$it", OrderBookViewModel::class.java)
+						.setUrlSymbol(it)
+						.getOrderBook()
+						.observe(this, Observer {
+							it?.let {
+								adapter.updateTicker(it.first, it.second)
+							}
+						})
+				}
+			})
+
 		(inflated as RecyclerView).let {
 			it.adapter = this.adapter
 			it.layoutManager = LinearLayoutManager(this)
@@ -48,57 +70,5 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 		this.startActivity<PriceActivity> {
 			this.putExtra(TradingPair.EXTRA, tradingPair)
 		}
-	}
-
-	override fun onResume() {
-		super.onResume()
-
-		this.requestTradingPairs()
-	}
-
-	private fun requestTicker() {
-		this.urlSymbols.forEach {
-			BitstampServices.api.getTicker(it).enqueue(object : Callback<Ticker> {
-				override fun onFailure(call: Call<Ticker>, t: Throwable) {
-					val context = this@PricesActivity
-					Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
-				}
-
-				override fun onResponse(call: Call<Ticker>, response: Response<Ticker>) {
-					if (response.isSuccessful) {
-						val ticker = response.body() ?: return
-
-						adapter.updateTicker(it, ticker)
-					} else {
-						response.errorBody()?.string()?.let { message ->
-							val context = this@PricesActivity
-							Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-						}
-					}
-				}
-			})
-		}
-	}
-
-	private fun requestTradingPairs() {
-		BitstampServices.api.getTradingPairs().enqueue(object : Callback<List<TradingPair>> {
-			override fun onFailure(call: Call<List<TradingPair>>, t: Throwable) = Unit
-
-			override fun onResponse(
-				call: Call<List<TradingPair>>,
-				response: Response<List<TradingPair>>
-			) {
-				if (response.isSuccessful) {
-					val tradingPairs = response.body()?.sortedBy { it.name } ?: return
-
-					urlSymbols.clear()
-					urlSymbols.addAll(tradingPairs.map { it.urlSymbol })
-
-					adapter.updateTradingPairs(tradingPairs)
-
-					requestTicker()
-				}
-			}
-		})
 	}
 }

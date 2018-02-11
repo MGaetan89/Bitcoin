@@ -91,8 +91,10 @@ kotlin {
 }
 
 dependencies {
+	kapt "android.arch.lifecycle:compiler:$lifecycleVersion"
 	kapt "android.arch.persistence.room:compiler:$roomVersion"
 
+	implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
 	implementation "android.arch.persistence.room:runtime:$roomVersion"
 	implementation "com.android.support:design:$supportLibraryVersion"
 	implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
