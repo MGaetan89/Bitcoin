@@ -3,7 +3,7 @@ buildscript {
 	ext.assertJAndroidVersion = '1.1.1'
 	ext.buildToolsVersion = '27.0.3'
 	ext.compileSdkVersion = 27
-	ext.constraintLayoutVersion = '1.1.0-beta4'
+	ext.constraintLayoutVersion = '1.1.0-beta5'
 	ext.coroutinesVersion = '0.22.1'
 	ext.espressoVersion = '3.0.1'
 	ext.jacocoAndroidGradlePlugin = '0.11.0'
