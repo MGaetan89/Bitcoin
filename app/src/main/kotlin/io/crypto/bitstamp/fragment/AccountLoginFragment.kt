@@ -1,10 +1,8 @@
 package io.crypto.bitstamp.fragment
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +19,12 @@ import io.crypto.bitstamp.util.KeyStoreWrapper
 import kotlinx.android.synthetic.main.fragment_account_login.login
 import kotlinx.android.synthetic.main.fragment_account_login.pin_code
 import kotlinx.android.synthetic.main.fragment_account_login.pin_code_layout
+import kotlinx.android.synthetic.main.fragment_account_login.user_id
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import java.security.KeyStoreException
 
-class AccountLoginFragment : DialogFragment(), View.OnClickListener {
+class AccountLoginFragment : BottomSheetDialogFragment(), View.OnClickListener {
 	companion object {
 		private const val EXTRA_ACCOUNT = BuildConfig.APPLICATION_ID + ".extra.account"
 
@@ -36,18 +35,12 @@ class AccountLoginFragment : DialogFragment(), View.OnClickListener {
 		}
 	}
 
+	private val account by lazy { this.arguments!!.getParcelable<Account>(EXTRA_ACCOUNT) }
+
 	override fun onClick(view: View) {
 		when (view.id) {
 			R.id.login -> this.checkPinCodeAndLogin()
 		}
-	}
-
-	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-		val context = this.context ?: return super.onCreateDialog(savedInstanceState)
-
-		return AlertDialog.Builder(context)
-			.setView(this.view)
-			.show()
 	}
 
 	override fun onCreateView(
@@ -66,6 +59,7 @@ class AccountLoginFragment : DialogFragment(), View.OnClickListener {
 				else -> false
 			}
 		}
+		this.user_id.text = this.account.customerId
 	}
 
 	private fun checkPinCodeAndLogin() {
@@ -76,7 +70,7 @@ class AccountLoginFragment : DialogFragment(), View.OnClickListener {
 		} else if (context != null) {
 			this.pin_code_layout.error = null
 
-			val account = this.arguments!!.getParcelable<Account>(EXTRA_ACCOUNT)
+			val account = this.account
 
 			launch {
 				val keyStoreWrapper = KeyStoreWrapper()
