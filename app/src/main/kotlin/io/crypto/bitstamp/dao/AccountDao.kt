@@ -8,9 +8,6 @@ import io.crypto.bitstamp.model.Account
 
 @Dao
 interface AccountDao {
-	@Query("SELECT * FROM accounts WHERE customer_id = :customerId LIMIT 1")
-	fun findByCustomerId(customerId: String): Account
-
 	@Query("SELECT * FROM accounts ORDER BY customer_id ASC")
 	fun getAll(): List<Account>
 

@@ -1,5 +1,7 @@
 package io.crypto.bitstamp.fragment
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -13,8 +15,9 @@ import io.crypto.bitstamp.adapter.AccountOrdersAdapter
 import io.crypto.bitstamp.model.CanceledOrder
 import io.crypto.bitstamp.model.OpenOrder
 import io.crypto.bitstamp.model.OpenOrderStatus
-import io.crypto.bitstamp.model.TradingPair
+import io.crypto.bitstamp.network.BitstampRepository
 import io.crypto.bitstamp.network.BitstampServices
+import io.crypto.bitstamp.viewModel.TradingPairsViewModel
 import kotlinx.android.synthetic.main.fragment_account_orders.list
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,6 +31,18 @@ class AccountOrdersFragment
 
 	private val adapter by lazy { AccountOrdersAdapter(this) }
 	private val layoutManager by lazy { LinearLayoutManager(this.context) }
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+
+		ViewModelProviders.of(this)
+			.get(TradingPairsViewModel::class.java)
+			.setRepository(BitstampRepository())
+			.getTradingPairs()
+			.observe(this, Observer {
+				it?.let(this.adapter::updateTradingPairs)
+			})
+	}
 
 	override fun onCancelOrder(position: Int, order: OpenOrder) {
 		BitstampServices.privateApi.cancelOrder(order.id).enqueue(object : Callback<CanceledOrder> {
@@ -98,8 +113,6 @@ class AccountOrdersFragment
 	override fun onResume() {
 		super.onResume()
 
-		this.requestTradingPairs()
-
 		BitstampServices.privateApi.getOpenOrders().enqueue(this)
 	}
 
@@ -134,22 +147,5 @@ class AccountOrdersFragment
 					}
 				})
 		}
-	}
-
-	private fun requestTradingPairs() {
-		BitstampServices.api.getTradingPairs().enqueue(object : Callback<List<TradingPair>> {
-			override fun onFailure(call: Call<List<TradingPair>>, t: Throwable) = Unit
-
-			override fun onResponse(
-				call: Call<List<TradingPair>>,
-				response: Response<List<TradingPair>>
-			) {
-				if (isAdded && response.isSuccessful) {
-					val tradingPairs = response.body() ?: return
-
-					adapter.updateTradingPairs(tradingPairs)
-				}
-			}
-		})
 	}
 }

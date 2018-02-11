@@ -44,7 +44,7 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 				val tradingPairs = it.orEmpty()
 				val urlSymbols = tradingPairs.map { it.urlSymbol }
 
-				adapter.updateTradingPairs(tradingPairs)
+				this.adapter.updateTradingPairs(tradingPairs)
 
 				urlSymbols.forEach {
 					ViewModelProviders.of(this)
@@ -53,7 +53,7 @@ class PricesActivity : BaseActivity(), PricesAdapter.OnPriceEventListener {
 						.getOrderBook()
 						.observe(this, Observer {
 							it?.let {
-								adapter.updateTicker(it.first, it.second)
+								this.adapter.updateTicker(it.first, it.second)
 							}
 						})
 				}
